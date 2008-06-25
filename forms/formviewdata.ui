@@ -30,10 +30,13 @@
                 <cstring>table</cstring>
             </property>
             <property name="numRows">
-                <number>3</number>
+                <number>0</number>
             </property>
             <property name="numCols">
-                <number>3</number>
+                <number>0</number>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
             </property>
         </widget>
     </hbox>
@@ -45,10 +48,12 @@
 </includes>
 <forwards>
     <forward>class ReadRootTree;</forward>
+    <forward>using namespace std;</forward>
 </forwards>
 <slots>
-    <slot>initialize( ReadRootTree * rootTree )</slot>
-    <slot>setColumnNames( std::vector&lt;std::string&gt; )</slot>
+    <slot>initialize( ReadRootTree * root_Tree )</slot>
+    <slot>setColumnNames(std:: vector&lt;std::string&gt; names )</slot>
+    <slot>fetchData( std::vector&lt;std::string&gt; column_expressions )</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

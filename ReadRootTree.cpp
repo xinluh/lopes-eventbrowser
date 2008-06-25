@@ -165,68 +165,18 @@ int ReadRootTree::fillValues(int (*callback)(void*,int,vector<float>,
 							 vector<string> expressions)
 {
 	if (!callback) return 0;
-		
-	vector<float> values(expressions.size());
 
-	initParsers(expressions.size());
+	return fillValues_all((void*)callback,CALLBACK_FLOAT,obj,expressions);
+}
 
-	for (int j = 0; j < (int) expressions.size(); j++)
-	{
-		if (expressions[j] != "")
-			parsers[j].SetExpr(expressions[j]);
-	}
+int ReadRootTree::fillValues_str(int (*callback)(void*,int,vector<string>,
+											 long total_n ),
+							 void* obj,
+							 vector<string> expressions)
+{
+	if (!callback) return 0;
 
-	for (int i = 0;i < getNumberEntries() ; i++)
-	{
-		chain->GetEntry(eventlist[i]); 
-		
-#ifdef TREAT_INTEGER_AS_FLOAT
-		for (int k = 0; k < (int) branches.size(); k++)
-		{
-
-			if (branch_types[k] == 'I')
-			{
-				cout << branches[k] << " ";
-				cout << *((int*) branch_address[k]) << endl;				
-				*(float*) branch_address[k] =
-					(float) *((int*) branch_address[k]);
-				cout << *((float*) branch_address[k]) << endl;
-			}
-		}
-#endif
-		
-#ifdef DEBUG	
-		cout << i << " (Event #" << eventlist[i]
-			 << "): -------------------------------" <<endl;
-#endif
-		// evaluate each of the expressions given and stored the result
-		for (int j =0; j< (int) expressions.size(); j++)
-		{
-			if (expressions[j] != "")
-			{
-				try
-				{
-					values[j] = parsers[j].Eval();
-				}
-				catch (mu::Parser::exception_type e)
-				{
-					cerr << e.GetMsg() << endl;
-					return 1;
-                    // todo:  don't go on when the expression can't be parsed
-				}
-#ifdef DEBUG
-				cout << expressions[j] << " = " <<  values [j] << endl;
-#endif
-			}
-			else
-				values[j] = 0;
-
-		}
-	
-		if (callback(obj,i,values,entries) != 0) return 1; // aborted
-	}
-
-	return 0;
+	return fillValues_all((void*)callback,CALLBACK_STR,obj,expressions);
 }
 
 
@@ -239,23 +189,53 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 	vector<float> values_f(expressions.size());
 	vector<string> values_s(expressions.size());
 
+	// keep track of whether the expression corresponds to an integer type;
+	// positive values corresponds to index of the corresponding branch, -1
+	// signify that the expression should be evaluated (instead of simple
+	// substitution)
+	vector<int> iexp(expressions.size());
+	
+	ostringstream ss;
+	int ret_code;
+	int (*callback)(void*,int,std::vector<float>,long) = 0;
+	int (*callback_str) (void*,int,std::vector<std::string>,long) = 0;
+
+	// cast the callback function to the correct type
+	if (type == CALLBACK_STR)
+		callback_str = (int (*) (void*,int,std::vector<std::string>,long))
+            			callback_func;
+	else
+		callback = (int (*)(void*,int,std::vector<float>,long)) callback_func;
+
+
 	initParsers(expressions.size());
 
+	// loop through the expressions and prepare the parsers 
 	for (int j = 0; j < (int) expressions.size(); j++)
 	{
-		if
-// snap up the expression corresponding to type int and
-		// convert them to string
-	    for (int i = 0; i < (int) branches.size(); i++)
+		if (type == CALLBACK_STR)
 		{
-			if (expression[j] == branches[i])
-				
+			for (int i = 0; i < (int) branches.size(); i++)
+			{
+				// if a expression corresponds to an integer branch type then
+				// make the expression to be substituted (not evaluated)
+				if (branch_types[i] == 'I' &&  expressions[j] == branches[i])
+				{
+					iexp[j] = i;
+					break;
+				}
+				else
+					iexp[j] = -1;
+			}
 		}
-		
+		else
+			iexp[j] = -1; //all expressions are to be evaluated
+		 		
 		if (expressions[j] != "")
 			parsers[j].SetExpr(expressions[j]);
 	}
 
+	// time to loop through the events!
 	for (int i = 0;i < getNumberEntries() ; i++)
 	{
 		chain->GetEntry(eventlist[i]); 
@@ -279,31 +259,59 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 		cout << i << " (Event #" << eventlist[i]
 			 << "): -------------------------------" <<endl;
 #endif
-		// evaluate each of the expressions given and stored the result
-		for (int j =0; j< (int) expressions.size(); j++)
+		for (int j =0; j <(int) expressions.size(); j++)
 		{
-			if (expressions[j] != "")
+			if (expressions[j] != "" && iexp[j] == -1) //evaluate expression
 			{
 				try
-				{
-					values_f[j] = parsers[j].Eval();
+				{ 
+					if (type == CALLBACK_STR)
+					{
+						ss.str("");
+						ss << parsers[j].Eval();
+						values_s[j] = ss.str();
+					}
+					else
+						values_f[j] = parsers[j].Eval();
 				}
 				catch (mu::Parser::exception_type e)
 				{
 					cerr << e.GetMsg() << endl;
+					message = e.GetMsg();
 					return 1;
                     // todo:  don't go on when the expression can't be parsed
 				}
-#ifdef DEBUG
-				cout << expressions[j] << " = " <<  values_f [j] << endl;
-#endif
 			}
-			else
-				values_f[j] = 0;
+			else if (expressions[j] != "") // substitution (for integer)
+			{
+				ss.str("");	// clean up the stringstream
+				ss << *((int*) branch_address[iexp[j]]);
+				values_s[j]=ss.str();
+			}
+			
+				
+			else if (i == 0) // if it's the first, clean up the previous data
+			{
+				if (type == CALLBACK_STR)
+					values_s[j] = "ERROR";
+				else
+					values_f[j] = 0;
+			}
 
+#ifdef DEBUG
+			   if (type == CALLBACK_STR)
+				   cout << expressions[j] << " = " <<  values_s [j] << endl;
+			   else
+				   cout << expressions[j] << " = " <<  values_f [j] << endl;
+#endif
 		}
-	
-		if (callback(obj,i,values_f,entries) != 0) return 1; // aborted
+
+		// call the appropriate callback function
+		ret_code = (type == CALLBACK_STR)?
+			        callback_str(obj,i,values_s,entries):
+       				callback(obj,i,values_f,entries);
+			
+		if  (ret_code != 0) return ret_code; // aborted by callback
 	}
 
 	return 0;
