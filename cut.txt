@@ -1,0 +1,12 @@
+Dual:
+ElL_ew>0 && CCheight_NS > 1.5 && CCheight_EW >1.5 && Good_EW==2 && Good_NS==3
+
+EW
+ElL_ew>0 && CCheight_EW >1.5 && Good_EW==2 
+
+NS
+ElL_ew>0 && CCheight_NS > 1.5 && Good_NS==3
+
+Multi
+(ElL_ew>0 && CCheight_NS > 1.5 && CCheight_EW >1.5 && Good_EW==2 && Good_NS==3)
+|| (ElL_ew>0 && CCheight_NS > 1.5 && CCheight_EW <1.5) || (ElL_ew>0 && CCheight_NS < 1.5 && CCheight_EW >1.5) 

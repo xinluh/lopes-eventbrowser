@@ -1,0 +1,29 @@
+; this is a comment line
+; format: [I|F]/name, I = integer, F = float
+I/Gt
+F/XC
+F/YC
+F/Size
+F/Nmu
+F/Geoang
+F/LogEguess
+F/AzL_ew
+F/ElL_ew
+F/AzL_ns
+F/ElL_ns
+F/CurvR_EW
+F/CurvR_NS
+F/CCheight_EW
+F/CCheight_NS
+F/CCheight_error_EW
+F/CCheight_error_NS
+F/Mean_daxis_EW
+F/Mean_daxis_NS
+I/Ev_no
+I/Good_EW
+I/Good_NS
+I/Good_Dual
+;F/Xc
+;F/Yc
+;F/Ze
+;F/Nmu

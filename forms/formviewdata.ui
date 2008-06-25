@@ -1,0 +1,54 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>formViewData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>formViewData</cstring>
+    </property>
+    <property name="enabled">
+        <bool>false</bool>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>745</width>
+            <height>684</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>View Tree Data</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>true</bool>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QTable">
+            <property name="name">
+                <cstring>table</cstring>
+            </property>
+            <property name="numRows">
+                <number>3</number>
+            </property>
+            <property name="numCols">
+                <number>3</number>
+            </property>
+        </widget>
+    </hbox>
+</widget>
+<includes>
+    <include location="global" impldecl="in declaration">string</include>
+    <include location="global" impldecl="in declaration">vector</include>
+    <include location="local" impldecl="in implementation">formviewdata.ui.h</include>
+</includes>
+<forwards>
+    <forward>class ReadRootTree;</forward>
+</forwards>
+<slots>
+    <slot>initialize( ReadRootTree * rootTree )</slot>
+    <slot>setColumnNames( std::vector&lt;std::string&gt; )</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
