@@ -2,7 +2,6 @@
 
 #ifdef DEBUG
 #include <iostream>
-using namespace std;
 #endif
 
 //#undef DEBUG
@@ -244,11 +243,13 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 
 	for (int j = 0; j < (int) expressions.size(); j++)
 	{
-		// snap up the expression corresponding to type int and
+		if
+// snap up the expression corresponding to type int and
 		// convert them to string
 	    for (int i = 0; i < (int) branches.size(); i++)
 		{
-		  
+			if (expression[j] == branches[i])
+				
 		}
 		
 		if (expressions[j] != "")
