@@ -16,7 +16,8 @@
 using namespace std;
 using namespace mu;
 
-ReadRootTree::ReadRootTree(vector<string> root_files, const char * tree_name)
+ReadRootTree::ReadRootTree(vector<string> root_files, const char * tree_name,
+						   const char* branchNamees_file)
 {
 	chain = new TChain(tree_name);
 
@@ -25,12 +26,12 @@ ReadRootTree::ReadRootTree(vector<string> root_files, const char * tree_name)
 
 	entries = (int)chain->GetEntries();
 
-	getBranches("branches.txt");
+	getBranches(branchNamees_file);
 
 	setEventCut("");
 }
 
-void ReadRootTree::getBranches(char *filename)
+void ReadRootTree::getBranches(const char *filename)
 {
 	ifstream infile (filename);
 	string s;
@@ -39,55 +40,22 @@ void ReadRootTree::getBranches(char *filename)
     {
 		if (s.at(0) != COMMENT_CHAR) //don't read the comment line
 		{
-			//each line is like: T/branch_name
-			//where T is the type, only F=float and I=integer for now
-			
+			//each line is formated as: T/branch_name
+			//where T is the type, only support F=float and I=integer for now
 			branch_types.push_back(s.at(0));
 			branches.push_back (s.substr(2));
 		}
     }
 
-	//allot memory for the branch values;
-	//todo using float for the largest size for now
-	// important: do not delete this vector<float>; "static" is important!
-	// take care with multi-threading of multiple ReadRootTree objects!
+	// allot memory for the branch values;  todo using float for the largest
+	// size for now. IMPORTANT: do not delete this vector<float>; "static"
+	// is important!  take care with multi-threading of multiple ReadRootTree
+	// objects, as each call to TTree.GetEntry will mess up the values
+	// pointing by branch_address
 	static vector<float> f (branches.size()); 
 	for (int i = 0; i<(int) branches.size() ; i++)
 		branch_address.push_back(&f[i]);
 
-
-	setAddresses();
-}
-
-void ReadRootTree::initParsers(int n)
-{
-	Parser *p;
-	while (n > (int) parsers.size())
-	{
-		p = new Parser();
-		parsers.push_back(*p);
-	}
-
-	cout << parsers.size() << endl;
-	for (int j = 0; j < n; j++)
-	{
-
-		for (int i = 0; i<(int) branches.size() ; i++)
-		{
-			// Warning! only add variable of type float since the rest of the
-			// code is designed only for float; for other types garbages
-			// values might occur!
-#ifndef TREAT_INTEGER_AS_FLOAT
-			if (branch_types[i] == 'F')
-#endif
-				parsers[j].DefineVar(branches[i].c_str(),
-							 (float*) branch_address[i]);
-		}
-	}
-}
-
-void ReadRootTree::setAddresses()
-{
 	for (int i = 0; i<(int) branches.size() ; i++)
 		chain->SetBranchAddress(branches[i].c_str(),branch_address[i]);
 
@@ -107,25 +75,51 @@ void ReadRootTree::setAddresses()
 #endif	
 }
 
+void ReadRootTree::initParsers(int n)
+{
+	Parser *p;
+
+	// substantiate parser as needed and set variable addresses for the new
+	// parsers
+	while (n > (int) parsers.size())
+	{
+		p = new Parser();
+
+		for (int i = 0; i<(int) branches.size() ; i++)
+		{
+			// Warning! only add variable of type float for expression
+			// evaluation since mu::parser is designed only for float; for
+			// other types garbages values might occur!
+#ifndef TREAT_INTEGER_AS_FLOAT
+			if (branch_types[i] == 'F')
+#endif
+				p->DefineVar(branches[i].c_str(),
+							 (float*) branch_address[i]);
+		}
+
+		parsers.push_back(*p);
+
+	}
+}
+
 void ReadRootTree::setEventCut(const char * filter,const char * sort_by,
 					 bool sort_desc)
 {
+	// reset the previous eventcut
 	chain->SetEventList(NULL);
 	eventlist.clear();
+	
 	if (filter)
 		eventCut = new string(filter);
 	
 	entries =  chain->Draw(">>eventlist",eventCut->c_str());
 	
-	if (entries == -1) return; 
+	if (entries == -1) return; // somehow Draw() fails; run away...
 	TEventList *  teventlist = (TEventList*)gDirectory->Get("eventlist");
 	Long64_t* tmplist = teventlist->GetList();
-
 			
 	if (sort_by) // also sort the events
 	{
-		cout << "Sorting by: " << sort_by << endl;
-
 		teventlist->SetReapplyCut(true);
 		chain->SetEventList(teventlist);
 		
@@ -144,13 +138,14 @@ void ReadRootTree::setEventCut(const char * filter,const char * sort_by,
 		
 		delete [] indices;
 	}
-	else
+	else // no need to sort, just add the event numbers to eventlist
 	{
 		for (int i = 0; i < entries ; i++)
 			eventlist.push_back(tmplist[i]);
 	}
 	
 #ifdef DEBUG
+	cout << "Selected Events after cut: "  << endl;
 	for (int i = 0; i < entries ; i++)
 		cout << eventlist[i] << " ";
 	cout << endl;
@@ -207,7 +202,7 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 	else
 		callback = (int (*)(void*,int,std::vector<float>,long)) callback_func;
 
-
+	// init parsers based on how many needed
 	initParsers(expressions.size());
 
 	// loop through the expressions and prepare the parsers 
@@ -218,7 +213,7 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 			for (int i = 0; i < (int) branches.size(); i++)
 			{
 				// if a expression corresponds to an integer branch type then
-				// make the expression to be substituted (not evaluated)
+				// mark the expression to be substituted (not evaluated)
 				if (branch_types[i] == 'I' &&  expressions[j] == branches[i])
 				{
 					iexp[j] = i;
@@ -229,15 +224,16 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 			}
 		}
 		else
-			iexp[j] = -1; //all expressions are to be evaluated
+			iexp[j] = -1; //the expression is to be evaluated
 		 		
 		if (expressions[j] != "")
 			parsers[j].SetExpr(expressions[j]);
 	}
 
-	// time to loop through the events!
+	// time to loop through the events and call the callback func!
 	for (int i = 0;i < getNumberEntries() ; i++)
 	{
+		// will fill values into the addresses in branch_address
 		chain->GetEntry(eventlist[i]); 
 		
 #ifdef TREAT_INTEGER_AS_FLOAT
@@ -259,6 +255,7 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 		cout << i << " (Event #" << eventlist[i]
 			 << "): -------------------------------" <<endl;
 #endif
+		
 		for (int j =0; j <(int) expressions.size(); j++)
 		{
 			if (expressions[j] != "" && iexp[j] == -1) //evaluate expression
@@ -288,8 +285,6 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 				ss << *((int*) branch_address[iexp[j]]);
 				values_s[j]=ss.str();
 			}
-			
-				
 			else if (i == 0) // if it's the first, clean up the previous data
 			{
 				if (type == CALLBACK_STR)
@@ -297,6 +292,7 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 				else
 					values_f[j] = 0;
 			}
+			// else - do nothing
 
 #ifdef DEBUG
 			   if (type == CALLBACK_STR)
