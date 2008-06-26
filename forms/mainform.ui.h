@@ -16,7 +16,7 @@
 #include <qfiledialog.h>
 #include <qmessagebox.h>
 #include <qinputdialog.h>
-
+#include <qobjectlist.h>
 #include "TQtWidget.h"
 
 #include <string>
@@ -649,4 +649,32 @@ void MainForm::fillBranchNames()
 	vector<string> names = draw->rootTree->getBranchNames();
 	for (int i = 0; i < (int) names.size(); i++)
 		cmbBranchNames->insertItem(names[i]);
+}
+
+
+void MainForm::insertBranchName( const QString& name )
+{
+	// find the QLineEdit or QTextEdit that has focus and append the branch
+	// name to it; the find method relies on the fact that all the textboxes
+	// are named with prefix txt
+	QObjectList *l = topLevelWidget()->queryList(NULL,"txt*");
+    QObjectListIt it( *l );
+	QWidget* w;
+		
+    while ((w = (QWidget*) it.current()) != 0 )
+	{
+		++it;
+		if (w->hasFocus())
+		{
+			if ((QLineEdit*)w != 0)
+				((QLineEdit*)w)->setText(((QLineEdit*)w)->text() + name);
+			
+			if ((QTextEdit*)w != 0)
+				((QTextEdit*)w)->setText(((QTextEdit*)w)->text() + name);
+
+			break;
+		}
+    }
+
+    delete l; 
 }
