@@ -11,6 +11,8 @@
 *****************************************************************************/
 #include "ReadRootTree.h"
 
+#include <qstatusbar.h>
+
 #ifdef DEBUG
 #include <iostream>
 #endif
@@ -31,10 +33,11 @@ void formViewData::initialize( ReadRootTree * root_Tree )
 	if (!root_Tree) throw "Must give a valid ReadRootTree object when init!";
 
 	rootTree = root_Tree;
-		
+
+	txtEventCut->setCurrentText(rootTree->getEventCut());
 	setColumnNames(rootTree->getBranchNames());
-	//table->setNumRows(6);
 	fetchData(rootTree->getBranchNames());
+
 	
 	
     setEnabled(true);
@@ -51,6 +54,8 @@ void formViewData::setColumnNames( vector<string> names )
 int callback_fetchData(void* obj,int index, vector<string> values,
 					   long total_n)
 {
+	index++;total_n++; // make compiler shut up about unused param
+	 
 	QTable* table = (QTable*) obj;
 	int row = table->numRows();
 	// insert new row
@@ -72,5 +77,30 @@ int callback_fetchData(void* obj,int index, vector<string> values,
 
 void formViewData::fetchData(vector<string> column_expressions)
 {
+	// clear the table   
+//	while (table->numRows() != 0)
+	//	table->removeRow(0);
+	table->setNumRows(0);
+	
+	
 	rootTree->fillValues_str(&callback_fetchData,table,column_expressions);
+}
+
+
+void formViewData::applyCut()
+{
+	rootTree->setEventCut(txtEventCut->currentText().ascii());
+//	btnApplyCut->setEnabled(false);
+
+	fetchData(rootTree->getBranchNames());
+
+	QString status  = QString("Current number of events: %1")
+		.arg(rootTree->getNumberEntries());
+
+	cout << status << endl;
+	
+	
+	//lblEventCutStatus->setText(status);
+	statusBar()->message(status);
+	
 }

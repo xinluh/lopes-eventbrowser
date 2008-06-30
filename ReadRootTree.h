@@ -1,5 +1,5 @@
 #ifndef _READROOTTREE_H_
-#define _REEDROOTTREE_H_
+#define _READROOTTREE_H_
 #include "TFile.h"
 #include "TTree.h"
 #include "TEventList.h"
@@ -71,6 +71,7 @@ class ReadRootTree
 	int getNumberEntries() {return entries;}
 	std::string getLastMessage() {return message; }
 	std::vector<std::string> getBranchNames() {return branches;}
+	const std::string getEventCut() {return *eventCut;}
 };
 
 #endif //define _READROOTFILE_H_

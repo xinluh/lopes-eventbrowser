@@ -36,7 +36,7 @@ using namespace std;
 
 Draw * draw = new Draw(); //the Draw object for drawing stuff
 
-//variables for creating new tab with TQtWidget in it
+//pointers for creating new tab with TQtWidget in it
 QWidget * newTab; // pointer to newly created tab
 TQtWidget * newTqtw; // pointer to newly created TQtWidget
 QVBoxLayout * newLayout; // pointer for laying out TQtWidget properly
@@ -63,7 +63,6 @@ bool multiGraphCont = false;
 // statusbar
 QLabel* lblStatus;
 QLabel* lblEventCutStatus;
-//QString eventText;
 
 //---------------------------------------------------------------------
 
@@ -82,9 +81,8 @@ void MainForm::init()
 	
 	addNewTab();	
 
-
 	// set up statusbar
-	lblStatus = new QLabel("Ready3",this);
+	lblStatus = new QLabel("Ready",this);
 	lblEventCutStatus = new QLabel("Current number of events: 00000",this);
 
 	lblStatus->setMinimumSize(lblStatus->sizeHint());
@@ -94,7 +92,6 @@ void MainForm::init()
 
   	applyRootCut();
 	fillBranchNames();
-	//statusBar()->message("Ready2");
 }
 
 void MainForm::fileOpen()
@@ -180,56 +177,58 @@ void MainForm::fileSaveAllMultiple()
 
 void MainForm::filePrint()
 {
-
+	NOT_IMPLEMENTED
 }
 
 
 void MainForm::editUndo()
 {
-
+	NOT_IMPLEMENTED
 }
 
 void MainForm::editRedo()
 {
-
+	NOT_IMPLEMENTED
 }
 
 void MainForm::fileExit()
 {
+	NOT_IMPLEMENTED
 }
 
 void MainForm::editCut()
 {
-
+	NOT_IMPLEMENTED
 }
 
 
 void MainForm::editCopy()
 {
-
+	NOT_IMPLEMENTED
 }
 
 
 void MainForm::editPaste()
 {
+		NOT_IMPLEMENTED
 }
 
 
 void MainForm::helpIndex()
 {
-
+	NOT_IMPLEMENTED
 }
 
 
 void MainForm::helpContents()
 {
-	
+	NOT_IMPLEMENTED
 }
 
 
 void MainForm::helpAbout()
 {
-
+	NOT_IMPLEMENTED
 }
 
 
@@ -300,8 +299,6 @@ void MainForm::Draw()
 		
 		renameTab(txtEventCut->text());
 	}
-			
-	
 }
 
 
@@ -318,7 +315,6 @@ void MainForm::applyRootCut()
 	cout << status << endl;
 	
 	lblEventCutStatus->setText(status);
-//	statusBar()->message(draw->rootTree->getLastMessage(),1500);
 }
 
 
@@ -614,9 +610,6 @@ void MainForm::changeStatus(QString status)
 {
     lblStatus->setText(status);
 }
-
-
-
 
 void MainForm::selectGraphType( int index )
 {
