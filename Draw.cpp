@@ -7,8 +7,19 @@
 
 using namespace std;
 
-Draw::Draw(){};
-Draw::~Draw(){};
+Draw::Draw()
+{
+	colorMultiGraph = 1;
+}
+
+Draw::~Draw(){}; //todo: release resources!
+
+int Draw::getDrawColor()
+{
+	if (isMultiGraph()) colorMultiGraph++;
+	return colorMultiGraph;
+}
+
 
 void Draw::setCanvas(TCanvas *tc)
 {
@@ -38,18 +49,53 @@ void Draw::drawAntennaPosition()
 	canvas->SetGridy();
 	canvas->SetFrameFillColor(0);
 
-	tg->SetFillColor(1);
 	tg->SetMarkerStyle(22);
-	tg->SetMarkerColor(4);
+	tg->SetMarkerColor(getDrawColor());
 	tg->SetTitle("Antenna positions in geographic coordinates");
 
 	tg->GetXaxis()->SetTitle("W-E (m)");
 	tg->GetYaxis()->SetTitle("S-N (m)");
 
-	tg->Draw("AP");
+	tg->Draw(isMultiGraph()? "P" : "AP");
 	canvas->Update();
 
 }
+
+void Draw::drawGrandeCoordinates()
+{
+	float x_G[37]={-0.14,-131.26,-257.02,-384.85,-499.64, 64.48,
+				   -64.99,-211.23,-328.97,-426.06,-569.81, 24.21,
+				   -140.10,-260.88,-377.53,-481.52,  44.09, -95.83,
+				   -195.43,-319.85,-481.54,-608.26,  24.79,-112.86,
+				   -249.76,-386.09,-533.71, 101.22, -24.72,-196.54,
+				   -317.87,-443.33,-565.96,-111.90,-275.03,-389.06, -517.91};
+	float y_G[37]={65.33, 70.87, 101.73, 96.12, 95.51, -42.03,-41.42,
+				   -40.54, -49.29,  -7.66,  46.42,-156.62, -143.78,
+				   -136.19,-144.97,-155.46,-276.64,-276.04, -272.58,
+				   -267.57,-234.93,-281.77,-391.27,-383.64, -392.04,
+				   -382.12,-409.11,-507.57,-507.58,-504.10, -529.16,
+				   -525.89,-526.39,-654.86,-645.43,-653.28, -620.77};
+
+	TGraph *tg = new TGraph();
+	for (int j=0;j<30;j++) tg->SetPoint(j,y_G[j],x_G[j]);
+
+	canvas->SetBorderSize(0);
+	canvas->SetGridx();
+	canvas->SetGridy();
+	canvas->SetFrameFillColor(0);
+
+	tg->SetMarkerStyle(22);
+	tg->SetMarkerColor(getDrawColor());
+	tg->SetTitle("Grande coordinates");
+
+	tg->GetXaxis()->SetTitle("W-E (m)");
+	tg->GetYaxis()->SetTitle("S-N (m)");
+
+	tg->Draw(isMultiGraph()? "P" : "AP");
+	canvas->Update();
+
+}
+
 
 //callback function for ReadRootTree class
 int getValue_2DTGraphErrors(void* obj,int index,vector<float> values,
@@ -91,13 +137,11 @@ void Draw::draw2DGraph(const char * x,const char* y,
 	g->SetTitle(s.str().c_str());
 	g->GetXaxis()->SetTitle(x);
 	g->GetYaxis()->SetTitle(y);
-	g->SetMarkerColor(2);
+	g->SetMarkerColor(getDrawColor());
 	g->SetMarkerStyle(20);
 	g->SetMarkerSize(1);
 
-	
-		
-	g->Draw("AP");
+	g->Draw(isMultiGraph()? "P" : "AP");
 	canvas->Update();
 }
 
@@ -145,16 +189,17 @@ void Draw::drawPolarGraph(const char * r, const char* theta,
 //	g->GetXaxis()->SetTitle(r);
 //	g->GetYaxis()->SetTitle(theta);
 
-	if (multiStatus == MULTI_START)
-	{
-		g->Draw("AOP");
-		multiStatus = MULTI_CONT;
-	}
-	else if (multiStatus == MULTI_CONT)
-		g->Draw("P");
-	else if (multiStatus == MULTI_NORMAL)
-		g->Draw("AOP");
+// 	if (multiStatus == MULTI_START)
+// 	{
+// 		g->Draw("AOP");
+// 		multiStatus = MULTI_CONT;
+// 	}
+// 	else if (multiStatus == MULTI_CONT)
+// 		g->Draw("P");
+// 	else if (multiStatus == MULTI_NORMAL)
+// 		g->Draw("AOP");
 
+	g->Draw(isMultiGraph()? "P" : "AOP");
 	
 	canvas->Update();
 
@@ -163,18 +208,20 @@ void Draw::drawPolarGraph(const char * r, const char* theta,
 	g->GetPolargram()->SetNdivPolar(104);
 	g->GetPolargram()->SetToDegree();
 
-	if (multiStatus == MULTI_START)
-	{
-		g->SetMarkerColor(1);
-		colorMultiGraph = 1;
-	}
-	else if (multiStatus == MULTI_CONT)
-	{
-		colorMultiGraph = (colorMultiGraph == 9)? 1: colorMultiGraph +1;
-		g->SetMarkerColor(colorMultiGraph);
-	}
-	else if (multiStatus == MULTI_NORMAL)
-		g->SetMarkerColor(4);
+// 	if (multiStatus == MULTI_START)
+// 	{
+// 		g->SetMarkerColor(1);
+// 		colorMultiGraph = 1;
+// 	}
+// 	else if (multiStatus == MULTI_CONT)
+// 	{
+// 		colorMultiGraph = (colorMultiGraph == 9)? 1: colorMultiGraph +1;
+// 		g->SetMarkerColor(colorMultiGraph);
+// 	}
+// 	else if (multiStatus == MULTI_NORMAL)
+// 		g->SetMarkerColor(4);
+
+	g->SetMarkerColor(getDrawColor());
 	
 	g->SetMarkerStyle(21);
 	g->SetMarkerSize(0.8);
@@ -331,12 +378,3 @@ void Draw::clearCanvas()
 	canvas->Update();
 }
 
-void Draw::beginMultigraph()
-{
-	multiStatus = MULTI_START;
-}
-
-void Draw::endMultigraph()
-{
-	multiStatus = MULTI_NORMAL;
-}

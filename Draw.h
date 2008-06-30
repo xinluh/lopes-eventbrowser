@@ -27,19 +27,22 @@ public:
 	enum multiGraphStatus {MULTI_START,MULTI_CONT,MULTI_NORMAL};
 
 	ReadRootTree *  rootTree;
+	bool isMultiGraph() {return multiGraph;	}
+	
 	enum saveAsOptions { DEFAULT, OPEN_ONLY, CLOSE_ONLY };
 
 	void setCanvas(TCanvas * tc);
 	void setCanvas(TCanvas * tc, int subpadnumber);
-	void beginMultigraph();
-	void endMultigraph();
+	void setMultiGraph(bool isMultiGraph) { colorMultiGraph = 1;
+	                                        multiGraph = isMultiGraph;}
 	void setSourceRootTree(std::vector<std::string> root_files,
 						   const char * treeName);
 	void divideCanvas(int n_columns, int n_rows);
 	void clearCanvas();
 	
 	void drawAntennaPosition();
-    void draw2DGraph(const char * x,const char* y,
+	void drawGrandeCoordinates();
+	void draw2DGraph(const char * x,const char* y,
 			const char * x_err, const char* y_err);
     void drawPolarGraph(const char * r, const char* theta, const char * r_err,
 						const char * theta_err);
@@ -55,9 +58,12 @@ public:
 	int padn; //the subpad number
 	multiGraphStatus multiStatus;
 	int colorMultiGraph; // keeping track of the colors used by previous graph
+	bool multiGraph;
+	int getDrawColor(); //detect whether is multiGraph and auto increment the
+						//color as needed
+	
+	
 
-	// callback functions:
-	//int getValue_ShowerAngles(void* obj,int index,float values[NUM_ARG]);
 };
 
 

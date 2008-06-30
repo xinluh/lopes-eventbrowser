@@ -266,16 +266,27 @@ void MainForm::Draw()
 	if (ckbNewTab->isChecked())
 		addNewTab();
 
-	if (ckbMultiGraph->isChecked() && multiGraphCont)
-	{
-		draw->beginMultigraph();
-		multiGraphCont = true;
-	}
+// 	if (ckbMultiGraph->isChecked() && multiGraphCont)
+// 	{
+// 		draw->beginMultigraph();
+// 		multiGraphCont = true;
+// 	}
 	
 	if (wgsAction->visibleWidget() == tabPosition)
 	{
-		draw->drawAntennaPosition();
-		renameTab("Antenna Position");
+		switch (cmbPositionType->currentItem())
+		{
+			case 0:
+				draw->drawGrandeCoordinates();
+				renameTab("Grande Coordinates");
+				break;
+			case 1:
+				draw->drawAntennaPosition();
+				renameTab("Antenna Position");
+				break;
+		}
+
+
 	}
 	else if (wgsAction->visibleWidget() == tabGraph2D)
 	{
@@ -592,11 +603,7 @@ void MainForm::clearGraph()
 
 void MainForm::setMultigraphStatus( bool state )
 {
-	if (!state)
-	{
-		draw->endMultigraph();
-		multiGraphCont = false;
-	}
+	draw->setMultiGraph(state);
 }
 
 
