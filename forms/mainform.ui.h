@@ -666,13 +666,17 @@ void MainForm::insertBranchName( const QString& name )
 		++it;
 		if (w->hasFocus())
 		{
-			if ((QLineEdit*)w != 0)
+			if (dynamic_cast<QLineEdit*>(w) != 0)
+			{
 				((QLineEdit*)w)->setText(((QLineEdit*)w)->text() + name);
-			
-			if ((QTextEdit*)w != 0)
-				((QTextEdit*)w)->setText(((QTextEdit*)w)->text() + name);
+				break;
+			}
 
-			break;
+			if ((QTextEdit*)w != 0)
+			{
+				((QTextEdit*)w)->setText(((QTextEdit*)w)->text() + name);
+				break;
+			}
 		}
     }
 
