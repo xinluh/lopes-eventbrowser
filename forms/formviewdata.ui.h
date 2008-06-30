@@ -10,6 +10,9 @@
 ** destructor.
 *****************************************************************************/
 #include "ReadRootTree.h"
+#include "ColumnCollection.h"
+#include "formChooseDisplayColumns.h"
+
 
 #include <qstatusbar.h>
 
@@ -26,6 +29,7 @@ using namespace std;
 #define MAX_NUM_EVENTS 500
 
 ReadRootTree * rootTree;
+ColumnCollection * cols;
 
 
 void formViewData::initialize( ReadRootTree * root_Tree )
@@ -35,21 +39,42 @@ void formViewData::initialize( ReadRootTree * root_Tree )
 	rootTree = root_Tree;
 
 	txtEventCut->setCurrentText(rootTree->getEventCut());
-	setColumnNames(rootTree->getBranchNames());
-	fetchData(rootTree->getBranchNames());
-
+	cols = new ColumnCollection(rootTree->getBranchNames());
+		
+	setColumnNames();
+	applyCut();
+	
 	
 	
     setEnabled(true);
 }
 
 
-void formViewData::setColumnNames( vector<string> names )
+void formViewData::applyCut()
 {
-	table->setNumCols(names.size());
-	for (int i = 0; i < (int) names.size(); i++)
-			table->horizontalHeader()->setLabel(i,names[i]);
+	rootTree->setEventCut(txtEventCut->currentText().ascii());
+//	btnApplyCut->setEnabled(false);
+
+	fetchData();
+
+	QString status  = QString("Current number of events: %1")
+		.arg(rootTree->getNumberEntries());
+
+	cout << status << endl;
+	
+	
+	//lblEventCutStatus->setText(status);
+	statusBar()->message(status);
+	
 }
+
+void formViewData::setColumnNames()
+{
+	table->setNumCols(cols->columns.size());
+	for (int i = 0; i < (int)cols->columns.size(); i++)
+			table->horizontalHeader()->setLabel(i,cols->columns[i].alias);
+}
+
 
 int callback_fetchData(void* obj,int index, vector<string> values,
 					   long total_n)
@@ -75,32 +100,24 @@ int callback_fetchData(void* obj,int index, vector<string> values,
 	
 }
 
-void formViewData::fetchData(vector<string> column_expressions)
+void formViewData::fetchData()
 {
 	// clear the table   
-//	while (table->numRows() != 0)
-	//	table->removeRow(0);
 	table->setNumRows(0);
-	
-	
-	rootTree->fillValues_str(&callback_fetchData,table,column_expressions);
+	rootTree->fillValues_str(&callback_fetchData,table,cols->getExpressions());
 }
 
 
-void formViewData::applyCut()
+void formViewData::editColumns()
 {
-	rootTree->setEventCut(txtEventCut->currentText().ascii());
-//	btnApplyCut->setEnabled(false);
-
-	fetchData(rootTree->getBranchNames());
-
-	QString status  = QString("Current number of events: %1")
-		.arg(rootTree->getNumberEntries());
-
-	cout << status << endl;
-	
-	
-	//lblEventCutStatus->setText(status);
-	statusBar()->message(status);
-	
+	// todo: important: make a copy of the ColumnCollection class before
+	// sending it off for editing; otherwise after user canceled the result
+	// could be bad...
+    formChooseDisplayColumns f(this);
+    f.initialize(cols);
+	if (f.exec())
+	{
+		setColumnNames();
+		fetchData();
+	}
 }

@@ -19,6 +19,14 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>btnEditColumns</cstring>
+            </property>
+            <property name="text">
+                <string>Edit Columns</string>
+            </property>
+        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout24</cstring>
@@ -104,6 +112,12 @@
         <receiver>btnApplyCut</receiver>
         <slot>toggle()</slot>
     </connection>
+    <connection>
+        <sender>btnEditColumns</sender>
+        <signal>clicked()</signal>
+        <receiver>formViewData</receiver>
+        <slot>editColumns()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">string</include>
@@ -112,9 +126,10 @@
 </includes>
 <slots>
     <slot>initialize( ReadRootTree * root_Tree )</slot>
-    <slot>setColumnNames( std::vector&lt;std::string&gt; names )</slot>
-    <slot>fetchData( std::vector&lt;std::string&gt; column_expressions )</slot>
     <slot>applyCut()</slot>
+    <slot>setColumnNames()</slot>
+    <slot>fetchData()</slot>
+    <slot>editColumns()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

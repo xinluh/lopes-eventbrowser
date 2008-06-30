@@ -285,8 +285,6 @@ void MainForm::Draw()
 				renameTab("Antenna Position");
 				break;
 		}
-
-
 	}
 	else if (wgsAction->visibleWidget() == tabGraph2D)
 	{

@@ -10,9 +10,17 @@ HEADERS += forms/mainform.ui.h \
            Draw.h ReadRootTree.h \
            Canvas.h \
            Helper.h \
-           forms/formviewdata.ui.h
-INTERFACES += forms/mainform.ui forms/formviewdata.ui
-SOURCES += main.cpp Draw.cpp ReadRootTree.cpp Canvas.cpp Helper.cpp
+           forms/formviewdata.ui.h \
+           ColumnCollection.h
+INTERFACES += forms/mainform.ui\
+              forms/formviewdata.ui \
+              forms/formChooseDisplayColumns.ui
+SOURCES += main.cpp \
+           Draw.cpp \
+           ReadRootTree.cpp \
+           Canvas.cpp \
+           Helper.cpp \
+           ColumnCollection.cpp
 
 SOURCES += muParserLib/muParserBase.cpp \
            muParserLib/muParser.cpp \
