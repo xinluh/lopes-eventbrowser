@@ -1,11 +1,2 @@
-
-Do:
-1) qmake -project
-2) add these lines after the *.pro file (for the root libraries):
-
-LIBS	+= -L$(ROOTSYS)/lib -lCore -lCint -lHist -lGraf -lGraf3d -lGpad -lTree
--lRint -lPostscript -lMatrix -lPhysics -pthread -lm -ldl -rdynamicinclude 
-($(ROOTSYS)/include/rootcint.pri
-
-3) qmake
-4) make
+To compile:
+simply type qmake;make
