@@ -13,11 +13,16 @@
 #include <qlistview.h>
 #include <vector>
 
+#ifdef DEBUG
+#include <iostream>
+#endif
+
+
 using namespace std;
 
 ColumnCollection * cc;
 vector<QCheckListItem*> items;
-int currentItem; // keep track of which item had been selected
+int currentItem = -1; // keep track of which item had been selected
 
 
 void formChooseDisplayColumns::init()
@@ -59,20 +64,15 @@ void formChooseDisplayColumns::addItem(singleColumn * c)
 
 void formChooseDisplayColumns::editSingleItem( QListViewItem * item )
 {
-	if (currentItem != -1) // commit the change
-	{
-		cc->columns[currentItem].shown = items[currentItem]->isOn();
-		cc->columns[currentItem].expression = items[currentItem]->
-			text(1).ascii();
-		cc->columns[currentItem].alias = items[currentItem]->text(2).ascii();
-	}
+    // save previous changes if any
+	saveChanges();
 
-	currentItem = getIndex(item);	
-	QCheckListItem *q = (QCheckListItem*) item;
+	// keep track of the index being selected so that when user reselects the
+	// previous index is knonw
+	currentItem = getIndex(item);
 
-	ckbShown->setChecked(q->isOn());
-	txtAlias->setText(q->text(2));
-	cmbExpression->setCurrentText(q->text(1));
+	txtAlias->setText(cc->columns[currentItem].alias);
+	cmbExpression->setCurrentText(cc->columns[currentItem].expression);
 }
 
 
@@ -85,4 +85,32 @@ int formChooseDisplayColumns::getIndex( QListViewItem *item )
 	}
 
 	return -1;
+	
+}
+
+
+void formChooseDisplayColumns::saveChanges()
+{
+	if (currentItem != -1)
+	{
+		cout << "item " << currentItem <<  endl;
+		
+		cc->columns[currentItem].shown = items[currentItem]->isOn();
+		cc->columns[currentItem].expression = cmbExpression->
+			                                  currentText().ascii();
+		cc->columns[currentItem].alias = txtAlias->text().ascii();
+	}
+}
+
+
+void formChooseDisplayColumns::okClicked()
+{
+	saveChanges();
+	accept();
+}
+
+
+void formChooseDisplayColumns::cancelClicked()
+{
+	reject();
 }

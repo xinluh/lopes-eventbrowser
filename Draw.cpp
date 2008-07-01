@@ -77,7 +77,7 @@ void Draw::drawGrandeCoordinates()
 				   -525.89,-526.39,-654.86,-645.43,-653.28, -620.77};
 
 	TGraph *tg = new TGraph();
-	for (int j=0;j<30;j++) tg->SetPoint(j,y_G[j],x_G[j]);
+	for (int j=0;j<30;j++) tg->SetPoint(j,x_G[j],y_G[j]);
 
 	canvas->SetBorderSize(0);
 	canvas->SetGridx();
