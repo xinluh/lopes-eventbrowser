@@ -15,7 +15,7 @@ struct singleColumn
 	singleColumn();
 	singleColumn(std::string exp)
 	{
-		alias = ValidateFilename(exp);
+		alias = validateFilename(exp);
 		expression = exp;
 		shown = true;
 	}
@@ -23,9 +23,9 @@ struct singleColumn
 
 //typedef std::vector<singleColumn> ColumnCollection;
 
- class ColumnCollection
+class ColumnCollection
  {
-  private:
+ private:
  	
 
   public:
@@ -34,9 +34,14 @@ struct singleColumn
  	~ColumnCollection();
 
 	std::vector<singleColumn> columns;
-	std::vector<std::string> getExpressions();
-	std::vector<std::string> getAliases();
+	
+	// when considerShown is true, the expression/alias from the column marked
+	// as not shown is not included
+	std::vector<std::string> getExpressions(bool considerShown = false);
+	std::vector<std::string> getAliases(bool considerShown = false);
+	int size(bool considerShown = false);
 
+	void print();
 //	ColumnCollection* clone();
 	 
  };

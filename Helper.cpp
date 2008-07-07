@@ -7,7 +7,7 @@
 using namespace std;
 
 
-string ValidateFilename(string s)
+string validateFilename(string s)
 {
 	if (s.empty()) return s;
 

@@ -43,9 +43,7 @@ void formViewData::initialize( ReadRootTree * root_Tree )
 		
 	setColumnNames();
 	applyCut();
-	
-	
-	
+		
     setEnabled(true);
 }
 
@@ -70,9 +68,11 @@ void formViewData::applyCut()
 
 void formViewData::setColumnNames()
 {
-	table->setNumCols(cols->columns.size());
-	for (int i = 0; i < (int)cols->columns.size(); i++)
-			table->horizontalHeader()->setLabel(i,cols->columns[i].alias);
+	vector<string> aliases = cols->getAliases(true);
+	table->setNumCols(aliases.size());
+	
+	for (int i = 0; i < (int)aliases.size(); i++)
+			table->horizontalHeader()->setLabel(i,aliases[i]);
 }
 
 
@@ -102,9 +102,19 @@ int callback_fetchData(void* obj,int index, vector<string> values,
 
 void formViewData::fetchData()
 {
-	// clear the table   
+	// clear the table first
 	table->setNumRows(0);
-	rootTree->fillValues_str(&callback_fetchData,table,cols->getExpressions());
+
+	// don't starting fetching if nothing is needed for display
+	if (cols->size(true) == 0) return; 
+
+	// make the table enabled/disabled to indicate visually whether the
+	// data-fetching is still going on
+	table->setEnabled(false);
+	rootTree->fillValues_str(&callback_fetchData,
+							 table,
+							 cols->getExpressions(true));
+	table->setEnabled(true);
 }
 
 
@@ -115,9 +125,12 @@ void formViewData::editColumns()
 	// could be bad...
     formChooseDisplayColumns f(this);
     f.initialize(cols);
+
 	if (f.exec())
 	{
+		cols->print();
 		setColumnNames();
 		fetchData();
+		cols->print();
 	}
 }

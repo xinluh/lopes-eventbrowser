@@ -7,7 +7,7 @@
 
 const std::string invalidFilenameCharacters = "`~#%&*{}\\:?/|;";
 
-std::string ValidateFilename(std::string s);
+std::string validateFilename(std::string s);
 
 
 

@@ -4,7 +4,7 @@
 #include <iostream>
 #endif
 
-//#undef DEBUG
+#undef DEBUG
 
 //uncomment the following line if it is desirable to use integer
 //for computation; currently only float can be used in expressions which are
@@ -288,7 +288,7 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 			else if (i == 0) // if it's the first, clean up the previous data
 			{
 				if (type == CALLBACK_STR)
-					values_s[j] = "ERROR";
+					values_s[j] = "#ERROR#";
 				else
 					values_f[j] = 0;
 			}

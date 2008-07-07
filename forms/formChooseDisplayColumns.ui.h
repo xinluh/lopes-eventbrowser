@@ -12,6 +12,8 @@
 //#include "ColumnCollection.h"
 #include <qlistview.h>
 #include <vector>
+#include "Helper.h"
+
 
 #ifdef DEBUG
 #include <iostream>
@@ -31,9 +33,9 @@ void formChooseDisplayColumns::init()
 	lv->setSorting(-1);
 }
 
-void formChooseDisplayColumns::initialize( ColumnCollection * c )
+void formChooseDisplayColumns::initialize( ColumnCollection * collection )
 {
-	cc = c;
+	cc = collection;
 	populate();
 }
 
@@ -44,11 +46,13 @@ void formChooseDisplayColumns::populate()
 
 	for (int i = 0; i < (int) cc->columns.size(); ++i)
 	    addItem(&(cc->columns[i]));
+
+	lv->setSelected(items[0],true);
 }
 
-void formChooseDisplayColumns::addItem(singleColumn * c)
+int formChooseDisplayColumns::addItem(singleColumn * c)
 {
-	if (!c) return;
+	if (!c) return -1;
 
 	QCheckListItem * q = new QCheckListItem(lv,lv->lastItem(),
 											"",QCheckListItem::CheckBox);
@@ -56,9 +60,11 @@ void formChooseDisplayColumns::addItem(singleColumn * c)
 	q->setText(1,c->expression);
 	q->setText(2,c->alias);
 	q->setTristate(false);
-	q->setState(c->shown? QCheckListItem::On:QCheckListItem::Off);
+	q->setState(c->shown? QCheckListItem::On : QCheckListItem::Off);
 
 	items.push_back(q);
+	
+	return (int)items.size() - 1;
 }
 
 
@@ -67,9 +73,12 @@ void formChooseDisplayColumns::editSingleItem( QListViewItem * item )
     // save previous changes if any
 	saveChanges();
 
+//	if (!item) {gbEdit->setEnabled(false); return;}
+
 	// keep track of the index being selected so that when user reselects the
 	// previous index is knonw
 	currentItem = getIndex(item);
+
 
 	txtAlias->setText(cc->columns[currentItem].alias);
 	cmbExpression->setCurrentText(cc->columns[currentItem].expression);
@@ -91,10 +100,12 @@ int formChooseDisplayColumns::getIndex( QListViewItem *item )
 
 void formChooseDisplayColumns::saveChanges()
 {
-	if (currentItem != -1)
+	if (txtAlias->text().isEmpty() && !cmbExpression->currentText().isEmpty())
+		txtAlias->setText(validateFilename(cmbExpression->currentText()));
+	
+	if (currentItem != -1 && !cmbExpression->currentText().isEmpty() &&
+		!txtAlias->text().isEmpty())
 	{
-		cout << "item " << currentItem <<  endl;
-		
 		cc->columns[currentItem].shown = items[currentItem]->isOn();
 		cc->columns[currentItem].expression = cmbExpression->
 			                                  currentText().ascii();
@@ -113,4 +124,38 @@ void formChooseDisplayColumns::okClicked()
 void formChooseDisplayColumns::cancelClicked()
 {
 	reject();
+}
+
+
+void formChooseDisplayColumns::addNewItem()
+{
+	singleColumn *s  = new singleColumn("new_exp");
+
+	cc->columns.push_back(*s);
+	lv->setSelected((QListViewItem*) items[addItem(s)],true);
+}
+
+
+void formChooseDisplayColumns::deleteItem( int index )
+{
+	cc->print();
+	
+	// todo:don't know what in the world is happening here - the item erased
+	// is always the one before, but shifting the index will result in index
+	// out of bound...
+	cc->columns.erase(cc->columns.begin() + index -1 );
+	
+	delete items[index];
+	items.erase(items.begin()+index);
+
+	cc->print();
+						  
+}
+
+
+void formChooseDisplayColumns::deleteItem()
+{
+	cout << "delete item " << currentItem << endl;
+
+	deleteItem(currentItem);
 }

@@ -80,7 +80,7 @@ void MainForm::init()
 	lvGraphs->setSorting(-1);
 	
 	addNewTab();	
-
+	
 	// set up statusbar
 	lblStatus = new QLabel("Ready",this);
 	lblEventCutStatus = new QLabel("Current number of events: 00000",this);
@@ -127,7 +127,7 @@ void MainForm::fileOpen()
 void MainForm::fileSave()
 {
 	QString file = QFileDialog::getSaveFileName(
-		           ValidateFilename(tabNames[getTabIndex()]->text(0)),
+		           validateFilename(tabNames[getTabIndex()]->text(0)),
 					fileTypeFilterSingle,
                     this,
                     tr("save file dialog"),

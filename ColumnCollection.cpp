@@ -19,28 +19,41 @@ using namespace std;
  	}
  }
 
-vector<string> ColumnCollection::getExpressions()
+vector<string> ColumnCollection::getExpressions( bool considerShown)
 {
 	vector<string> s;
 	for (int i = 0; i <(int) columns.size(); ++i)
 	{
-		cout << columns[i].expression << endl;
-		
-		s.push_back(columns[i].expression);
+		if (!considerShown || (considerShown && columns[i].shown))
+			s.push_back(columns[i].expression);
 
 	}
 	return s;
 }
 					
 	
-vector<string> ColumnCollection::getAliases()
+vector<string> ColumnCollection::getAliases( bool considerShown)
 {
 	vector<string> s;
 	for (int i = 0; i <(int) columns.size(); ++i)
-		s.push_back(columns[i].alias);
+	{
+		if (!considerShown || (considerShown && columns[i].shown))
+			s.push_back(columns[i].alias);
+	}
 	return s;
 }
-					
+
+int ColumnCollection::size( bool considerShown)
+{
+	int n = 0;
+	for (int i = 0; i <(int) columns.size(); ++i)
+	{
+		if (!considerShown || (considerShown && columns[i].shown))
+			n++;
+	}
+		
+	return n;
+}
 // ColumnCollection* ColumnCollection::clone()
 // {
 // 	ColumnCollection *c = new ColumnCollection();
@@ -51,3 +64,15 @@ vector<string> ColumnCollection::getAliases()
 // 	}
 // 	return c;
 // }
+
+void ColumnCollection::print()
+{
+
+		cout << "-----------------------------------" << endl;
+	for (int i = 0; i <(int) columns.size(); ++i)
+	{
+	
+		cout << columns[i].shown << " " << columns[i].expression << " " << columns[i].alias << endl;
+	}
+		
+}
