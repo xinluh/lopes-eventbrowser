@@ -12,6 +12,7 @@
 #include "ReadRootTree.h"
 #include "ColumnCollection.h"
 #include "formChooseDisplayColumns.h"
+#include "Helper.h"
 
 
 #include <qstatusbar.h>
@@ -39,7 +40,10 @@ void formViewData::initialize( ReadRootTree * root_Tree )
 	rootTree = root_Tree;
 
 	txtEventCut->setCurrentText(rootTree->getEventCut());
-	cols = new ColumnCollection(rootTree->getBranchNames());
+	if (fileExists(COLUMN_FILE))
+		cols = ColumnCollection::readFromFile();
+	else
+		cols = new ColumnCollection(rootTree->getBranchNames());
 		
 	setColumnNames();
 	applyCut();
@@ -128,9 +132,7 @@ void formViewData::editColumns()
 
 	if (f.exec())
 	{
-		cols->print();
 		setColumnNames();
 		fetchData();
-		cols->print();
 	}
 }

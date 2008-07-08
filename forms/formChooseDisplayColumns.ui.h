@@ -45,7 +45,7 @@ void formChooseDisplayColumns::populate()
 	items.clear();
 
 	for (int i = 0; i < (int) cc->columns.size(); ++i)
-	    addItem(&(cc->columns[i]));
+	    addItem(cc->columns[i]);
 
 	lv->setSelected(items[0],true);
 }
@@ -79,9 +79,8 @@ void formChooseDisplayColumns::editSingleItem( QListViewItem * item )
 	// previous index is knonw
 	currentItem = getIndex(item);
 
-
-	txtAlias->setText(cc->columns[currentItem].alias);
-	cmbExpression->setCurrentText(cc->columns[currentItem].expression);
+	txtAlias->setText(cc->columns[currentItem]->alias);
+	cmbExpression->setCurrentText(cc->columns[currentItem]->expression);
 }
 
 
@@ -106,10 +105,10 @@ void formChooseDisplayColumns::saveChanges()
 	if (currentItem != -1 && !cmbExpression->currentText().isEmpty() &&
 		!txtAlias->text().isEmpty())
 	{
-		cc->columns[currentItem].shown = items[currentItem]->isOn();
-		cc->columns[currentItem].expression = cmbExpression->
+		cc->columns[currentItem]->shown = items[currentItem]->isOn();
+		cc->columns[currentItem]->expression = cmbExpression->
 			                                  currentText().ascii();
-		cc->columns[currentItem].alias = txtAlias->text().ascii();
+		cc->columns[currentItem]->alias = txtAlias->text().ascii();
 	}
 }
 
@@ -131,7 +130,7 @@ void formChooseDisplayColumns::addNewItem()
 {
 	singleColumn *s  = new singleColumn("new_exp");
 
-	cc->columns.push_back(*s);
+	cc->addColumn(s);
 	lv->setSelected((QListViewItem*) items[addItem(s)],true);
 }
 
@@ -140,10 +139,7 @@ void formChooseDisplayColumns::deleteItem( int index )
 {
 	cc->print();
 	
-	// todo:don't know what in the world is happening here - the item erased
-	// is always the one before, but shifting the index will result in index
-	// out of bound...
-	cc->columns.erase(cc->columns.begin() + index -1 );
+	cc->removeColumn(index);
 	
 	delete items[index];
 	items.erase(items.begin()+index);
@@ -158,4 +154,10 @@ void formChooseDisplayColumns::deleteItem()
 	cout << "delete item " << currentItem << endl;
 
 	deleteItem(currentItem);
+}
+
+
+void formChooseDisplayColumns::saveColumnsToFile()
+{
+	cc->saveToFile();
 }
