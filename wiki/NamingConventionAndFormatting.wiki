@@ -2,7 +2,7 @@
 #labels Phase-Design
 
 = Naming convention =
-In general the names of variables, functions, etc. follow the format of starting with lower case with each subsequent word capitalized, e.g. oneLongVariableName. Constants and enum members are all capital letters using underscore as separator, e.g. ENUM_NAME. The names are usually descriptive unless it is a counting or local variable.
+In general the names of variables, functions, etc. follow the format of starting with lower case with each subsequent word capitalized, e.g. oneLongVariableName. Constants and enum members are all capital letters using underscore as separator, e.g. ENUM_NAME. Classes are named similiar to the variable except the first letter is capitalized. The names are usually descriptive unless it is a counting or local variable.
 
 == UI elements ==
 All UI elements/widgets, except labels which does not show up in the code, are named using the Hungarian notation, e.g. btnApply, with prefixes:
