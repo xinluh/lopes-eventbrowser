@@ -50,3 +50,46 @@ bool fileExists(string strFilename)
   
   return(blnReturn);
 }
+
+int getFileList (string dir, vector<string> &files, string extension)
+{
+    DIR *dp;
+    struct dirent *dirp;
+
+	if (dir.length() == 0)
+		dir = getCurrentDir();
+
+	if((dp  = opendir(dir.c_str())) == NULL)
+	{
+        cerr << "Error opening " << dir << endl;
+        return -1;
+    }
+
+    while ((dirp = readdir(dp)) != NULL)
+	{
+		string s(dirp->d_name);
+
+		cout << s << endl;
+
+		if (s.length() > extension.length() &&
+		    (s.compare(s.length() - extension.length(),
+					   extension.length(),extension) == 0))
+			files.push_back(string(dirp->d_name));
+    }
+
+	closedir(dp);
+    return 0;
+}
+
+string getCurrentDir()
+{
+	char * s = new char[250];
+	string *str;
+	if (getcwd(s,250))
+		str = new string(s);
+	else
+		str = new string;
+
+	delete s;
+	return *str;
+}

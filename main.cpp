@@ -19,7 +19,7 @@ using namespace std;
 
 const char * datafile = "tree-ka104ev.root";
 
-int main( int argc, char **argv ) 
+int main( int argc, char *argv[] ) 
 {
 	QApplication *app = new QApplication(argc, argv);
 	app->connect( app, SIGNAL( lastWindowClosed() ), app, SLOT( quit() ) );

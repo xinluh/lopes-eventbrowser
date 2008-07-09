@@ -338,7 +338,7 @@ void Draw::drawShowerAngles(const char * r, const char* theta,
 
 void Draw::setSourceRootTree(vector<string> root_files, const char * treeName)
 {
-	rootTree = new ReadRootTree(root_files,treeName,"branches.txt");
+	rootTree = new ReadRootTree(root_files,treeName,"branches.cfg");
 }
 
 void Draw::saveAs(TCanvas *tc, const char * filename,

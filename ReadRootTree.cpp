@@ -26,7 +26,15 @@ ReadRootTree::ReadRootTree(vector<string> root_files, const char * tree_name,
 
 	entries = (int)chain->GetEntries();
 
-	getBranches(branchNamees_file);
+	if (fileExists(branchNamees_file))
+		getBranches(branchNamees_file);
+	else
+	{
+		cerr << "The branches.txt file not found!!! "
+			 << "The behavoir is undefined now..."
+			 << endl;
+		return;
+	}
 
 	setEventCut("");
 }

@@ -70,8 +70,10 @@ QLabel* lblEventCutStatus;
 void MainForm::init()
 {
 	vector<string> files;
-	files.push_back("tree-ka104ev.root");
-	files.push_back("tree-g139ev-new.root");
+    // get a list of files ending with .root in the current working directory
+	getFileList("",files,"root"); 
+	// files.push_back("tree-ka104ev.root");
+	// files.push_back("tree-g139ev-new.root");
 	draw->setSourceRootTree(files,"T");
 
 //	cmbEventCuts->setEditable(true);
