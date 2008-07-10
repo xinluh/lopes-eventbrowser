@@ -34,11 +34,7 @@ int main( int argc, char *argv[] )
 
 //	cout << ValidateFilename("askgjakjdf##g_f,gkja") << endl;
 	
-	cout << "---------------------------" << endl << endl << endl;
-	cout << datafile << endl;
-	cout << "---------------------------" << endl << endl << endl;
-
-	
+	cout << "Application starting..." << endl;
 	
 //	ReadRootTree * r = new ReadRootTree("tree-ka104ev.root","T");
 	

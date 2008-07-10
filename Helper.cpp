@@ -34,11 +34,13 @@ bool fileExists(string strFilename)
 
   // Attempt to get the file attributes
   intStat = stat(strFilename.c_str(),&stFileInfo);
-  if(intStat == 0) {
+  if(intStat == 0)
+  {
     // We were able to get the file attributes
     // so the file obviously exists.
     blnReturn = true;
-  } else {
+  } else
+  {
     // We were not able to get the file attributes.
     // This may mean that we don't have permission to
     // access the folder which contains this file. If you
@@ -69,8 +71,6 @@ int getFileList (string dir, vector<string> &files, string extension)
 	{
 		string s(dirp->d_name);
 
-		cout << s << endl;
-
 		if (s.length() > extension.length() &&
 		    (s.compare(s.length() - extension.length(),
 					   extension.length(),extension) == 0))
@@ -92,4 +92,19 @@ string getCurrentDir()
 
 	delete s;
 	return *str;
+}
+
+string joinStrings(vector<string> strings, string separator)
+{
+	string s;
+
+	for (int i = 0; i < (int) strings.size(); ++i)
+	{
+		if (s.length() != 0)
+			s += separator;
+
+		s += strings[i];
+	}
+
+	return s;
 }
