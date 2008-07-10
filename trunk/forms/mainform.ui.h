@@ -12,6 +12,7 @@
 #include "Draw.h"
 #include "Helper.h"
 #include "formviewdata.h"
+
 #include <qstatusbar.h>
 #include <qfiledialog.h>
 #include <qmessagebox.h>
@@ -27,7 +28,8 @@
 #include <iostream>
 #endif
 
-#define NOT_IMPLEMENTED QMessageBox::information(this, "Message","Sorry, not implemented yet." );
+#define NOT_IMPLEMENTED QMessageBox::information(this, \
+					    "Message","Sorry, not implemented yet." );
 
 using namespace std;
 
@@ -59,7 +61,6 @@ vector<int> tabIds;
 vector<QListViewItem*> tabNames;
 
 bool multiGraphCont = false;
-
 // statusbar
 QLabel* lblStatus;
 QLabel* lblEventCutStatus;
@@ -69,37 +70,46 @@ QLabel* lblEventCutStatus;
 
 void MainForm::init()
 {
-	vector<string> files;
-    // get a list of files ending with .root in the current working directory
-	getFileList("",files,"root"); 
-	// files.push_back("tree-ka104ev.root");
-	// files.push_back("tree-g139ev-new.root");
-	draw->setSourceRootTree(files,"T");
-
-//	cmbEventCuts->setEditable(true);
-
 	//don't sort the listview - it messes up the order of inserting tabs
 	lvGraphs->setSorting(-1);
 	
 	addNewTab();	
 	
-	// set up statusbar
+	// set up statusbar; important: don't attempt to write to status bar
+	// before this!!!
 	lblStatus = new QLabel("Ready",this);
 	lblEventCutStatus = new QLabel("Current number of events: 00000",this);
-
 	lblStatus->setMinimumSize(lblStatus->sizeHint());
-
 	statusBar()->addWidget(lblStatus,1);
 	statusBar()->addWidget(lblEventCutStatus);
 
-  	applyRootCut();
+    // get a list of files ending with .root in the current working directory
+	vector<string> files;
+	getFileList("",files,"root");
+
+	if (files.size() > 0)
+	    fileOpen(files,"");
+	else
+		fileOpen();
+
+	if (!draw->rootTree)
+	{
+		QMessageBox::critical(this,"Error",
+							  "You must select some root files to"
+							  "start with! The application will exit now.");
+		// todo: this does not work...
+		this->close();
+		return;
+	}
+	
+	applyRootCut();
 	fillBranchNames();
 }
 
 void MainForm::fileOpen()
 {
 	vector<string> vfiles;
-	bool ok;
+	bool ok = false;
 	
 	QStringList files = QFileDialog::getOpenFileNames(
                             "Root File (*.root)",
@@ -108,22 +118,40 @@ void MainForm::fileOpen()
                             "open files dialog",
                             "Select one or more root files to open" );
 
-	QString name = QInputDialog::getText(tr("Root Tree"),
-										 tr("Enter the name of the root tree"),
-										 QLineEdit::Normal,
-										 "T",
-										 &ok,
-										 this);
-	if (!ok && name.isEmpty()) return;
+	if (!ok) return;
 	
 	for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
 			vfiles.push_back(*it);
 	
-	draw->setSourceRootTree(vfiles,name.ascii());
+	fileOpen(vfiles,"");
+}
+
+void MainForm::fileOpen(vector<string> filenames, string tree_name)
+{
+	// ask for the tree name if not specified
+	if (tree_name == "")
+	{
+		bool ok = false;
+		QString name = QInputDialog::getText(tr("Name of Root Tree"),
+					    tr("Enter the name of the root tree below.\n\n"
+						   "The root files opened are :\n")
+       						+ joinStrings(filenames, ", "),
+										 QLineEdit::Normal,
+										 "T",
+										 &ok,
+										 this);
+
+		if (!ok && name.isEmpty()) return;
+		tree_name = name.ascii();
+	}
+
+
+	draw->setSourceRootTree(filenames,tree_name.c_str());
 	txtEventCut->setText("");
 	applyRootCut();
 
-	this->setCaption("Browser - " + files.join("; "));
+	this->setCaption("Browser - " + joinStrings(filenames,"; "));
+	changeStatus("Opened files: " + joinStrings(filenames, ", "));
 }
 
 void MainForm::fileSave()
@@ -317,6 +345,8 @@ void MainForm::Draw()
 
 void MainForm::applyRootCut()
 {
+	if (!draw->rootTree) return;
+	
 	draw->rootTree->setEventCut(txtEventCut->text().ascii());
 	btnApplyCut->setEnabled(false);
 
@@ -324,7 +354,7 @@ void MainForm::applyRootCut()
 		.arg(draw->rootTree->getNumberEntries());
 
 	cout << status << endl;
-	
+
 	lblEventCutStatus->setText(status);
 }
 
@@ -646,6 +676,8 @@ void MainForm::viewData()
 
 void MainForm::fillBranchNames()
 {
+	if (!draw->rootTree) return;
+	
 	vector<string> names = draw->rootTree->getBranchNames();
 	for (int i = 0; i < (int) names.size(); i++)
 		cmbBranchNames->insertItem(names[i]);
@@ -682,3 +714,5 @@ void MainForm::insertBranchName( const QString& name )
 
     delete l; 
 }
+
+

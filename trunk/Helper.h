@@ -21,7 +21,8 @@ int getFileList(std::string dir, std::vector<std::string> &files,
 
 std::string getCurrentDir();
 
-
+std::string joinStrings(std::vector<std::string> strings,
+					   std::string separator);
 
 
 
