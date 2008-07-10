@@ -1,0 +1,1629 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>MainForm</class>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>MainForm</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>846</width>
+            <height>791</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Browser</string>
+    </property>
+    <property name="toolTip" stdset="0">
+        <string></string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QSplitter">
+            <property name="name">
+                <cstring>splitter1</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>613</width>
+                    <height>100</height>
+                </size>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout26</cstring>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout25</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QToolButton">
+                                <property name="name">
+                                    <cstring>btnAddNewTab</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="iconSet">
+                                    <iconset>image0</iconset>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Add new canvas</string>
+                                </property>
+                            </widget>
+                            <widget class="QToolButton">
+                                <property name="name">
+                                    <cstring>btnRemoveTab</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="iconSet">
+                                    <iconset>image1</iconset>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Remove current canvas</string>
+                                </property>
+                            </widget>
+                            <widget class="QToolButton">
+                                <property name="name">
+                                    <cstring>btnRenameTab</cstring>
+                                </property>
+                                <property name="text">
+                                    <string></string>
+                                </property>
+                                <property name="iconSet">
+                                    <iconset>image2</iconset>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Rename the current canvas</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer5</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>90</width>
+                                        <height>20</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                        </hbox>
+                    </widget>
+                    <widget class="QListView">
+                        <column>
+                            <property name="text">
+                                <string>Canvas</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>false</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>false</bool>
+                            </property>
+                        </column>
+                        <property name="name">
+                            <cstring>lvGraphs</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>5</hsizetype>
+                                <vsizetype>7</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>100</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>300</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="hScrollBarMode">
+                            <enum>AlwaysOff</enum>
+                        </property>
+                        <property name="allColumnsShowFocus">
+                            <bool>false</bool>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>AllColumns</enum>
+                        </property>
+                    </widget>
+                </vbox>
+            </widget>
+            <widget class="QWidgetStack">
+                <property name="name">
+                    <cstring>wgStack</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>5</hsizetype>
+                        <vsizetype>5</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>500</width>
+                        <height>100</height>
+                    </size>
+                </property>
+                <widget class="QWidget">
+                    <property name="name">
+                        <cstring>wgEmtpyPage</cstring>
+                    </property>
+                    <attribute name="id">
+                        <number>0</number>
+                    </attribute>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1_4</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&lt;p align="center"&gt;&lt;font size="+1"&gt;&lt;font size="+1"&gt;You selected an empty page! Choose a page on the left.&lt;/font&gt;&lt;/font&gt;&lt;/p&gt;</string>
+                            </property>
+                        </widget>
+                    </hbox>
+                </widget>
+                <widget class="QWidget">
+                    <property name="name">
+                        <cstring>qt_dead_widget_WStackPage</cstring>
+                    </property>
+                    <attribute name="id">
+                        <number>1</number>
+                    </attribute>
+                </widget>
+            </widget>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout51</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout48</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QGroupBox">
+                            <property name="name">
+                                <cstring>groupBox3</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>0</hsizetype>
+                                    <vsizetype>5</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="maximumSize">
+                                <size>
+                                    <width>300</width>
+                                    <height>32767</height>
+                                </size>
+                            </property>
+                            <property name="title">
+                                <string>Events</string>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QTextEdit">
+                                    <property name="name">
+                                        <cstring>txtEventCut</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>true</bool>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>7</hsizetype>
+                                            <vsizetype>4</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>ElL_ew&gt;0 &amp;&amp; CCheight_NS &gt; 1.5 &amp;&amp; CCheight_EW &gt;1.5</string>
+                                    </property>
+                                    <property name="wordWrap">
+                                        <enum>WidgetWidth</enum>
+                                    </property>
+                                </widget>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout29</cstring>
+                                    </property>
+                                    <hbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QLabel">
+                                            <property name="name">
+                                                <cstring>textLabel1_3_2</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>Saved Cuts</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QComboBox">
+                                            <item>
+                                                <property name="text">
+                                                    <string>ElL_ew&gt;0 &amp;&amp; CCheight_NS &lt;50 &amp;&amp; CCheight_EW &lt;50 &amp;&amp; CCheight_EW&gt;0  &amp;&amp; CCheight_NS&gt;0 </string>
+                                                </property>
+                                            </item>
+                                            <property name="name">
+                                                <cstring>cmbEventCuts</cstring>
+                                            </property>
+                                            <property name="sizePolicy">
+                                                <sizepolicy>
+                                                    <hsizetype>5</hsizetype>
+                                                    <vsizetype>0</vsizetype>
+                                                    <horstretch>0</horstretch>
+                                                    <verstretch>0</verstretch>
+                                                </sizepolicy>
+                                            </property>
+                                            <property name="maximumSize">
+                                                <size>
+                                                    <width>400</width>
+                                                    <height>32767</height>
+                                                </size>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout40</cstring>
+                                    </property>
+                                    <hbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <widget class="QPushButton">
+                                            <property name="name">
+                                                <cstring>btnApplyCut</cstring>
+                                            </property>
+                                            <property name="enabled">
+                                                <bool>true</bool>
+                                            </property>
+                                            <property name="text">
+                                                <string>&amp;Apply cut</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string>Alt+A</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QPushButton">
+                                            <property name="name">
+                                                <cstring>btnSaveCut</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>&amp;Save Cut</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string>Alt+S</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QPushButton">
+                                            <property name="name">
+                                                <cstring>btnViewData</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>&amp;View Data</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string>Alt+V</string>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout47</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_3_2_2</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>5</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="text">
+                                        <string>Available Branches:</string>
+                                    </property>
+                                </widget>
+                                <widget class="QComboBox">
+                                    <property name="name">
+                                        <cstring>cmbBranchNames</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>4</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>190</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>190</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="focusPolicy">
+                                        <enum>TabFocus</enum>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout49</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout24</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string>&amp;Graph Type:</string>
+                                    </property>
+                                    <property name="buddy" stdset="0">
+                                        <cstring>cmbGraphType</cstring>
+                                    </property>
+                                </widget>
+                                <widget class="QComboBox">
+                                    <item>
+                                        <property name="text">
+                                            <string>2D Graph</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Shower Angles</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Antenna Position</string>
+                                        </property>
+                                    </item>
+                                    <property name="name">
+                                        <cstring>cmbGraphType</cstring>
+                                    </property>
+                                </widget>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer7</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>40</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </hbox>
+                        </widget>
+                        <widget class="QWidgetStack">
+                            <property name="name">
+                                <cstring>wgsAction</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>0</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <widget class="QWidget">
+                                <property name="name">
+                                    <cstring>tabGraph2D</cstring>
+                                </property>
+                                <attribute name="id">
+                                    <number>0</number>
+                                </attribute>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout12</cstring>
+                                        </property>
+                                        <vbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QLayoutWidget">
+                                                <property name="name">
+                                                    <cstring>layout5</cstring>
+                                                </property>
+                                                <hbox>
+                                                    <property name="name">
+                                                        <cstring>unnamed</cstring>
+                                                    </property>
+                                                    <widget class="QLabel">
+                                                        <property name="name">
+                                                            <cstring>textLabel3</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>x-axis:</string>
+                                                        </property>
+                                                    </widget>
+                                                    <widget class="QLineEdit">
+                                                        <property name="name">
+                                                            <cstring>txt2DXAxis</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>1-cos(Geoang)</string>
+                                                        </property>
+                                                    </widget>
+                                                </hbox>
+                                            </widget>
+                                            <widget class="QLayoutWidget">
+                                                <property name="name">
+                                                    <cstring>layout6</cstring>
+                                                </property>
+                                                <hbox>
+                                                    <property name="name">
+                                                        <cstring>unnamed</cstring>
+                                                    </property>
+                                                    <widget class="QLabel">
+                                                        <property name="name">
+                                                            <cstring>textLabel4</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>y-axis:</string>
+                                                        </property>
+                                                    </widget>
+                                                    <widget class="QLineEdit">
+                                                        <property name="name">
+                                                            <cstring>txt2DYAxis</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>CCheight_EW*1e6/Nmu</string>
+                                                        </property>
+                                                    </widget>
+                                                </hbox>
+                                            </widget>
+                                            <spacer>
+                                                <property name="name">
+                                                    <cstring>spacer2</cstring>
+                                                </property>
+                                                <property name="orientation">
+                                                    <enum>Vertical</enum>
+                                                </property>
+                                                <property name="sizeType">
+                                                    <enum>Expanding</enum>
+                                                </property>
+                                                <property name="sizeHint">
+                                                    <size>
+                                                        <width>20</width>
+                                                        <height>20</height>
+                                                    </size>
+                                                </property>
+                                            </spacer>
+                                            <widget class="QCheckBox">
+                                                <property name="name">
+                                                    <cstring>ckb2DErrors</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Use Errors</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QGroupBox">
+                                                <property name="name">
+                                                    <cstring>gb2DErrors</cstring>
+                                                </property>
+                                                <property name="enabled">
+                                                    <bool>false</bool>
+                                                </property>
+                                                <property name="title">
+                                                    <string>Errors</string>
+                                                </property>
+                                                <vbox>
+                                                    <property name="name">
+                                                        <cstring>unnamed</cstring>
+                                                    </property>
+                                                    <widget class="QLayoutWidget">
+                                                        <property name="name">
+                                                            <cstring>layout8</cstring>
+                                                        </property>
+                                                        <hbox>
+                                                            <property name="name">
+                                                                <cstring>unnamed</cstring>
+                                                            </property>
+                                                            <widget class="QLabel">
+                                                                <property name="name">
+                                                                    <cstring>textLabel3_2</cstring>
+                                                                </property>
+                                                                <property name="text">
+                                                                    <string>x-axis:</string>
+                                                                </property>
+                                                            </widget>
+                                                            <widget class="QLineEdit">
+                                                                <property name="name">
+                                                                    <cstring>txt2DXAxisError</cstring>
+                                                                </property>
+                                                                <property name="text">
+                                                                    <string>0.001</string>
+                                                                </property>
+                                                            </widget>
+                                                        </hbox>
+                                                    </widget>
+                                                    <widget class="QLayoutWidget">
+                                                        <property name="name">
+                                                            <cstring>layout9</cstring>
+                                                        </property>
+                                                        <hbox>
+                                                            <property name="name">
+                                                                <cstring>unnamed</cstring>
+                                                            </property>
+                                                            <widget class="QLabel">
+                                                                <property name="name">
+                                                                    <cstring>textLabel4_2</cstring>
+                                                                </property>
+                                                                <property name="text">
+                                                                    <string>y-axis:</string>
+                                                                </property>
+                                                            </widget>
+                                                            <widget class="QLineEdit">
+                                                                <property name="name">
+                                                                    <cstring>txt2DYAxisError</cstring>
+                                                                </property>
+                                                                <property name="text">
+                                                                    <string>sqrt((CCheight_error_EW)^2+(0.4*CCheight_EW)^2)/log10(Nmu)</string>
+                                                                </property>
+                                                            </widget>
+                                                        </hbox>
+                                                    </widget>
+                                                </vbox>
+                                            </widget>
+                                        </vbox>
+                                    </widget>
+                                </hbox>
+                            </widget>
+                            <widget class="QWidget">
+                                <property name="name">
+                                    <cstring>tabShowerAngles</cstring>
+                                </property>
+                                <attribute name="id">
+                                    <number>1</number>
+                                </attribute>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout23</cstring>
+                                        </property>
+                                        <grid>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QLineEdit" row="0" column="1">
+                                                <property name="name">
+                                                    <cstring>txtPolarRAxis</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>90-ElL_ew</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel" row="1" column="0">
+                                                <property name="name">
+                                                    <cstring>textLabel4_3</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>theta-axis (in radians):</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel" row="0" column="0">
+                                                <property name="name">
+                                                    <cstring>textLabel3_3</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>r-axis:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel" row="2" column="0">
+                                                <property name="name">
+                                                    <cstring>textLabel1_5</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>color code by:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLineEdit" row="1" column="1">
+                                                <property name="name">
+                                                    <cstring>txtPolarThetaAxis</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>(360-AzL_ew+90)*3.14159/180</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLineEdit" row="2" column="1">
+                                                <property name="name">
+                                                    <cstring>txtColorCode</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>CCheight_EW</string>
+                                                </property>
+                                            </widget>
+                                        </grid>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>ckbPolarErrors</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Use Errors</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QGroupBox">
+                                        <property name="name">
+                                            <cstring>gbPolarErrors</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="title">
+                                            <string>Errors</string>
+                                        </property>
+                                        <vbox>
+                                            <property name="name">
+                                                <cstring>unnamed_2</cstring>
+                                            </property>
+                                            <widget class="QLayoutWidget">
+                                                <property name="name">
+                                                    <cstring>layout8_2</cstring>
+                                                </property>
+                                                <hbox>
+                                                    <property name="name">
+                                                        <cstring>unnamed_2</cstring>
+                                                    </property>
+                                                    <widget class="QLabel">
+                                                        <property name="name">
+                                                            <cstring>textLabel3_2_2</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>r-axis:</string>
+                                                        </property>
+                                                    </widget>
+                                                    <widget class="QLineEdit">
+                                                        <property name="name">
+                                                            <cstring>txtPolarRAxisError</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>0.001</string>
+                                                        </property>
+                                                    </widget>
+                                                </hbox>
+                                            </widget>
+                                            <widget class="QLayoutWidget">
+                                                <property name="name">
+                                                    <cstring>layout9_2</cstring>
+                                                </property>
+                                                <hbox>
+                                                    <property name="name">
+                                                        <cstring>unnamed_2</cstring>
+                                                    </property>
+                                                    <widget class="QLabel">
+                                                        <property name="name">
+                                                            <cstring>textLabel4_2_2</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>theta-axis:</string>
+                                                        </property>
+                                                    </widget>
+                                                    <widget class="QLineEdit">
+                                                        <property name="name">
+                                                            <cstring>txtPolarThetaAxisError</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>sqrt((CCheight_error_EW)^2+(0.4*CCheight_EW)^2)/log10(Nmu)</string>
+                                                        </property>
+                                                    </widget>
+                                                </hbox>
+                                            </widget>
+                                        </vbox>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                            <widget class="QWidget">
+                                <property name="name">
+                                    <cstring>tabPosition</cstring>
+                                </property>
+                                <attribute name="id">
+                                    <number>2</number>
+                                </attribute>
+                                <widget class="QComboBox">
+                                    <item>
+                                        <property name="text">
+                                            <string>Grande Coordinate</string>
+                                        </property>
+                                    </item>
+                                    <item>
+                                        <property name="text">
+                                            <string>Antenna Position</string>
+                                        </property>
+                                    </item>
+                                    <property name="name">
+                                        <cstring>cmbPositionType</cstring>
+                                    </property>
+                                    <property name="geometry">
+                                        <rect>
+                                            <x>22</x>
+                                            <y>16</y>
+                                            <width>270</width>
+                                            <height>21</height>
+                                        </rect>
+                                    </property>
+                                </widget>
+                            </widget>
+                        </widget>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout24</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>ckbNewTab</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="text">
+                        <string>Draw in new tabbed &amp;window</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+W</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>ckbMultiGraph</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="text">
+                        <string>Draw on the same graph (&amp;Multigraph)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+M</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>120</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>btnClear</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Clear</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>btnDraw</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>100</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Draw</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+D</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<menubar>
+    <property name="name">
+        <cstring>MenuBar</cstring>
+    </property>
+    <item text="&amp;File" name="fileMenu">
+        <action name="fileNewAction"/>
+        <action name="fileOpenAction"/>
+        <action name="fileSaveAction"/>
+        <action name="fileSave_AllAction"/>
+        <item text="Save A&amp;ll As..." name="popupMenu_4" accel="">
+            <action name="fileSave_AllSingle_PostscriptAction"/>
+            <action name="fileSave_AllSeparate_PostscritpsAction"/>
+        </item>
+        <separator/>
+        <action name="filePrintAction"/>
+        <separator/>
+        <action name="fileExitAction"/>
+    </item>
+    <item text="&amp;Edit" name="Edit">
+        <action name="editDivide_CanvasAction"/>
+        <action name="editUndoAction"/>
+        <action name="editRedoAction"/>
+        <separator/>
+        <action name="editCutAction"/>
+        <action name="editCopyAction"/>
+        <action name="editPasteAction"/>
+        <separator/>
+        <action name="editFindAction"/>
+    </item>
+    <item text="&amp;Help" name="helpMenu">
+        <action name="helpContentsAction"/>
+        <action name="helpIndexAction"/>
+        <separator/>
+        <action name="helpAboutAction"/>
+    </item>
+    <separator/>
+</menubar>
+<toolbars>
+</toolbars>
+<actions>
+    <action>
+        <property name="name">
+            <cstring>fileNewAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image3</iconset>
+        </property>
+        <property name="text">
+            <string>&amp;New Tab</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;New Tab</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+N</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileOpenAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image4</iconset>
+        </property>
+        <property name="text">
+            <string>Open</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Open...</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+O</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileSaveAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image5</iconset>
+        </property>
+        <property name="text">
+            <string>Save</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Save</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+S</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileSaveAsAction</cstring>
+        </property>
+        <property name="text">
+            <string>Save As</string>
+        </property>
+        <property name="menuText">
+            <string>Save &amp;As...</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>filePrintAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image6</iconset>
+        </property>
+        <property name="text">
+            <string>Print</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Print...</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+P</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileExitAction</cstring>
+        </property>
+        <property name="text">
+            <string>Exit</string>
+        </property>
+        <property name="menuText">
+            <string>E&amp;xit</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editUndoAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image7</iconset>
+        </property>
+        <property name="text">
+            <string>Undo</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Undo</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Z</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editRedoAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image8</iconset>
+        </property>
+        <property name="text">
+            <string>Redo</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Redo</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+Y</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editCutAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image9</iconset>
+        </property>
+        <property name="text">
+            <string>Cut</string>
+        </property>
+        <property name="menuText">
+            <string>Cu&amp;t</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+X</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editCopyAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image10</iconset>
+        </property>
+        <property name="text">
+            <string>Copy</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Copy</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+C</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editPasteAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image11</iconset>
+        </property>
+        <property name="text">
+            <string>Paste</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Paste</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+V</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editFindAction</cstring>
+        </property>
+        <property name="iconSet">
+            <iconset>image12</iconset>
+        </property>
+        <property name="text">
+            <string>Find</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Find...</string>
+        </property>
+        <property name="accel">
+            <string>Ctrl+F</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpContentsAction</cstring>
+        </property>
+        <property name="text">
+            <string>Contents</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Contents...</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpIndexAction</cstring>
+        </property>
+        <property name="text">
+            <string>Index</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Index...</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>helpAboutAction</cstring>
+        </property>
+        <property name="text">
+            <string>About</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;About</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileSave_AllAction</cstring>
+        </property>
+        <property name="text">
+            <string>Save A&amp;ll As...</string>
+        </property>
+        <property name="menuText">
+            <string>Save A&amp;ll As...</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileSave_AllSingle_PostscriptAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Single File</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Single File</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileSave_AllSeparate_PostscritpsAction</cstring>
+        </property>
+        <property name="text">
+            <string>S&amp;eparate Files</string>
+        </property>
+        <property name="menuText">
+            <string>S&amp;eparate Files</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editDivide_CanvasAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>false</bool>
+        </property>
+        <property name="text">
+            <string>&amp;Divide Canvas</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Divide Canvas</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editDivide_Canvas2_x_2Action</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;2 x 2</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;2 x 2</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editDivide_Canvas3_x_2Action</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;3 x 2</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;3 x 2</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>editDivide_Canvas4_x_2Action</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;4 x 2</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;4 x 2</string>
+        </property>
+    </action>
+</actions>
+<images>
+    <image name="image0">
+        <data format="PNG" length="417">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000016849444154388ded923d48c35014853fb5c31b75cc66b62a2ead75a8b839667334ae119c3ae8e6a8e0a020459cc441c85bc5a1eaa28be20fd274d05204870c423376ab41d4eb9016d410cd50c1c1038f0397fbcebd9c7be01f7f0239c7ad16cb2239c795f5b2547b265c74442ab5a6483b124ff3a73f4d5388c6ca1a1cde831ab3532d934a586173781f606521acebde097fdc7836e5c67d5f0b39c7ad2aecf1108dc2a6cbcb0b0156d6205ffa5cefb077b5d357f87652b12c72d19008b7115d3444a42d52b911916791d35ac45293c483c6ac08eb9ac961d83ef6690d466c2ad838f1191d84d58acfa582d5039f460676af0314717b62c2b363b6972f69f483c9f48ae6e9c1c45ad32c4d996c9f37508f26fb9b9aa3c0646e4bd3ba3308d1de0f9627d8e388b8674d59dcfb851cdb05035e7e23c7f51633f42ec703d0c9f1c410c1482cc7b1b87691f941f81540617bf9793ddec9edc74325fa9d38f14b4ff775c5de52fcfb478477a80eb4ae067523290000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="267">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000d249444154388dedd0a14f425114c7f12f8c7003816ae346370a60916a34d27856327f046c06dd98632446e354666060d0a81078046414c20d04224dde2cc740610f11ff80fb29bf9d13ce393be079de498978235fed4d0d4131423004fc33c3712771f5e7a6eb27d5f7a5eecd55f55bf56db64f9dfd527fa9e6ab3d8dcf49c61bd1422865a13d726c33d07e755c66e0f1c5e1d2d018383e0c349e1dcb1474271b0cc1d18147832bb9202cd40459596eeac26e65b9bd17face527e10ccdad26f0ac38de5ae256c3f2f8890f0cccb3dcf3bf4037bcd6eeff7a6f8b50000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="913">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000035849444154388db5944f681c7514c73fc9ae10d01e1404035a8cd4a23988ed498f067bcb41b75ed2bdd55be2454abdc44b98eca12c3908bb87481709ec5458772764a9092ca496ca6e41d82d344e945826a03081a5ec96a8b3db3ac9d7c3cc6e269b3f277d30bcdf9b61bef379df793cf89f62a877c82c66b612ddceb95cb7ab849f18b67c0be2800fc991e47e295e52320ea60fc9f8654cbf4432ce90e9b376fddaf5c913bfe0ae3afb6a48b665ebf69dbae44af98a2457325286e4e9d8702bcede717ac3bd43ee81a9cdb54d1e8c74f9e5958bdc79bc43f212e47edee6d38fbf643e3d0f40e7cf76983b00981b259de40200b6652b5f5e97f330a09424b582942e4badad905c9276a3c4aedfb7730ab9a9111d22b6362c12ef4e507bbc0da3b0fd471b5e84ef7fdc26790e16ee370068dcaf01d06eb743621380f4149ab925da6fcfe04e71d08563d92ade93d494ea5b21ce96a467d2ed9f24fb6184b875c8633f33455058d3f2aca29f99427d6273c3e2f2ab307fb7c11860ae35e8c4a174b7c1c511f8e1518304096a83c4dfbc119bb925369767e0b72764bffb24f6d9b7119feb4b75192943deef52a61c90176b92e74837578369a9d6aa8788fba485697985bc32510b00aa9f4fff9a37f3f24c4fc69c21ed4a46a1ae5953ba59b665a76c65b219a925b55a816a3a14ad9bd3f25257941e14752c4779332f35245524b7e2ca4819722c5b46ca906dd92a168ac7939ad352b9789414c04819f24c4feb9575b95fb901514b41dbd17caf2a7911d2c2b5e349a3c49985b4dc4a6f78237fbd979b03a44b07a4ceaa73bc702fd20bc69e74e0613f37073ccd5d953777a55f1b378cd385dd5567ef0871f3a0aea6d252212dcf2af64525c9293b02622713df30fc28612fbbae2be323f4c17bafebeae405199381a8e33892a4d9b959012f11ecc2a123c2ceaae3ebd90069b81300553f44eb95f5e0594dc1b673a4ba5917f026f03c9115d13b0c95364c782eac5e0ef319e8743a4862f46b87894b13ec7477e07d68ffd58631b01e59001dc0878309e97bb3f48579617165f1add127a3e496b38ceebe466e39c7d9ce5972cb59c6f50ed95256e31a1bcaae2c72fee979b22b59e666e7c68126f0342a3ce8493c6ce94c78bd10693116bef84f48d8067681bfc37aff34e1debd5898e3917a387cb127ee0f889d3e76ff55fc0b64a651f4a9f6c3640000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="481">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000001a849444154388da593b14ac3501846bf48d15654e8a0e01b08be808893a363361d0471ab38d94d5d6c9712dd74f705d4d141147514ecd6c521428714ae904095db520a9fc34dd2f6264d527a97933fc37f0f270498f2900d83c29c251bc6f0fb70b06a950be4f2e7e87751ce9de1b25f05727924cf4071a18bc3dd53bcbc96b1bd55b845fffbc858b997839beb9cfcf47cbad78a5f2724ed7d0a730e43c62449dbb649924ed389a7a3e83a9f2449e95a8a52aae562ef9134d7e38d9b29747c0a254319983f9374de28cccd88f158d371c6fe72d9b6495aa430af49732dde3830d20d750acdfcbd44b2b141612e8d3776e24d4363e1fa54df84bd06794352eccc93a611356e6731d4a8eea055ab30d837133c5c3e550100adbf16b00ab45a3a3d6019f07e347a1e50f497e4f2317fd070e3c0649ca91b4fab6631b2386c1c69a8cf3edd519224af185d1c6b9cd194ed0c8def1eee125beaecfc7680c5ac8d75f314d3817142e3b49601655b8e70b2c62986216586c6236d8b80e775064d17074d4758c8da38a3a1cec4c6539dd8c61fac58b50a5957372b4e36978e4b07c13e237243f2fbb4131aff031554cadd14829af00000000049454e44ae426082</data>
+    </image>
+    <image name="image4">
+        <data format="PNG" length="872">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000032f49444154388db5955f685b751cc5cfda827f98421f0af64170a02f0395557c28be34baa76d0f92d2c12e1459a1c8ea068e6efab287e95d41e97c18648e41fa70e15e8418f310628462f2504c3b3b9a496752c920838e5eb26c861235869af5e3c3bdc9d2d8d275e0f7e570eef9ddf33bbfefef7bb9d20e85cb71dbb1c105db0a3f1186adb0b9935faba2319bbd54ad5a03075a06aee5be658c1a25d7724bc6a871dfb5dcfb13a7261e50d983eb8607d158f4b1f1916347960052e9142d2c43662e03c0d2e212d420114fec8c40a55281725be2dcfbb99f13c904cc81f99909598846fc36549be7ecc02adbeab6636f493c0b10ba1282ab60fba6b5aab73a3c1386b2f7520b1db02d8f67e6bd9365e63350dd9a389348263628c2f494092e50f6936479dc8e769ef5f9629bbe0a8978f472cb383812bcc60c1bb663c3557057ddd64578c9c260813de361d847dbb1a102ee6a112c88c6a35f6d19abe2f5e227e694f9172e34476cec7c88c1081c1ab749f9d8c90311183cb5bd6e9c0d2d2838123c5e3b5f5b6ff6d6fc72da9b8eac973cb5dc89955d3178867515af170f4f9c9978401970211787c4a277e3d3b1a74020301e7aa8e048b0df3861b8b6150620783604c0742ce72fce315d7d721e8a2d6d0e8ef38b2469ece4d81a55c8cca5a0f8f489c3b3804bc338113cdc2d49075e3970bae785466f3c755bebcff56838f0b22e27f3d2509fe6d3799d1bead3a5745e3dbbf08f8ff6e9a36bdf6fd44b2b172449c6a8f12d8b605e8902104a02153023de4c9b919c8f6dbc53af819d8680434192ba25e9ed375f7fed66f9d67b173f3cad999feeeadeefbd4aff96d745f5e94231afc6e641a50b3e2fe4d5d0c1ffe8d9b5bbfa20d7fbcf0f3f0e4faee4579625e999c050e0582556799498f77a3569416d1526ad1caceece9b3d0e9c34d79adf47b7a497ea7fd65f5da9af8cdc7b7158c9e5acbe50bfce15b26ae80d250b5935d4afd936dea94f1dedd7a5efd28f4a8545ebceaf376725d125e98fd2c352c1b81dfc7ce186a35bbd037ae786a3e1de0135f94207efd4073e7574a8feee9de4375f3b92f64bd23e3ff9b3929ef71fee97d4b5eb2f666b216943524d5245d2dffbb659d4d5b6e15e6bd3dfe4ffab7f012a4781c07856e8350000000049454e44ae426082</data>
+    </image>
+    <image name="image5">
+        <data format="PNG" length="981">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000039c49444154388da59451685b551cc6bfda387a650fb9b0ca0afa5004a1e0a00e1f4c7d6a461e5cb183c88a547ca928e49629d77b45a42958db8133b79462e283b40f91f6614102c6760f2d4d4ba113bb3583d6b4b2b22b64721bdb9a842a27998bf97cb8499a6cb3ebf0fff2ddff39dff9ceef9ecb3d404d299707269371fee1f205e88a902e5f800b11b2f352e02f738eabda65ef6b386635561e8261ad7dd9fc22b8558a23f6e1dbc52d73b3f1aa7aa121f4cb269ccf5e3811bd69dc4b1f34bfe5f1b4fc7e637963e358e9c1b0d66ec6794709f3feda1cffe954274a2b51f2fce0143329528b242976c9f343dfb1334aa10cf5be7e2ce2d367dce1d55ce2a0b0db51f82df7aefaedd0d0c596b3db3ffd9af9ac3bf2f3f489a667ce35443713709e3c877be674e3cefec9ee37bb9efeeac7a5edfb47a67bd5e13b22c1e8c4b4d2523b3e30aa682b51d23b4a9a9b646f6885568af47e3abc612d8bf051990d00d03728622d0e7dbd90c3401e8001033a74c84d12e2fba7d1daae03c538e07003c5389c0537d2693f5a9145ad5f023e191dfbfacb43b22b7d3ece0952d0ae1a7545c8def1059b78dc26ef9b5ce342840ff935556125f3290028a49bb6476e8c021290cfe70109c8ee650109c0bc0138dcd07f98051c807f3e0e38cec23f6fd4f9b27b5918a7425054a5bd1a0ce005ff3b7e200b489204e481ae25191d8a81118f0e1481614f17508c63c4e3b6577874747c10c2ad2519b80bc8cd3242ce108c4ee3c56af0308ceec47e0290eb49db5ed131fd6702ce53c0e0fc2c0a45b74d5c005af7aea3eda57e9bfc797b5dbfd20f7d513f533d634d55ec43b2ca6796b1c5752948cb24bd5766985c2d6bc256ebb63d5feb678614314100685054a55d6e926f691f6b906519d9bd2ce4e643ed78df40dbab3ad2e9593439ba00ccc2e9ecc2d64d03d7bfd1abbe7c3e0f4992e0ffdc8f422efb32444cf404c783f5c4e201725fa04a6eddb6fb3ad25aff3aa9a94a0f145519e6dfa465592592cc58b65b0851a7aef702ec9b3c7cfdcab865d93456ca22c9d24c6c86421563c84433df27d7931431414d55fe5baf65e8f20528ae658ef491a4e2eb9b805269ca6a9ae6b11540b5b74c8b421514c2de002226c894fd35b95b3eab555bd656d78eec01d80f07b654883555e143c495c58fd3ba601e065b299bbc9ef809eb51c11575e88b3a426f84a08fe93016abb7d483b7d6237ba10af47fd45f37bf7377c7feeb444c9009964892a9f2d6ff4f4b9aaab0c17bd1db33f5dcd4d527217d5c9f4be73afe054db82ff2880ffc9c0000000049454e44ae426082</data>
+    </image>
+    <image name="image6">
+        <data format="PNG" length="736">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000002a749444154388dad943f4c136118c69f3a1d5bc76fbcb54cd609371a17238bd10de2e0bfc11e0b4917539d08538bd39d53eb74c7e2b52e1413133031111213184c6032653bb7ca646ffb397c77a5b44068e2bb3cdffbbef99e3cef9fef93ae3080ddbd5d0038b2707874680ffb1646f93db88a67caf24b49925c8a83c100807ebf0fcc403caeecfbfef70bca47fe58fec6c4db3bdb17ca9dc43c1f77e39b2b9e523ae9ef5df4676ac3554a73cc49b777b6671fdc65d3bfac92ffaa78bcd73726ce0782dd2ce85f8f61145eaf1ca0d56ec1abf3a9e78f6212f3fdf5377d961f2e5359ac507d559dae00c00f5af013ea6bebf003ea6bf54b71fd75037e4263c3876f7077a182ebf631c6a5b258218c422e2a0592247b512756d1f1241e595c3e5ab66d688754162bb8c6c5352ea668b8bb5021230d99c54a947070285102a0f1daa77cbb8c312ec56211d7b8288ee299481312aa3ca34c993af551bcbe56c718174996d8969965b3bd3c3e39b6873c9e6fc1499ecffcfcd7db3f84044cd12009635c6e05ef02cd97a4cea79e742a455b1dcd1fcc2bdaea480752f4a1237d95a2ad28f323cd1f489d0f361fbc6f6befe08ebcbaa7345b0447924820eedad50adb718621fc9dc6d6380ea015b460906dc717288e141be4073eb433d276766912836c6b828c6c0cfd4d1f36a0fab43a6ac583fb8f100984517cae6c90918c299af233f4377d48a0b1d1806f56b13186b81b53f0039f3f674339926aaaa9e934a5b426a9a99a5353330d240d25674e35790a1468284f730ae4c9535381947a3afde5a9fbb9ab376fdf68d55b2d14006ad59a3a9f7794a643398e24cd692e1b444f3d2d398fed4024f59c5d2d6969e477d4d3527a4f721c3d7fb9a2556fb5204985f18fa7fb7147bf4f4f2549a952a5a93de596da8086a994a67f6cec2c5579a1ac95272b7af1fcc588ef1ff5dc58757a63fcb40000000049454e44ae426082</data>
+    </image>
+    <image name="image7">
+        <data format="PNG" length="189">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000008449444154388ded93d10e80200845b1efb63586ff7d7b702b46215a4f35cfe698221744259a7c9634b65d506d26a272ac8233a52d795a405b10886d33d82613355a8905e05b719b39acc489af2ca7a3280b9c73b77786e239ba7bd655b1428bca037177fff06d372b767a9ce9daf348b490705f0921c2fec9067f9e45bf9ef5a5d6e4ffec4a4578abea3a4ae30000000049454e44ae426082</data>
+    </image>
+    <image name="image8">
+        <data format="PNG" length="184">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000007f49444154388ded92410e80200c0447e3b3e560e0957e060f46ad5aaad49b6112421adacdb6051aff214e3143ce10c5d962bfac10b16eabde745ae2da8966aa5854db9916c37024a7779a00840e10a2a355ef5990b68362924754fe9e4f8ead5fb3d2efa95312454fa272a68987199f9de4b9662c773a5d7c2328ef8d8697055c487c96ac5029280000000049454e44ae426082</data>
+    </image>
+    <image name="image9">
+        <data format="PNG" length="186">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000008149444154388dcdd2410e8030080440ead7f1df78699b86605910a37b319a30ae58a28f22c1e7334771917fc2ee1a50d882da53d805b2f088a8ab1bb4d10a4233af9d8a48e03510c18db9a302e3003cb14674f67b0eb537a29bae601a1703d15818bf03ac1dc3f86ed842e01fea0da7d7e17deeee25db208d387be4588ace6b7d2e379d44ac8f73f04b0000000049454e44ae426082</data>
+    </image>
+    <image name="image10">
+        <data format="PNG" length="257">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000c849444154388dd594410e83201444674c2fd5c42bf446dde9a6e9197ac55e615cfc80a81f4448179de40703c373fca2c0bf890054e169034b3e9b64eabba49b0301ec6e7124a9abf008cea56e850fe182e4a6d679809c61af6212206dc7bc9493d1a6c27a199e40b615367beb3637e93bfaf021a11fca34bbeb419f07701f9ff0e05d8925e9fd929b3cdbc37473b9c7a15678fc40f6e7383c3e69f6dc39dfcb6c64778f8f327f73624fc1df95f8cc5ff17753736296ab3df1798e9e1ee7d596b842fbbf59cdf8432d2a38b9fc1e75380e0000000049454e44ae426082</data>
+    </image>
+    <image name="image11">
+        <data format="PNG" length="329">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000011049444154388db593eb6dc3300c843f1a9d254b04e81ed945462048bb640f035e22cb5c7fb0aa5f726cd70901e140913a1dcf167c286ca3ae7f9c5934d548d068d7d6291795b2b1497a94bc29a47a8a141de744654d2e5df64f0e36008a223f0c48d8c59044dff580632db78bf7e787a1581d18a588f494524480faae9724a973a8e5b57363d22f07bf39205a8cebf775d5c871048649a19dd41a87967013199b78b7851923dcb42005ff9252f4a67273e0786e772b7c758fe7e83f5dda81538fcd895f29c94861d56733af9b65a03da658525569d92ff1ab7c9fc7ed9d5d8ac77951fe36c563e56ff17888000cf929c5b5f8537cc6e3fa142715d770fe77687da5f5995f58b163b0bd2f6ff1123f133f4427278c9534f0f90000000049454e44ae426082</data>
+    </image>
+    <image name="image12">
+        <data format="PNG" length="1090">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000040949444154388db5945f485b6718c69f24679a30bbc6b50eb3bf9cd2419551a630a8c2ba3fe028ac17a35046b32be3769113648c1c3a4aea859c5a18ea458b0edc6a47b6d831eb32706cbb10655554b024ed3a4c379584c59aa46a4f42ac275193f3ecc2642be2e276b1071ebe0fdeeffb7deff77e7f803d14381130ec356637ed3a89e7f88d2beb3a6981c59241c6d0852e5dcec9994a6be5571d4a87f33fafe239e739ae0d6bd94030a0932443d449e639c76dcd50d786b58ca7cdd3b817cb58ec28ed9e573c59cfcf892389f2fa67ebb75c9f4ea5711339f96ad0707e1a5baecb53691cc656e2a58439fb3039a1742875ff2a5b6d585be71cc9656ebabdd4493ea0ca159271c6b84832ecf6cee6b9cc0d86496d585ddb13ca769ef50dfa3699e686bb3fa0938cc7546d85642aa66af7494667a3da0237395e886ff8067c19a55df9b024586a95564852bac47592f38c314a72892aef910c33c6bb247fe9f4f31aa31c5506029b2429b54af19235b608b04622117455a07cea6e720b366423f14c1a954846563229d8901cbb959c7325b1248f04c3a96cbd31be184797808325c1004ca228a20d2153634de53a2258136d9624e27820565996318ff937ab2b27da8450b2aba93e05c0647bce8636c05412ac00b9482402b350cbdeef230988484ccd275761c3ef3fdc8c8f631adfc93f0557cda84dcb23a18c02e423f31100d82a09ee3e680b88a298b30ad0ed87c527e5aba150a3b97242fe12936f57db82722eb4dcd554bf9e0536dc75b5aff6ee0b1ac417c50deb41db7449b059307f7ee1e285b86c87a9633ad808d4ee934742460510e491603984da27e491509992c553ddb782afcba7eb8d2ea9257dfea17bec9fc07f49f3abf1a1c1a15592747bc9d80c6fbbfb036719a543eaa3333cce80db3bbbfd0283cc33cd25c929a5c37d615b4970e727ca51f74752a6e752cf2249f60ccfd2e3a5eeee0f905eea3d3f6e4325a79427c9a1c121b28f6b0ea7e3befd8c7d2f78e751cdafde53da3d0bbcc328c79926c9c9b1c91483fccdf181e38f9837d622b54a24c92bbd57c830b392d3a1eecc7cd7dfadb3bbb319b9ec695722fe9a9c83c52220535d6dbb210be7af1bdc862fa456e9228073bd977bd1ff593f5ad09277dd6ed152a9d4916b5ffb637b95dd084000f01880b282cb8b7d75407d5f6a957492f4797de43275c92969e1def0f3bb81ca0058005400d85ff7725dd5e8d8e87192efcede997d8fe40947b3e310802a00074ebd73ea64113e39354992b49fb12f3d0a150098013c0e603f8003d60a6bf5d0e0d01b2465aafc96a48f33fc9841be05e0108017003cd370ace198a3d9be7d5ba2a4ea571700188b353614b62c146c7aa42dda581847003a807cd10dc71a9eaea911bde60a6b75229168f25ff7ffbaf3f00c05ef049af0f74117c145e70a0be885d8ffab3f0147f57b6b925278a70000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>fileOpenAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>fileOpen()</slot>
+    </connection>
+    <connection>
+        <sender>fileSaveAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>fileSave()</slot>
+    </connection>
+    <connection>
+        <sender>filePrintAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>filePrint()</slot>
+    </connection>
+    <connection>
+        <sender>fileExitAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>close()</slot>
+    </connection>
+    <connection>
+        <sender>editUndoAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>editUndo()</slot>
+    </connection>
+    <connection>
+        <sender>editRedoAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>editRedo()</slot>
+    </connection>
+    <connection>
+        <sender>editCutAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>editCut()</slot>
+    </connection>
+    <connection>
+        <sender>editCopyAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>editCopy()</slot>
+    </connection>
+    <connection>
+        <sender>editPasteAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>editPaste()</slot>
+    </connection>
+    <connection>
+        <sender>helpIndexAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>helpIndex()</slot>
+    </connection>
+    <connection>
+        <sender>helpContentsAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>helpContents()</slot>
+    </connection>
+    <connection>
+        <sender>helpAboutAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>helpAbout()</slot>
+    </connection>
+    <connection>
+        <sender>btnDraw</sender>
+        <signal>clicked()</signal>
+        <receiver>MainForm</receiver>
+        <slot>Draw()</slot>
+    </connection>
+    <connection>
+        <sender>fileNewAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>addNewTab()</slot>
+    </connection>
+    <connection>
+        <sender>fileSave_AllSingle_PostscriptAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>fileSaveAllSingle()</slot>
+    </connection>
+    <connection>
+        <sender>fileSave_AllSeparate_PostscritpsAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>fileSaveAllMultiple()</slot>
+    </connection>
+    <connection>
+        <sender>lvGraphs</sender>
+        <signal>selectionChanged(QListViewItem*)</signal>
+        <receiver>MainForm</receiver>
+        <slot>selectTab(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>wgStack</sender>
+        <signal>aboutToShow(QWidget*)</signal>
+        <receiver>MainForm</receiver>
+        <slot>setTabAsCanvas(QWidget*)</slot>
+    </connection>
+    <connection>
+        <sender>btnAddNewTab</sender>
+        <signal>clicked()</signal>
+        <receiver>MainForm</receiver>
+        <slot>addNewTab()</slot>
+    </connection>
+    <connection>
+        <sender>btnRemoveTab</sender>
+        <signal>clicked()</signal>
+        <receiver>MainForm</receiver>
+        <slot>removeTab()</slot>
+    </connection>
+    <connection>
+        <sender>btnRenameTab</sender>
+        <signal>clicked()</signal>
+        <receiver>MainForm</receiver>
+        <slot>renameTab()</slot>
+    </connection>
+    <connection>
+        <sender>editDivide_CanvasAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>divideCanvas()</slot>
+    </connection>
+    <connection>
+        <sender>lvGraphs</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>MainForm</receiver>
+        <slot>enableTabActionButtons()</slot>
+    </connection>
+    <connection>
+        <sender>btnClear</sender>
+        <signal>clicked()</signal>
+        <receiver>MainForm</receiver>
+        <slot>clearGraph()</slot>
+    </connection>
+    <connection>
+        <sender>ckbMultiGraph</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>MainForm</receiver>
+        <slot>setMultigraphStatus(bool)</slot>
+    </connection>
+    <connection>
+        <sender>ckbPolarErrors</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>gbPolarErrors</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>txt2DYAxisError</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>MainForm</receiver>
+        <slot>enableDrawButton()</slot>
+    </connection>
+    <connection>
+        <sender>txt2DXAxisError</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>MainForm</receiver>
+        <slot>enableDrawButton()</slot>
+    </connection>
+    <connection>
+        <sender>ckb2DErrors</sender>
+        <signal>toggled(bool)</signal>
+        <receiver>gb2DErrors</receiver>
+        <slot>setEnabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>txt2DYAxis</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>MainForm</receiver>
+        <slot>enableDrawButton()</slot>
+    </connection>
+    <connection>
+        <sender>txt2DXAxis</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>MainForm</receiver>
+        <slot>enableDrawButton()</slot>
+    </connection>
+    <connection>
+        <sender>txtEventCut</sender>
+        <signal>textChanged()</signal>
+        <receiver>MainForm</receiver>
+        <slot>txtEventCut_changed()</slot>
+    </connection>
+    <connection>
+        <sender>btnApplyCut</sender>
+        <signal>clicked()</signal>
+        <receiver>MainForm</receiver>
+        <slot>applyRootCut()</slot>
+    </connection>
+    <connection>
+        <sender>cmbEventCuts</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>txtEventCut</receiver>
+        <slot>setText(const QString&amp;)</slot>
+    </connection>
+    <connection>
+        <sender>btnSaveCut</sender>
+        <signal>clicked()</signal>
+        <receiver>MainForm</receiver>
+        <slot>saveEventCut()</slot>
+    </connection>
+    <connection>
+        <sender>btnViewData</sender>
+        <signal>clicked()</signal>
+        <receiver>MainForm</receiver>
+        <slot>viewData()</slot>
+    </connection>
+    <connection>
+        <sender>cmbGraphType</sender>
+        <signal>activated(int)</signal>
+        <receiver>MainForm</receiver>
+        <slot>selectGraphType(int)</slot>
+    </connection>
+    <connection>
+        <sender>cmbBranchNames</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>MainForm</receiver>
+        <slot>insertBranchName(const QString&amp;)</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in implementation">mainform.ui.h</include>
+</includes>
+<slots>
+    <slot>fileOpen()</slot>
+    <slot>fileSave()</slot>
+    <slot>fileSaveAllSingle()</slot>
+    <slot>fileSaveAllMultiple()</slot>
+    <slot>filePrint()</slot>
+    <slot>editUndo()</slot>
+    <slot>editRedo()</slot>
+    <slot>fileExit()</slot>
+    <slot>editCut()</slot>
+    <slot>editCopy()</slot>
+    <slot>editPaste()</slot>
+    <slot>helpIndex()</slot>
+    <slot>helpContents()</slot>
+    <slot>helpAbout()</slot>
+    <slot>enableDrawButton()</slot>
+    <slot>Draw()</slot>
+    <slot>applyRootCut()</slot>
+    <slot>txtEventCut_changed()</slot>
+    <slot>addNewTab()</slot>
+    <slot>enableTabActionButtons()</slot>
+    <slot>setTabAsCanvas( QWidget * qw )</slot>
+    <slot returnType="int">getTabIndex()</slot>
+    <slot returnType="int">getTabIndex( int widgetID )</slot>
+    <slot returnType="int">getTabIndex( QListViewItem * item )</slot>
+    <slot>selectTab( QListViewItem * sel )</slot>
+    <slot>removeTab()</slot>
+    <slot>removeTab( int index )</slot>
+    <slot>renameTab()</slot>
+    <slot>renameTab( int index )</slot>
+    <slot>renameTab( QString name )</slot>
+    <slot>renameTab( int index, QString name )</slot>
+    <slot>divideCanvas()</slot>
+    <slot>divideCanvas( int n_columns, int n_rows )</slot>
+    <slot>addNewSubPad( int n_subpad )</slot>
+    <slot>clearGraph()</slot>
+    <slot>setMultigraphStatus( bool state )</slot>
+    <slot>saveEventCut()</slot>
+    <slot>changeStatus( QString status )</slot>
+    <slot>selectGraphType( int index )</slot>
+    <slot>viewData()</slot>
+    <slot>fillBranchNames()</slot>
+    <slot>insertBranchName( const QString &amp; name )</slot>
+</slots>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+</functions>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

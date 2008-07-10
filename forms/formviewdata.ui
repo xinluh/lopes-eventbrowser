@@ -1,0 +1,135 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>formViewData</class>
+<widget class="QMainWindow">
+    <property name="name">
+        <cstring>formViewData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>802</width>
+            <height>874</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Form2</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>btnEditColumns</cstring>
+            </property>
+            <property name="text">
+                <string>Edit Columns</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout24</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>true</bool>
+                    </property>
+                    <property name="text">
+                        <string>Event &amp;Cut:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>txtEventCut</cstring>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>txtEventCut</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="editable">
+                        <bool>true</bool>
+                    </property>
+                    <property name="duplicatesEnabled">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>btnApplyCut</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Apply</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+A</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QTable">
+            <property name="name">
+                <cstring>table</cstring>
+            </property>
+            <property name="numRows">
+                <number>0</number>
+            </property>
+            <property name="numCols">
+                <number>0</number>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </vbox>
+</widget>
+<toolbars>
+</toolbars>
+<connections>
+    <connection>
+        <sender>btnApplyCut</sender>
+        <signal>clicked()</signal>
+        <receiver>formViewData</receiver>
+        <slot>applyCut()</slot>
+    </connection>
+    <connection>
+        <sender>txtEventCut</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>btnApplyCut</receiver>
+        <slot>toggle()</slot>
+    </connection>
+    <connection>
+        <sender>btnEditColumns</sender>
+        <signal>clicked()</signal>
+        <receiver>formViewData</receiver>
+        <slot>editColumns()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="global" impldecl="in declaration">string</include>
+    <include location="local" impldecl="in declaration">ReadRootTree.h</include>
+    <include location="global" impldecl="in declaration">vector</include>
+</includes>
+<slots>
+    <slot>initialize( ReadRootTree * root_Tree )</slot>
+    <slot>applyCut()</slot>
+    <slot>setColumnNames()</slot>
+    <slot>fetchData()</slot>
+    <slot>editColumns()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
