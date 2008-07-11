@@ -10,8 +10,11 @@
 ** destructor.
 *****************************************************************************/
 #include "Draw.h"
+#include "Canvas.h"
 #include "Helper.h"
 #include "formviewdata.h"
+#include "CanvasCollection.h"
+
 
 #include <qstatusbar.h>
 #include <qfiledialog.h>
@@ -59,6 +62,7 @@ static string fileTypeFilterMultiple = "Postscript (*.ps);;"
 // and the widgetstack
 vector<int> tabIds;
 vector<QListViewItem*> tabNames;
+CanvasCollection canvases;
 
 bool multiGraphCont = false;
 // statusbar
@@ -364,9 +368,51 @@ void MainForm::txtEventCut_changed()
 	btnApplyCut->setEnabled(true);
 }
 
+void MainForm::addNewTab(Canvas* c)
+{
+	if (!c) return;
+	
+	int id = -1;
+	QListViewItem * item;
+	
+	newTab = new QWidget(wgStack,"tab_"); //todo add number!
+	newTqtw = new TQtWidget(newTab,"tqtw");
+	newLayout = new QVBoxLayout(newTab,0,6,"tabLayout");
+	newLayout->addWidget(newTqtw);
+	
+	id = wgStack->addWidget(newTab);
+
+	if (id != -1)
+	{
+		tabIds.push_back(id);
+
+		//create an item after the last one in the listview
+		item = new QListViewItem(lvGraphs,
+			  (tabNames.size() == 0)? 0 : tabNames[(int)tabNames.size() - 1],
+								 c->getName());
+		tabNames.push_back(item);
+		
+		//focus on the newly created tab
+		lvGraphs->setSelected(item,true);
+
+		// make sure that the correct TQtWidget is the current Canvas
+		setTabAsCanvas(newTab);
+	}
+
+}
 
 void MainForm::addNewTab()
 {
+	Canvas *c = new Canvas();
+	c->setName("Untitled Canvas");
+
+	if (wgsAction->visibleWidget() == tabPosition)
+		c->setGraphType(Canvas::ANTENNA_POSITION);
+	else if (wgsAction->visibleWidget() == tabGraph2D)
+		c->setGraphType(Canvas::GRAPH_2D);
+	else if (wgsAction->visibleWidget() == tabShowerAngles)
+		c->setGraphType(Canvas::SHOWER_ANGLE);
+	
 //	int tabcount = tabsGraph->count();
 	int id = -1;
 	QListViewItem * item;
