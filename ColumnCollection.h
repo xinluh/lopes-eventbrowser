@@ -7,6 +7,7 @@
 
 
 #include "Helper.h"
+#include "global.h"
 
 #define COLUMN_FILE "columns.cfg"
 #define CFG_SEPARATOR '|'

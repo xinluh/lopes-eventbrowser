@@ -10,15 +10,13 @@
 #include "TLegend.h"
 
 #include "ReadRootTree.h"
+#include "global.h"
 
 #include <string>
 #include <sstream>
-//#include <qobject.h> //not essential for class; just to add slots for 
-                     //design convenience
 
-class Draw //: public QObject
+class Draw
 {
-//	Q_OBJECT // see comment after #include <qobject.h>
 
 public:
 	Draw();

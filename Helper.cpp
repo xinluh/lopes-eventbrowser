@@ -14,11 +14,11 @@ string validateFilename(string s)
 	for (int i = 0; i < (int) invalidFilenameCharacters.length(); i++)
 	{
 		replace(s.begin(),s.end(),invalidFilenameCharacters.c_str()[i],
-				REPLACEMENT_CHAR);
+				INVALID_CHAR_REPLACEMENT_CHAR);
 	}
 
-	if (s.length() > MAX_LENGTH_FILENAME)
-		s.erase(MAX_LENGTH_FILENAME); //truncate the name if too long
+	if (s.length() > MAX_LENGTH_SAVE_FILENAME)
+		s.erase(MAX_LENGTH_SAVE_FILENAME); //truncate the name if too long
 	
 	//  cout << s << endl;
 
