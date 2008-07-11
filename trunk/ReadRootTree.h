@@ -8,6 +8,8 @@
 
 #include "muParser.h"
 #include "Helper.h"
+#include "global.h"
+
 
 #include <string>
 #include <vector>
@@ -15,7 +17,6 @@
 #include <iostream>
 #include <sstream>
 
-#define COMMENT_CHAR ';'
 
 class ReadRootTree
 {

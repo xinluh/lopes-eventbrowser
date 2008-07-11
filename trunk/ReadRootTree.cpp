@@ -46,7 +46,7 @@ void ReadRootTree::getBranches(const char *filename)
 
     while (getline(infile, s, '\n'))
     {
-		if (s.at(0) != COMMENT_CHAR) //don't read the comment line
+		if (s.at(0) != CFG_COMMENT_CHAR) //don't read the comment line
 		{
 			//each line is formated as: T/branch_name
 			//where T is the type, only support F=float and I=integer for now

@@ -7,10 +7,8 @@
 #include <dirent.h>
 #include <unistd.h> // need to use <direct.h> if under windows
 
-#define REPLACEMENT_CHAR '_'
-#define MAX_LENGTH_FILENAME 100
+#include "global.h"
 
-const std::string invalidFilenameCharacters = "`~#%&*{}\\:?/|;";
 
 std::string validateFilename(std::string s);
 
