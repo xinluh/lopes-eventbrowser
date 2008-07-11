@@ -9,9 +9,11 @@ INCLUDEPATH += . build muParserLib
 HEADERS += forms/mainform.ui.h \
            Draw.h ReadRootTree.h \
            Canvas.h \
+           global.h \
            Helper.h \
            forms/formviewdata.ui.h \
-           ColumnCollection.h
+           ColumnCollection.h \
+           CanvasCollection.h
 INTERFACES += forms/mainform.ui\
               forms/formviewdata.ui \
               forms/formChooseDisplayColumns.ui
@@ -20,8 +22,8 @@ SOURCES += main.cpp \
            ReadRootTree.cpp \
            Canvas.cpp \
            Helper.cpp \
-           ColumnCollection.cpp
-
+           ColumnCollection.cpp \
+           CanvasCollection.cpp
 SOURCES += muParserLib/muParserBase.cpp \
            muParserLib/muParser.cpp \
            muParserLib/muParserBytecode.cpp \
