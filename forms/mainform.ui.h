@@ -115,7 +115,7 @@ void MainForm::fileOpen()
                             "Root File (*.root)",
                             "",
                             this,
-                            "open files dialog",
+                            "Open files dialog",
                             "Select one or more root files to open" );
 
 	if (!ok) return;
@@ -240,7 +240,7 @@ void MainForm::editCopy()
 
 void MainForm::editPaste()
 {
-		NOT_IMPLEMENTED
+	NOT_IMPLEMENTED
 }
 
 
@@ -465,7 +465,7 @@ void MainForm::selectTab( QListViewItem * sel)
 		if (!sel || !sel->parent()) return;
 
 		index = getTabIndex(sel->parent());
-		cout << __LINE__ << endl;
+
 		if (index < 0) return;
 
 		// todo cd to the subpad
@@ -714,5 +714,4 @@ void MainForm::insertBranchName( const QString& name )
 
     delete l; 
 }
-
 
