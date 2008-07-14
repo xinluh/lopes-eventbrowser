@@ -113,7 +113,6 @@ void MainForm::init()
 void MainForm::fileOpen()
 {
 	vector<string> vfiles;
-	bool ok = false;
 	
 	QStringList files = QFileDialog::getOpenFileNames(
                             "Root File (*.root)",
@@ -122,7 +121,7 @@ void MainForm::fileOpen()
                             "Open files dialog",
                             "Select one or more root files to open" );
 
-	if (!ok) return;
+	if (files.size() == 0) return;
 	
 	for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
 			vfiles.push_back(*it);
