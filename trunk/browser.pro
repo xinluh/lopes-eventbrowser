@@ -12,11 +12,13 @@ HEADERS += forms/mainform.ui.h \
            global.h \
            Helper.h \
            forms/formviewdata.ui.h \
+           forms/formOpenFile.ui.h \
            ColumnCollection.h \
            CanvasCollection.h
 INTERFACES += forms/mainform.ui\
               forms/formviewdata.ui \
-              forms/formChooseDisplayColumns.ui
+              forms/formChooseDisplayColumns.ui \
+              forms/formOpenFile.ui
 SOURCES += main.cpp \
            Draw.cpp \
            ReadRootTree.cpp \

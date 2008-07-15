@@ -4,7 +4,7 @@
 #include <iostream>
 #endif
 
-#undef DEBUG
+//#undef DEBUG
 
 //uncomment the following line if it is desirable to use integer
 //for computation; currently only float can be used in expressions which are
@@ -16,31 +16,130 @@
 using namespace std;
 using namespace mu;
 
+const vector<string> ReadRootTree::getRootTreeNames(string rootFile)
+{
+	TFile f(rootFile.c_str());
+	vector<string> names;
+
+	TIter next(f.GetListOfKeys());
+	TKey *key;
+	while ((key = (TKey*) next()))
+	{
+
+		if (string(key->GetClassName()) == "TTree")
+			names.push_back(key->GetName());
+	}
+
+	return names;
+}
+
+void ReadRootTree::getRootBranchNames (std::string rootFile,
+									std::string treeName,
+									std::vector<std::string>& names,
+									std::vector<char>& types)
+{
+	TFile f(rootFile.c_str());
+	TTree * t = (TTree*) f.Get(treeName.c_str());
+
+	getBranchNames(t,names,types);
+}
+	
+
 ReadRootTree::ReadRootTree(vector<string> root_files, const char * tree_name,
 						   const char* branchNamees_file)
 {
-	chain = new TChain(tree_name);
-
-	for (int i = 0; i < (int) root_files.size(); i++)
-		chain->Add(root_files[i].c_str());
-
-	entries = (int)chain->GetEntries();
-
-	if (fileExists(branchNamees_file))
-		getBranches(branchNamees_file);
-	else
+	if (root_files.empty())
 	{
-		cerr << "The branches.txt file not found!!! "
-			 << "The behavoir is undefined now..."
+		cerr <<  "Fatal error! cannot initialize without valid rootfile(s)"
 			 << endl;
 		return;
 	}
 
+	if (!tree_name)
+    // then find and read the first TTree found in the first root file
+	{
+		vector<string> treeNames =  getRootTreeNames(root_files[0]);
+
+		if (!treeNames.empty())
+			tree_name = treeNames[0].c_str();
+		else
+		{
+			cerr << "Fatal error! there is no TTree existing in"
+				"the given root file: " << root_files[0] << endl;
+			return;
+		}
+	}	
+	
+	chain = new TChain(tree_name);
+
+	// copy root_files into listOfFiles for later reference
+	listOfFiles.clear();
+	listOfFiles.assign(root_files.begin(),root_files.end());
+
+	// adding the root files into the TChain
+	for (int i = 0; i < (int) root_files.size(); i++)
+		chain->Add(root_files[i].c_str());
+
+	// get the initial count of events
+	entries = (int)chain->GetEntries();
+
+	// get the branch names either from file or from TTree/TChain
+	if ((branchNamees_file) && fileExists(branchNamees_file))
+	{
+		branchNameFile = new string(branchNamees_file);
+		getBranches(branchNamees_file);
+	}
+	else
+		getBranches();
+	
+	initBranches();
+
 	setEventCut("");
 }
 
-void ReadRootTree::getBranches(const char *filename)
+ReadRootTree::~ReadRootTree()
 {
+	delete chain;
+	delete eventCut;
+	
+	branch_address.clear();
+}
+
+const void ReadRootTree::getBranchNames(TTree * t,
+										std::vector<std::string>& names,
+										std::vector<char>& types)
+{
+	TIter next(t->GetListOfBranches());
+	TBranch * branch;
+	TLeaf * leaf;
+
+	// read each branch; if the branch has type float (TLeafF) or int (TLeafI)
+	// then process the branch into the vectors names and types
+	while ((branch = (TBranch*) next()))
+	{
+		leaf = (TLeaf*) branch->GetListOfLeaves()->At(0);
+		
+		if (string(leaf->ClassName()) == "TLeafF")
+		{
+			names.push_back(branch->GetName());
+			types.push_back('F');
+		}
+		else if (string(leaf->ClassName()) == "TLeafI")
+		{
+			names.push_back(branch->GetName());
+			types.push_back('I');
+		}			
+	}
+
+}
+
+void ReadRootTree::getBranches()
+{
+	getBranchNames((TTree*) chain,branches,branch_types);
+}
+
+void ReadRootTree::getBranches(const char *filename)
+ {
 	ifstream infile (filename);
 	string s;
 
@@ -54,7 +153,11 @@ void ReadRootTree::getBranches(const char *filename)
 			branches.push_back (s.substr(2));
 		}
     }
+ }
+	
 
+void ReadRootTree::initBranches()
+{
 	// allot memory for the branch values;  todo using float for the largest
 	// size for now. IMPORTANT: do not delete this vector<float>; "static"
 	// is important!  take care with multi-threading of multiple ReadRootTree
@@ -320,3 +423,5 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 
 	return 0;
 }
+
+
