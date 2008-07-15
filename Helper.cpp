@@ -58,6 +58,8 @@ int getFileList (string dir, vector<string> &files, string extension)
     DIR *dp;
     struct dirent *dirp;
 
+	files.clear();
+
 	if (dir.length() == 0)
 		dir = getCurrentDir();
 

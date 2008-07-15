@@ -14,7 +14,7 @@
 #include "Helper.h"
 #include "formviewdata.h"
 #include "CanvasCollection.h"
-
+#include "formOpenFile.h"
 
 #include <qstatusbar.h>
 #include <qfiledialog.h>
@@ -87,6 +87,8 @@ void MainForm::init()
 	statusBar()->addWidget(lblStatus,1);
 	statusBar()->addWidget(lblEventCutStatus);
 
+	
+	
     // get a list of files ending with .root in the current working directory
 	vector<string> files;
 	getFileList("",files,"root");
@@ -107,6 +109,8 @@ void MainForm::init()
 	}
 	
 	applyRootCut();
+//	cout << "hello from file " << __FILE__ << " line: " << __LINE__  << endl;
+	
 	fillBranchNames();
 }
 
