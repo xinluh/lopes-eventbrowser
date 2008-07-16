@@ -101,9 +101,9 @@ void Draw::drawGrandeCoordinates()
 int getValue_2DTGraphErrors(void* obj,int index,vector<float> values,
 							long total_n)
 {
-	total_n++; 					// make the compiler shut up about unused param
+	total_n++;	// make the compiler shut up about unused param
 	TGraphErrors * g = (TGraphErrors  * ) obj;
-	cout << index << " " << values[0] << " " << values[1] << endl;
+//	cout << index << " " << values[0] << " " << values[1] << endl;
 
 	g->SetPoint(index,values[0],values[1]);
 	g->SetPointError(index,values[2],values[3]);

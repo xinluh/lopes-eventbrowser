@@ -4,7 +4,7 @@
 #include <iostream>
 #endif
 
-//#undef DEBUG
+#undef DEBUG
 
 //uncomment the following line if it is desirable to use integer
 //for computation; currently only float can be used in expressions which are
@@ -90,7 +90,10 @@ ReadRootTree::ReadRootTree(vector<string> root_files, const char * tree_name,
 		getBranches(branchNamees_file);
 	}
 	else
+	{
+		branchNameFile = NULL;
 		getBranches();
+	}
 	
 	initBranches();
 
@@ -183,7 +186,9 @@ void ReadRootTree::initBranches()
 		else if (branch_types[i] == 'I') // read as int
 			cout << *((int*) branch_address[i]) << endl;
 	}
-#endif	
+#endif
+	cout << "hello from file " << __FILE__ << " line: " << __LINE__  << endl;
+	
 }
 
 void ReadRootTree::initParsers(int n)
@@ -255,13 +260,13 @@ void ReadRootTree::setEventCut(const char * filter,const char * sort_by,
 			eventlist.push_back(tmplist[i]);
 	}
 	
-#ifdef DEBUG
-	cout << "Selected Events after cut: "  << endl;
-	for (int i = 0; i < entries ; i++)
-		cout << eventlist[i] << " ";
-	cout << endl;
-	cout << entries << endl;
-#endif
+// #ifdef DEBUG
+// 	cout << "Selected Events after cut: "  << endl;
+// 	for (int i = 0; i < entries ; i++)
+// 		cout << eventlist[i] << " ";
+// 	cout << endl;
+// 	cout << entries << endl;
+// #endif
 	
 }
 

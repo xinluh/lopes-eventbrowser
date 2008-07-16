@@ -1602,8 +1602,8 @@
     <slot>Draw()</slot>
     <slot>applyRootCut()</slot>
     <slot>txtEventCut_changed()</slot>
-    <slot>addNewTab()</slot>
     <slot>addNewTab(Canvas* c)</slot>
+    <slot>addNewTab()</slot>
     <slot>enableTabActionButtons()</slot>
     <slot>setTabAsCanvas( QWidget * qw )</slot>
     <slot returnType="int">getTabIndex()</slot>
@@ -1627,7 +1627,6 @@
     <slot>viewData()</slot>
     <slot>fillBranchNames()</slot>
     <slot>insertBranchName( const QString &amp; name )</slot>
-    <slot>fileOpen(std::vector&lt;std::string&gt; filenames, std::string tree_name)</slot>
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>
