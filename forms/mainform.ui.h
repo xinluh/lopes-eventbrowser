@@ -87,78 +87,36 @@ void MainForm::init()
 	statusBar()->addWidget(lblStatus,1);
 	statusBar()->addWidget(lblEventCutStatus);
 
+	fileOpen();
 	
-	
-    // get a list of files ending with .root in the current working directory
-	vector<string> files;
-	getFileList("",files,"root");
-
-	if (files.size() > 0)
-	    fileOpen(files,"");
-	else
-		fileOpen();
-
-	if (!draw->rootTree)
-	{
-		QMessageBox::critical(this,"Error",
-							  "You must select some root files to"
-							  "start with! The application will exit now.");
-		// todo: this does not work...
-		this->close();
-		return;
-	}
-	
-	applyRootCut();
-//	cout << "hello from file " << __FILE__ << " line: " << __LINE__  << endl;
-	
-	fillBranchNames();
 }
 
 void MainForm::fileOpen()
 {
-	vector<string> vfiles;
+	formOpenFile f(this);
+	f.initialize(draw->rootTree);
 	
-	QStringList files = QFileDialog::getOpenFileNames(
-                            "Root File (*.root)",
-                            "",
-                            this,
-                            "Open files dialog",
-                            "Select one or more root files to open" );
-
-	if (files.size() == 0) return;
-	
-	for ( QStringList::Iterator it = files.begin(); it != files.end(); ++it )
-			vfiles.push_back(*it);
-	
-	fileOpen(vfiles,"");
-}
-
-void MainForm::fileOpen(vector<string> filenames, string tree_name)
-{
-	// ask for the tree name if not specified
-	if (tree_name == "")
+	if (f.exec())
 	{
-		bool ok = false;
-		QString name = QInputDialog::getText(tr("Name of Root Tree"),
-					    tr("Enter the name of the root tree below.\n\n"
-						   "The root files opened are :\n")
-       						+ joinStrings(filenames, ", "),
-										 QLineEdit::Normal,
-										 "T",
-										 &ok,
-										 this);
-
-		if (!ok && name.isEmpty()) return;
-		tree_name = name.ascii();
+		draw->rootTree = f.getReadRootTree();
+	}
+	else if (!(draw->rootTree)) // for the first time when program opens
+	{
+		QMessageBox::critical(this,"Error",
+ 							  "You must select some root files to"
+ 							  "start with! The application will exit now.");
+ 		// todo: this does not work...
+ 		this->close();
+ 		return;
 	}
 
-
-	draw->setSourceRootTree(filenames,tree_name.c_str());
 	txtEventCut->setText("");
 	applyRootCut();
+	fillBranchNames();
 
-	this->setCaption("Browser - " + joinStrings(filenames,"; "));
-	changeStatus("Opened files: " + joinStrings(filenames, ", "));
+	this->setCaption("Browser - " +
+					 joinStrings(draw->rootTree->getListOfFiles(),"; "));
+	//changeStatus("Opened files: " + joinStrings(filenames, ", "));
 }
 
 void MainForm::fileSave()
@@ -726,6 +684,8 @@ void MainForm::viewData()
 void MainForm::fillBranchNames()
 {
 	if (!draw->rootTree) return;
+
+	cmbBranchNames->clear();
 	
 	vector<string> names = draw->rootTree->getBranchNames();
 	for (int i = 0; i < (int) names.size(); i++)
