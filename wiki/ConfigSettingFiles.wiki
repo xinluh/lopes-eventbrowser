@@ -9,7 +9,7 @@ T/branch_name
 }}}
 where T is the type of data, only support F=float and I=integer for now.
 
-Any line that begins with COMMENT_CHAR defined in [http://code.google.com/p/lopes-eventbrowser/source/browse/global.h global.h], which is currently semicolon (;), is ignored when the file is parsed. 
+Any line that begins with COMMENT_CHAR defined in [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/global.h global.h], which is currently semicolon (;), is ignored when the file is parsed. 
 
 This file is not essential for the program; the program will automatically detect the existing branches in a root tree and use them if no branch configuration file is specified.
 
