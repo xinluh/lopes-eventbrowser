@@ -11,6 +11,7 @@
 *****************************************************************************/
 //#include "ColumnCollection.h"
 #include <qlistview.h>
+#include <qmessagebox.h>
 #include <vector>
 #include "Helper.h"
 
@@ -160,4 +161,10 @@ void formChooseDisplayColumns::deleteItem()
 void formChooseDisplayColumns::saveColumnsToFile()
 {
 	cc->saveToFile();
+	QMessageBox::information(this,"Columns configuration saved",
+							 "The configuration of the columns are saved "
+							 "to a file called columns.cfg in the program "
+							 "directory. You can delete or edit this file, "
+							 "and if this file is found its content  will be "
+							 "automatically read.");
 }

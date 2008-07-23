@@ -59,14 +59,7 @@ void formViewData::applyCut()
 
 	fetchData();
 
-	QString status  = QString("Current number of events: %1")
-		.arg(rootTree->getNumberEntries());
 
-	cout << status << endl;
-	
-	
-	//lblEventCutStatus->setText(status);
-	statusBar()->message(status);
 	
 }
 
@@ -97,7 +90,7 @@ int callback_fetchData(void* obj,int index, vector<string> values,
 		
 	}
 
-	if (index > MAX_NUM_EVENTS)
+	if (index >= MAX_NUM_EVENTS)
 		return 2; // time to abort; don't need anymore data
 	else
 		return 0;
@@ -106,6 +99,7 @@ int callback_fetchData(void* obj,int index, vector<string> values,
 
 void formViewData::fetchData()
 {
+	int retCode;
 	// clear the table first
 	table->setNumRows(0);
 
@@ -115,9 +109,22 @@ void formViewData::fetchData()
 	// make the table enabled/disabled to indicate visually whether the
 	// data-fetching is still going on
 	table->setEnabled(false);
-	rootTree->fillValues_str(&callback_fetchData,
+	retCode = rootTree->fillValues_str(&callback_fetchData,
 							 table,
 							 cols->getExpressions(true));
+
+	QString status  = QString("Current number of events: %1")
+		.arg(rootTree->getNumberEntries());
+
+	if (retCode == 2)
+		status += QString("; NOTE: only the first %1 events are displayed!")
+			.arg(MAX_NUM_EVENTS);
+
+	cout << status << endl;
+	
+	
+	//lblEventCutStatus->setText(status);
+	statusBar()->message(status);
 	table->setEnabled(true);
 }
 
