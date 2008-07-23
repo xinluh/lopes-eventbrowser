@@ -1,0 +1,34 @@
+#summary A quick introduction to use the program.
+#labels Featured
+
+_This assumes that one already has a compiled binary version and has the necessary libraries correctly linked. If not, see CompilingEventBrowser and LibraryDependency._
+
+To start the program, from a terminal, cd to the directory where the program is located, and use command:
+{{{
+./browser
+}}}
+
+=Open File Dialog=
+
+First one will be greeted by a dialog asking for the root files to be opened:
+[http://code.google.com/p/lopes-eventbrowser/source/browse/wiki/pic/dialog_choosecolumns.png   http://code.google.com/p/lopes-eventbrowser/source/browse/wiki/pic/dialog_choosecolumns.png]
+
+Any file with extension .root is automatically recognized and added to the list of files to be opened. To open other files, click "Browse..." and select one or more files (by holding down SHIFT or CTRL key). Multiple files will be opened as a root chain.
+
+Once the files are added to the list, the list of root trees present in the root file is automatically detected, and one can select from the drop-down list. 
+
+There are two options for reading branches from a root tree. The easiest is the "Default" option, which reads all compatible branches (i.e. branches of integer or float data type). But one can also use a text file, which is handy when one needs only a subset of branches. The use of this config file is explained in ConfigSettingFiles.
+
+Click OK to proceed.
+
+=Main Dialog=
+[http://code.google.com/p/lopes-eventbrowser/source/browse/wiki/pic/dialog_main.png   http://code.google.com/p/lopes-eventbrowser/source/browse/wiki/pic/dialog_main.png]
+
+The root files and root trees selected will be opened, and now one is ready for making analysis of the data in the root trees. The branches available are shown in the lower left hand corner in a drop-down list; whenever the input focus is on a textbox, one can select a branch from the drop-down list, and the name of the branch will be automatically inserted into the textbox to minimize typing errors (remember the branch name is case-sensitive!).
+
+To make a cut in the event selection, simply enter a cut in the Events textbox or select one from the "Saved cuts" drop-down list, and click "Apply cut." Notice that the "Apply cut" button is greyed out after applying the cut, signifying that the cut has been applied, and also notice that the number of events after cut is displayed in the lower right hand corner.
+
+A new canvas is already created, so one can start plotting. If a new canvas is desired, click the button with the plus sign in the upper right hand corner. 
+
+Choose a graph type and enter the information needed, then just click "Draw" to plot the graph.
+
