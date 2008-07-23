@@ -673,7 +673,11 @@ void MainForm::selectGraphType( int index )
 
 void MainForm::viewData()
 {
-    formViewData* f = new formViewData(this);
+    static formViewData* f;
+
+	if (!f)
+		f = new formViewData(this);
+	
     f->initialize(draw->rootTree);
     f->show();
 	f->raise();

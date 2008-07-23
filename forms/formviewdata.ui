@@ -13,19 +13,46 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Form2</string>
+        <string>View Events</string>
     </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QPushButton">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>btnEditColumns</cstring>
+                <cstring>layout22</cstring>
             </property>
-            <property name="text">
-                <string>Edit Columns</string>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer6</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>btnEditColumns</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Edit Columns</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
