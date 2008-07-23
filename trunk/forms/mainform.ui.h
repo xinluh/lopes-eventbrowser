@@ -508,7 +508,8 @@ void MainForm::removeTab( int index )
 	cout << "select index " << s_index << endl;
 	
  	// select the tab above
-	selectTab(tabNames[s_index]); 
+	if (s_index > 0)
+		selectTab(tabNames[s_index]); 
 
 	delete tabNames[index];
 
