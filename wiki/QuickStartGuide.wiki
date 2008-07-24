@@ -14,7 +14,9 @@ First one will be greeted by a dialog asking for the root files to be opened:
 
 [http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_openfile.png http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_openfile.png]
 
-Any file with extension .root is automatically recognized and added to the list of files to be opened. To open other files, click "Browse..." and select one or more files (by holding down SHIFT or CTRL key). Multiple files will be opened as a root chain.
+Any file with extension .root locating in the startup directory of the program is automatically recognized and added to the list of files to be opened. To open other files, click "Browse..." and select one or more files (by holding down SHIFT or CTRL key). Multiple files will be opened as a root chain. 
+
+This program will read any root trees created by ROOT. 
 
 Once the files are added to the list, the list of root trees present in the root file is automatically detected, and one can select from the drop-down list. 
 
@@ -29,12 +31,15 @@ Click OK to proceed.
 The root files and root trees selected will be opened, and now one is ready for making analysis of the data in the root trees. 
 
 The branches available are shown in the lower left hand corner in a drop-down list:
+
 http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_availablebranches.png
 
 Whenever the input focus is on a textbox, one can select a branch from the drop-down list, and the name of the branch will be automatically inserted into the textbox to minimize typing errors (remember the branch name is case-sensitive!).
 
 ===Event cuts===
+
 To make a cut in the event selection, simply enter a cut in the Events textbox or select one from the "Saved cuts" drop-down list, and click "Apply cut." 
+
 http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_events.png
 
 Notice that the "Apply cut" button is greyed out after applying the cut, signifying that the cut has been applied, and also notice that the number of events after cut is displayed in the lower right hand corner.
@@ -50,6 +55,7 @@ Choose a graph type and enter the information needed, then just click "Draw" to 
 For more explanations on this dialog, see MainDialog.
 
 ==Drawing a 2D graph==
+
 First define a cut if a cut is needed (see [Event cuts]).
 
 Then select "2D Graph" from the "Graph Type" drop-down list:
@@ -61,6 +67,7 @@ Then Fill in the expressions for x- and y-axis; the expressions can be any reaso
 If error bars are desired, check the checkbox "Use Errors" and fill in the appropriate values. 
 
 Then click "Draw" to plot the graph:
+
 http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_2dgraph.png
 
 Notice that the canvas title under the list of canvases is automatically changed to _x-axis_ - _y-axis_. 
@@ -77,4 +84,5 @@ One can also manipulate the theta angle so that the directions north, east, etc.
 The shower angles graph is color coded; the points on the graph is given color in a rainbow fashion depending on the values of the field "color code by"; the color code is also shown on the graph in a legend on the right. 
 
 A sample graph using the parameters in the screenshot above:
+
 http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_showerangles1.png
