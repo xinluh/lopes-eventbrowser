@@ -26,12 +26,55 @@ Click OK to proceed.
 
 [http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main.png http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main.png]
 
-The root files and root trees selected will be opened, and now one is ready for making analysis of the data in the root trees. The branches available are shown in the lower left hand corner in a drop-down list; whenever the input focus is on a textbox, one can select a branch from the drop-down list, and the name of the branch will be automatically inserted into the textbox to minimize typing errors (remember the branch name is case-sensitive!).
+The root files and root trees selected will be opened, and now one is ready for making analysis of the data in the root trees. 
 
-To make a cut in the event selection, simply enter a cut in the Events textbox or select one from the "Saved cuts" drop-down list, and click "Apply cut." Notice that the "Apply cut" button is greyed out after applying the cut, signifying that the cut has been applied, and also notice that the number of events after cut is displayed in the lower right hand corner.
+The branches available are shown in the lower left hand corner in a drop-down list:
+http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_availablebranches.png
 
-A new canvas is already created, so one can start plotting. If a new canvas is desired, click the button with the plus sign in the upper right hand corner. 
+Whenever the input focus is on a textbox, one can select a branch from the drop-down list, and the name of the branch will be automatically inserted into the textbox to minimize typing errors (remember the branch name is case-sensitive!).
+
+===Event cuts===
+To make a cut in the event selection, simply enter a cut in the Events textbox or select one from the "Saved cuts" drop-down list, and click "Apply cut." 
+http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_events.png
+
+Notice that the "Apply cut" button is greyed out after applying the cut, signifying that the cut has been applied, and also notice that the number of events after cut is displayed in the lower right hand corner.
+http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_eventnumber.png
+
+===Tab interface===
+A new canvas is already created, so one can start plotting. If a new canvas is desired, click the button with the plus sign in the upper right hand corner. To remove a canvas, click the button with minus sign; and to rename, click the third button.
+
+http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_tabs.png
 
 Choose a graph type and enter the information needed, then just click "Draw" to plot the graph.
 
 For more explanations on this dialog, see MainDialog.
+
+==Drawing a 2D graph==
+First define a cut if a cut is needed (see [Event cuts]).
+
+Then select "2D Graph" from the "Graph Type" drop-down list:
+
+http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_2dgraph.png
+
+Then Fill in the expressions for x- and y-axis; the expressions can be any reasonable expression involving the values of branches shown under the drop-down list "Availabe Branches". 
+
+If error bars are desired, check the checkbox "Use Errors" and fill in the appropriate values. 
+
+Then click "Draw" to plot the graph:
+http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_2dgraph.png
+
+Notice that the canvas title under the list of canvases is automatically changed to _x-axis_ - _y-axis_. 
+
+==Drawing shower angles===
+Select "Shower Angles" from the "Graph Type" drop-down list:
+
+http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_showerangles.png
+
+Fill in expressions for "r-axis" and "theta-axis", remember that the latter has to be entered in radians (multiply by 3.14159/180 to convert from degrees to radians). 
+
+One can also manipulate the theta angle so that the directions north, east, etc. are shown in the normal way: use 360 - angle (in degree) to graph the points clockwise (instead of counterclockwise, which is customary for polar graphs), and use angle + 90 to rotate the graphs so that 0 degree corresponds to north.
+
+The shower angles graph is color coded; the points on the graph is given color in a rainbow fashion depending on the values of the field "color code by"; the color code is also shown on the graph in a legend on the right. 
+
+A sample graph using the parameters in the screenshot above:
+http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_showerangles1.png
