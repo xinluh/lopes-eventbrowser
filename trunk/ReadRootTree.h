@@ -68,6 +68,11 @@ class ReadRootTree
 	// apply eventcut; if filter is null, then the previous cut is re-applied
 	void setEventCut(const char * filter = NULL,const char * sort_by = NULL,
 					 bool sort_desc = false);
+
+	//save the entries after event cut in a new file; only the branches
+	//already set will be read into the new file; that is, the unsupported
+	//branch types like string, etc. will NOT be saved to the new file
+	void saveToNewFile(std::string filename);
 	
 	// for each event in the root tree, this function will call the callback
 	// function as given in parameter; obj will be pass unmodified to the

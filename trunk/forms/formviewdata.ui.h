@@ -14,7 +14,7 @@
 #include "formChooseDisplayColumns.h"
 #include "Helper.h"
 
-
+#include <qfiledialog.h>
 #include <qstatusbar.h>
 
 #ifdef DEBUG
@@ -143,3 +143,16 @@ void formViewData::editColumns()
 		fetchData();
 	}
 }
+
+void formViewData::saveAsNewRoot()
+{
+	QString file = QFileDialog::getSaveFileName(
+		            "newroot.root",
+					"Root file (*.root)",
+                    this,
+                    tr("save file dialog"),
+                    tr("Choose a filename to save under"));
+
+	if (file) rootTree->saveToNewFile(file.ascii());
+}
+	
