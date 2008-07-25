@@ -21,7 +21,7 @@
         </property>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout22</cstring>
+                <cstring>layout3</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -39,17 +39,31 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>40</width>
+                            <width>570</width>
                             <height>20</height>
                         </size>
                     </property>
                 </spacer>
                 <widget class="QPushButton">
                     <property name="name">
+                        <cstring>btnSave</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Save as new root file...</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
                         <cstring>btnEditColumns</cstring>
                     </property>
                     <property name="text">
-                        <string>Edit Columns</string>
+                        <string>&amp;Edit Columns</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+E</string>
                     </property>
                 </widget>
             </hbox>
@@ -145,6 +159,12 @@
         <receiver>formViewData</receiver>
         <slot>editColumns()</slot>
     </connection>
+    <connection>
+        <sender>btnSave</sender>
+        <signal>clicked()</signal>
+        <receiver>formViewData</receiver>
+        <slot>saveAsNewRoot()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">string</include>
@@ -157,6 +177,7 @@
     <slot>setColumnNames()</slot>
     <slot>fetchData()</slot>
     <slot>editColumns()</slot>
+    <slot>saveAsNewRoot()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

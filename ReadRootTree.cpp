@@ -429,4 +429,18 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
 	return 0;
 }
 
+void ReadRootTree::saveToNewFile(string filename)
+{
+	TFile *file = new TFile(filename.c_str(),"recreate");
+	TTree *newtree = chain->CloneTree(0);
 
+	for (long i = 0; i < entries; ++i)
+	{
+	    chain->GetEntry(eventlist[i]);
+		newtree->Fill();
+	}
+
+	newtree->Print();
+	newtree->AutoSave();
+	delete file;
+}
