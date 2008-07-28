@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <stdio.h>
 
 #ifdef DEBUG
 #include <iostream>
@@ -568,24 +569,14 @@ void MainForm::divideCanvas()
 	QString s = QInputDialog::getText(tr("Divide Canvas"),
 									  tr("How to divide? e.g. 3x2"),
 									  QLineEdit::Normal,
-									  "2x2",
+									  "3x2",
 									  &ok,
 									  this);
 	if (ok && !s.isEmpty())
 	{
-		// todo: really parse the string instead of dirty ifelse statement ^_^
-
-		if (s == "2x2")
-			divideCanvas(2,2);
-		else if (s == "3x2")
-			divideCanvas(3,2);
-		else if (s ==  "4x2")
-			divideCanvas(4,2);
-		else if (s ==  "3x3")
-			divideCanvas(3,3);
-		else
-			NOT_IMPLEMENTED
-	     
+		int n_columns, n_rows;
+		sscanf(s.ascii(),"%ix%i",&n_columns,&n_rows);
+		divideCanvas(n_columns,n_rows);
 	}	
 }
 
