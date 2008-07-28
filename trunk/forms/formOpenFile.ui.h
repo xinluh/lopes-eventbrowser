@@ -13,6 +13,7 @@
 #include <vector>
 #include <qfiledialog.h>
 #include <qcombobox.h>
+#include <qpushbutton.h>
 
 
 #include "Helper.h"
@@ -40,7 +41,12 @@ void formOpenFile::initialize(ReadRootTree *t )
 
 	if (!tree)
 	{
-	// get a list of files ending with .root in the current working directory
+		// must have valid root files; thus if ReadRootTree is null, user
+		// cannot click cancel in this dialog
+		buttonCancel->setEnabled(false);
+		
+		// get a list of files ending with .root in the current working
+		// directory
 		vector<string> files;
 		getFileList("",files,"root");
 		openFiles(files);

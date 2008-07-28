@@ -18,6 +18,7 @@ HEADERS += forms/mainform.ui.h \
 INTERFACES += forms/mainform.ui\
               forms/formviewdata.ui \
               forms/formChooseDisplayColumns.ui \
+              forms/formAbout.ui \
               forms/formOpenFile.ui
 SOURCES += main.cpp \
            Draw.cpp \

@@ -32,6 +32,11 @@ long CanvasCollection::size()
 {
 	return canvases.size();
 }
+
+Canvas* CanvasCollection::at(int index)
+{
+	return canvases[index];
+}
 // CanvasCollection* CanvasCollection::clone()
 // {
 // 	CanvasCollection *c = new CanvasCollection();

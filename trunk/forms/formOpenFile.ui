@@ -18,6 +18,9 @@
     <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
+    <property name="modal">
+        <bool>true</bool>
+    </property>
     <widget class="QLayoutWidget">
         <property name="name">
             <cstring>Layout5</cstring>
