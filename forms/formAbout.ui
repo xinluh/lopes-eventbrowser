@@ -1,0 +1,56 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>formAbout</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>formAbout</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>391</width>
+            <height>201</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>About Browser</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QTextEdit">
+            <property name="name">
+                <cstring>textEdit2</cstring>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>238</red>
+                    <green>238</green>
+                    <blue>238</blue>
+                </color>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="text">
+                <string>&lt;h1&gt;&lt;p align="center"&gt;Event Browser&lt;/p&gt;&lt;/h1&gt;
+
+A qt-based event browser for the LOPES collaboration at Forschungszentrum Karlsruhe, Germany. Uses ROOT as the backend for plotting and graphing.
+&lt;br&gt;&lt;br&gt;
+Developed by Xinlu Huang, with advices from P. Gina Isar.
+&lt;br&gt;&lt;br&gt;
+Website: &lt;a href="http://code.google.com/p/lopes-eventbrowser/"&gt;http://code.google.com/p/lopes-eventbrowser/&lt;/a&gt;
+</string>
+            </property>
+            <property name="wordWrap">
+                <enum>WidgetWidth</enum>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </hbox>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

@@ -15,6 +15,7 @@
 #include "formviewdata.h"
 #include "CanvasCollection.h"
 #include "formOpenFile.h"
+#include "formAbout.h"
 
 #include <qstatusbar.h>
 #include <qfiledialog.h>
@@ -98,16 +99,13 @@ void MainForm::fileOpen()
 	f.initialize(draw->rootTree);
 	
 	if (f.exec())
-	{
 		draw->rootTree = f.getReadRootTree();
-	}
 	else if (!(draw->rootTree)) // for the first time when program opens
 	{
-		QMessageBox::critical(this,"Error",
- 							  "You must select some root files to"
- 							  "start with! The application will exit now.");
- 		// todo: this does not work...
- 		this->close();
+		QMessageBox::information(this,"Open files",
+								 "You must select some root files to"
+								 "start with! Use File -> "
+								 "Open to open root files.");
  		return;
 	}
 
@@ -170,61 +168,19 @@ void MainForm::fileSaveAllMultiple()
 	NOT_IMPLEMENTED
 }
 
-
+void MainForm::fileExit()
+{
+	close();
+}
 void MainForm::filePrint()
 {
 	NOT_IMPLEMENTED
 }
 
-
-void MainForm::editUndo()
-{
-	NOT_IMPLEMENTED
-}
-
-void MainForm::editRedo()
-{
-	NOT_IMPLEMENTED
-}
-
-void MainForm::fileExit()
-{
-	NOT_IMPLEMENTED
-}
-
-void MainForm::editCut()
-{
-	NOT_IMPLEMENTED
-}
-
-
-void MainForm::editCopy()
-{
-	NOT_IMPLEMENTED
-}
-
-
-void MainForm::editPaste()
-{
-	NOT_IMPLEMENTED
-}
-
-
-void MainForm::helpIndex()
-{
-	NOT_IMPLEMENTED
-}
-
-
-void MainForm::helpContents()
-{
-	NOT_IMPLEMENTED
-}
-
-
 void MainForm::helpAbout()
 {
-	NOT_IMPLEMENTED
+	formAbout f(this);
+	f.exec();
 }
 
 
@@ -388,6 +344,9 @@ void MainForm::addNewTab()
 
 	if (id != -1)
 	{
+		Canvas *c = new Canvas();
+//		c->setGraphType(
+
 		tabIds.push_back(id);
 
 		ostringstream ss;
@@ -398,6 +357,7 @@ void MainForm::addNewTab()
 			  (tabNames.size() == 0)? 0 : tabNames[(int)tabNames.size() - 1],
 								 ss.str());
 		tabNames.push_back(item);
+
 		
 		//focus on the newly created tab
 		lvGraphs->setSelected(item,true);
@@ -647,19 +607,55 @@ void MainForm::changeStatus(QString status)
     lblStatus->setText(status);
 }
 
-void MainForm::selectGraphType( int index )
+void MainForm::determineGraphType(int index, QWidget** associatedWidget,
+								  Canvas::graphTypes* type)
 {
 	switch (index)
 	{
 		case 0:
-			wgsAction->raiseWidget(tabGraph2D);
+			if (associatedWidget)
+				*associatedWidget = tabGraph2D;
+			if (type)
+				*type = Canvas::GRAPH_2D;
 			break;
 		case 1:
-			wgsAction->raiseWidget(tabShowerAngles);
+			if (associatedWidget)
+				*associatedWidget = tabShowerAngles;
+			if (type)
+				*type = Canvas::SHOWER_ANGLE;
 			break;
 		case 2:
-			wgsAction->raiseWidget(tabPosition);
+			if (associatedWidget)
+				*associatedWidget = tabPosition;
+			if (type)
+				*type = Canvas::ANTENNA_POSITION;
+			break;
 	}
+		
+}
+
+void MainForm::selectGraphType( int index )
+{
+	QWidget* w = 0;
+	Canvas::graphTypes type;
+	
+	determineGraphType(index,&w,&type);
+
+	wgsAction->raiseWidget(w);
+	//canvases.at(getTabIndex())->setGraphType(type);
+	
+//	switch (index)
+//	{
+//		case 0:
+//			wgsAction->raiseWidget(tabGraph2D);
+//			break;
+//		case 1:
+//			wgsAction->raiseWidget(tabShowerAngles);
+//			break;
+//		case 2:
+//			wgsAction->raiseWidget(tabPosition);
+//			break;
+//	}
 }
 
 

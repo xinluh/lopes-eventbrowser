@@ -22,6 +22,7 @@ public:
 	std::vector<Canvas*> canvases;
 	
 	long size ();
+	Canvas* at(int index);
 	void addCanvas (Canvas *c);
 	void removeCanvas (int index);
 	
