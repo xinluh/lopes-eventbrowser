@@ -17,26 +17,12 @@ CanvasCollection::~CanvasCollection()
 	}
 }
 
-void CanvasCollection::addCanvas(Canvas *c)
-{
-	canvases.push_back(c);
-}
-
 void CanvasCollection::removeCanvas(int index)
 {
 	delete canvases[index];
 	canvases.erase(canvases.begin() + index);
 }
 
-long CanvasCollection::size()
-{
-	return canvases.size();
-}
-
-Canvas* CanvasCollection::at(int index)
-{
-	return canvases[index];
-}
 // CanvasCollection* CanvasCollection::clone()
 // {
 // 	CanvasCollection *c = new CanvasCollection();

@@ -735,82 +735,6 @@
                                             </widget>
                                         </grid>
                                     </widget>
-                                    <widget class="QCheckBox">
-                                        <property name="name">
-                                            <cstring>ckbPolarErrors</cstring>
-                                        </property>
-                                        <property name="text">
-                                            <string>Use Errors</string>
-                                        </property>
-                                    </widget>
-                                    <widget class="QGroupBox">
-                                        <property name="name">
-                                            <cstring>gbPolarErrors</cstring>
-                                        </property>
-                                        <property name="enabled">
-                                            <bool>false</bool>
-                                        </property>
-                                        <property name="title">
-                                            <string>Errors</string>
-                                        </property>
-                                        <vbox>
-                                            <property name="name">
-                                                <cstring>unnamed_2</cstring>
-                                            </property>
-                                            <widget class="QLayoutWidget">
-                                                <property name="name">
-                                                    <cstring>layout8_2</cstring>
-                                                </property>
-                                                <hbox>
-                                                    <property name="name">
-                                                        <cstring>unnamed_2</cstring>
-                                                    </property>
-                                                    <widget class="QLabel">
-                                                        <property name="name">
-                                                            <cstring>textLabel3_2_2</cstring>
-                                                        </property>
-                                                        <property name="text">
-                                                            <string>r-axis:</string>
-                                                        </property>
-                                                    </widget>
-                                                    <widget class="QLineEdit">
-                                                        <property name="name">
-                                                            <cstring>txtPolarRAxisError</cstring>
-                                                        </property>
-                                                        <property name="text">
-                                                            <string>0.001</string>
-                                                        </property>
-                                                    </widget>
-                                                </hbox>
-                                            </widget>
-                                            <widget class="QLayoutWidget">
-                                                <property name="name">
-                                                    <cstring>layout9_2</cstring>
-                                                </property>
-                                                <hbox>
-                                                    <property name="name">
-                                                        <cstring>unnamed_2</cstring>
-                                                    </property>
-                                                    <widget class="QLabel">
-                                                        <property name="name">
-                                                            <cstring>textLabel4_2_2</cstring>
-                                                        </property>
-                                                        <property name="text">
-                                                            <string>theta-axis:</string>
-                                                        </property>
-                                                    </widget>
-                                                    <widget class="QLineEdit">
-                                                        <property name="name">
-                                                            <cstring>txtPolarThetaAxisError</cstring>
-                                                        </property>
-                                                        <property name="text">
-                                                            <string>sqrt((CCheight_error_EW)^2+(0.4*CCheight_EW)^2)/log10(Nmu)</string>
-                                                        </property>
-                                                    </widget>
-                                                </hbox>
-                                            </widget>
-                                        </vbox>
-                                    </widget>
                                 </vbox>
                             </widget>
                             <widget class="QWidget">
@@ -843,6 +767,137 @@
                                         </rect>
                                     </property>
                                 </widget>
+                            </widget>
+                            <widget class="QWidget">
+                                <property name="name">
+                                    <cstring>tabGraphPolar</cstring>
+                                </property>
+                                <attribute name="id">
+                                    <number>3</number>
+                                </attribute>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout23_2</cstring>
+                                        </property>
+                                        <grid>
+                                            <property name="name">
+                                                <cstring>unnamed_2</cstring>
+                                            </property>
+                                            <widget class="QLineEdit" row="0" column="1">
+                                                <property name="name">
+                                                    <cstring>txtPolarRAxis_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>90-ElL_ew</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel" row="1" column="0">
+                                                <property name="name">
+                                                    <cstring>textLabel4_3_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>theta-axis (in radians):</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel" row="0" column="0">
+                                                <property name="name">
+                                                    <cstring>textLabel3_3_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>r-axis:</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLineEdit" row="1" column="1">
+                                                <property name="name">
+                                                    <cstring>txtPolarThetaAxis_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>(360-AzL_ew+90)*3.14159/180</string>
+                                                </property>
+                                            </widget>
+                                        </grid>
+                                    </widget>
+                                    <widget class="QCheckBox">
+                                        <property name="name">
+                                            <cstring>ckbPolarErrors</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>Use Errors</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QGroupBox">
+                                        <property name="name">
+                                            <cstring>gbPolarErrors</cstring>
+                                        </property>
+                                        <property name="enabled">
+                                            <bool>false</bool>
+                                        </property>
+                                        <property name="title">
+                                            <string>Errors</string>
+                                        </property>
+                                        <vbox>
+                                            <property name="name">
+                                                <cstring>unnamed_2</cstring>
+                                            </property>
+                                            <widget class="QLayoutWidget">
+                                                <property name="name">
+                                                    <cstring>layout8_2_2</cstring>
+                                                </property>
+                                                <hbox>
+                                                    <property name="name">
+                                                        <cstring>unnamed_2</cstring>
+                                                    </property>
+                                                    <widget class="QLabel">
+                                                        <property name="name">
+                                                            <cstring>textLabel3_2_2_2</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>r-axis:</string>
+                                                        </property>
+                                                    </widget>
+                                                    <widget class="QLineEdit">
+                                                        <property name="name">
+                                                            <cstring>txtPolarRAxisError</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>0.001</string>
+                                                        </property>
+                                                    </widget>
+                                                </hbox>
+                                            </widget>
+                                            <widget class="QLayoutWidget">
+                                                <property name="name">
+                                                    <cstring>layout9_2_2</cstring>
+                                                </property>
+                                                <hbox>
+                                                    <property name="name">
+                                                        <cstring>unnamed_2</cstring>
+                                                    </property>
+                                                    <widget class="QLabel">
+                                                        <property name="name">
+                                                            <cstring>textLabel4_2_2_2</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>theta-axis:</string>
+                                                        </property>
+                                                    </widget>
+                                                    <widget class="QLineEdit">
+                                                        <property name="name">
+                                                            <cstring>txtPolarThetaAxisError</cstring>
+                                                        </property>
+                                                        <property name="text">
+                                                            <string>sqrt((CCheight_error_EW)^2+(0.4*CCheight_EW)^2)/log10(Nmu)</string>
+                                                        </property>
+                                                    </widget>
+                                                </hbox>
+                                            </widget>
+                                        </vbox>
+                                    </widget>
+                                </vbox>
                             </widget>
                         </widget>
                     </vbox>
@@ -1444,12 +1499,6 @@
         <slot>setMultigraphStatus(bool)</slot>
     </connection>
     <connection>
-        <sender>ckbPolarErrors</sender>
-        <signal>toggled(bool)</signal>
-        <receiver>gbPolarErrors</receiver>
-        <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
         <sender>txt2DYAxisError</sender>
         <signal>textChanged(const QString&amp;)</signal>
         <receiver>MainForm</receiver>
@@ -1521,6 +1570,12 @@
         <receiver>MainForm</receiver>
         <slot>insertBranchName(const QString&amp;)</slot>
     </connection>
+    <connection>
+        <sender>lvGraphs</sender>
+        <signal>doubleClicked(QListViewItem*)</signal>
+        <receiver>MainForm</receiver>
+        <slot>renameTab()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">string</include>
@@ -1540,7 +1595,7 @@
     <slot>Draw()</slot>
     <slot>applyRootCut()</slot>
     <slot>txtEventCut_changed()</slot>
-    <slot>addNewTab(Canvas* c)</slot>
+    <slot>addNewTab( Canvas * c )</slot>
     <slot>addNewTab()</slot>
     <slot>enableTabActionButtons()</slot>
     <slot>setTabAsCanvas( QWidget * qw )</slot>
@@ -1548,6 +1603,8 @@
     <slot returnType="int">getTabIndex( int widgetID )</slot>
     <slot returnType="int">getTabIndex( QListViewItem * item )</slot>
     <slot>selectTab( QListViewItem * sel )</slot>
+    <slot>loadCanvas( Canvas * c )</slot>
+    <slot>saveToCanvas()</slot>
     <slot>removeTab()</slot>
     <slot>removeTab( int index )</slot>
     <slot>renameTab()</slot>
@@ -1561,7 +1618,7 @@
     <slot>setMultigraphStatus( bool state )</slot>
     <slot>saveEventCut()</slot>
     <slot>changeStatus( QString status )</slot>
-    <slot>determineGraphType( int index, QWidget ** associatedWidget, Canvas::graphTypes * type )</slot>
+    <slot>determineGraphType( int index, QWidget * * associatedWidget, Canvas::graphTypes * type )</slot>
     <slot>selectGraphType( int index )</slot>
     <slot>viewData()</slot>
     <slot>fillBranchNames()</slot>
