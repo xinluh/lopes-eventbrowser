@@ -21,9 +21,9 @@ public:
 
 	std::vector<Canvas*> canvases;
 	
-	long size ();
-	Canvas* at(int index);
-	void addCanvas (Canvas *c);
+	long size () { return canvases.size(); }
+	Canvas* at(int index) { return canvases[index]; }
+	void push_back(Canvas* c) { canvases.push_back(c); }
 	void removeCanvas (int index);
 	
 	void print();

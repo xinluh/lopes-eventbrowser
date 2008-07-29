@@ -205,24 +205,29 @@ void MainForm::enableDrawButton()
 	{
 		btnDraw->setEnabled(!txtPolarRAxis->text().isEmpty() &&
 			                !txtPolarThetaAxis->text().isEmpty());
+	}
+	else if (wgsAction->visibleWidget() == tabGraphPolar)
+	{
+		btnDraw->setEnabled(!txtPolarRAxis_2->text().isEmpty() &&
+			                !txtPolarThetaAxis_2->text().isEmpty());
 		if (ckb2DErrors->isChecked())
 			btnDraw->setEnabled(!txtPolarRAxisError->text().isEmpty() &&
 								!txtPolarThetaAxisError->text().isEmpty());
 	}
+
+// ## uncomment below to add another graph type ##
+//	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
+//	{
+//		btnDraw->setEnabled(_true if all the neccesary fields are completed;
+//							false otherwise);
+//	}
+			 
 }
-
-
 
 void MainForm::Draw()
 {
 	if (ckbNewTab->isChecked())
 		addNewTab();
-
-// 	if (ckbMultiGraph->isChecked() && multiGraphCont)
-// 	{
-// 		draw->beginMultigraph();
-// 		multiGraphCont = true;
-// 	}
 	
 	if (wgsAction->visibleWidget() == tabPosition)
 	{
@@ -260,10 +265,15 @@ void MainForm::Draw()
 		
 		renameTab(txtEventCut->text());
 	}
+ // ## uncomment below to add another graph type ##
+//	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
+//	{
+//	    use the object draw to draw stuff here; root has already been cd to the
+//	    current canvas
+//      also do renameTab(_name_) to change the name of the tab to a more
+//      description name   	
+//	}
 }
-
-
-
 
 void MainForm::applyRootCut()
 {
@@ -323,51 +333,23 @@ void MainForm::addNewTab()
 {
 	Canvas *c = new Canvas();
 	c->setName("Untitled Canvas");
-
+	
 	if (wgsAction->visibleWidget() == tabPosition)
 		c->setGraphType(Canvas::ANTENNA_POSITION);
 	else if (wgsAction->visibleWidget() == tabGraph2D)
 		c->setGraphType(Canvas::GRAPH_2D);
 	else if (wgsAction->visibleWidget() == tabShowerAngles)
 		c->setGraphType(Canvas::SHOWER_ANGLE);
+// ## uncomment below to add another graph type ##
+//	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
+//      c->setGraphType(Canvas::_your identification set in Canvas.h_);
+	else
+		c->setGraphType(Canvas::GRAPH_2D); // default to 2D graph
+
+	canvases.push_back(c);
 	
-//	int tabcount = tabsGraph->count();
-	int id = -1;
-	QListViewItem * item;
-	
-	newTab = new QWidget(wgStack,"tab_"); //todo add number!
-	newTqtw = new TQtWidget(newTab,"tqtw");
-	newLayout = new QVBoxLayout(newTab,0,6,"tabLayout");
-	newLayout->addWidget(newTqtw);
-	
-	id = wgStack->addWidget(newTab);
-
-	if (id != -1)
-	{
-		Canvas *c = new Canvas();
-//		c->setGraphType(
-
-		tabIds.push_back(id);
-
-		ostringstream ss;
-		ss << "Untitled Canvas " << id;
-
-		//create an item after the last one in the listview
-		item = new QListViewItem(lvGraphs,
-			  (tabNames.size() == 0)? 0 : tabNames[(int)tabNames.size() - 1],
-								 ss.str());
-		tabNames.push_back(item);
-
-		
-		//focus on the newly created tab
-		lvGraphs->setSelected(item,true);
-
-		// make sure that the correct TQtWidget is the current Canvas
-		setTabAsCanvas(newTab);
-	}
+	addNewTab(c);	
 }
-
-
 
 void MainForm::enableTabActionButtons()
 {
@@ -390,9 +372,8 @@ void MainForm::setTabAsCanvas( QWidget * qw )
 // get the index in the arrays tabIds and tabNames for the currently selected
 int MainForm::getTabIndex()
 {
-	return getTabIndex(lvGraphs->selectedItem());
+	return getTabIndex(wgStack->id(wgStack->visibleWidget()));
 }
-
 
 
 int MainForm::getTabIndex( int widgetID )
@@ -407,7 +388,6 @@ int MainForm::getTabIndex( int widgetID )
 	return -1;
 }
 
-
 int MainForm::getTabIndex( QListViewItem * item )
 {
 	if (!item) return -1;
@@ -419,9 +399,10 @@ int MainForm::getTabIndex( QListViewItem * item )
     return -1;
 }
 
-
 void MainForm::selectTab( QListViewItem * sel)
 {
+	saveToCanvas();
+	
 	multiGraphCont = false; // make sure that a new graph with axis is started
 	
 	int index = (sel)? getTabIndex(sel) : getTabIndex();
@@ -437,18 +418,121 @@ void MainForm::selectTab( QListViewItem * sel)
 		if (index < 0) return;
 
 		// todo cd to the subpad
+
+		return;
 	}
 
 	id = tabIds[index];
-	
-	//cout << "id = " << id << endl;
 	
 	if (id == 0)
 		wgStack->raiseWidget(wgStack->id(wgEmtpyPage));
 	else
 		wgStack->raiseWidget(id);
+
+	loadCanvas(canvases.at(index));
 }
 
+// load the inforamtion from the object Canvas to the user interface
+void MainForm::loadCanvas(Canvas* c)
+{
+	if (!c) return;
+
+	txtEventCut->setText(c->getEventCut());
+	applyRootCut();
+
+	renameTab(c->getName());
+	
+	switch (c->getGraphType())
+	{
+		case Canvas::GRAPH_2D:
+		{
+			wgsAction->raiseWidget(tabGraph2D);
+			infoGraph2D* info = (infoGraph2D*) c->getGraphInfo();
+
+			ckb2DErrors->setChecked(info->useErrors);
+			txt2DXAxis->setText(info->xAxis);
+			txt2DYAxis->setText(info->yAxis);
+			txt2DXAxisError->setText(info->xAxis_err);
+			txt2DYAxisError->setText(info->yAxis_err);
+			break;
+		}
+		case Canvas::SHOWER_ANGLE:
+		{
+			wgsAction->raiseWidget(tabShowerAngles);
+			infoShowerAngle* info2 = (infoShowerAngle*) c->getGraphInfo();
+
+			txtPolarThetaAxis->setText(info2->thetaAxis);
+			txtPolarRAxis->setText(info2->rAxis);
+			txtColorCode->setText(info2->colorCodeBy);
+			break;
+		}
+		case Canvas::GRAPH_POLAR:
+		{
+			//todo
+		}
+		case Canvas::ANTENNA_POSITION:
+		{
+			wgsAction->raiseWidget(tabPosition);
+		}
+		default:
+		{
+			cout << "hmm, this should not happen..." << endl;
+		}
+			
+			
+		// ## add the case for new graph type here
+		// case Canvas::_your new enum graph type enum name_:
+		// {
+		//     wgsAction->raiseWidget(_yout new tab widget_);
+		//     fill in the values like above
+		// }
+	}
+			
+}
+
+// save the current text fields, such as event cut, etc.  to the object Canvas
+void MainForm::saveToCanvas()
+{
+	int index = getTabIndex();
+
+	if (index < 0) return;
+
+	Canvas* c = canvases.at(index);
+
+	if (!c) return;
+
+	c->setEventCut(txtEventCut->text().ascii());
+	c->setName(tabNames[index]->text(0));
+
+	if (wgsAction->visibleWidget() == tabPosition)
+	{
+		c->setGraphType(Canvas::ANTENNA_POSITION);
+	}
+	else if (wgsAction->visibleWidget() == tabGraph2D)
+	{
+		c->setGraphType(Canvas::GRAPH_2D);
+
+		infoGraph2D* info = (infoGraph2D*) c->getGraphInfo();
+		info->useErrors = ckb2DErrors->isChecked();
+		info->xAxis = string(txt2DXAxis->text().ascii());
+		info->yAxis = txt2DYAxis->text().ascii();
+		info->xAxis_err = txt2DXAxisError->text().ascii();
+		info->yAxis_err = txt2DYAxisError->text().ascii();
+	}
+	else if (wgsAction->visibleWidget() == tabShowerAngles)
+	{
+		c->setGraphType(Canvas::SHOWER_ANGLE);
+		
+		infoShowerAngle* info2 = (infoShowerAngle*) c->getGraphInfo();
+		info2->rAxis = txtPolarRAxis->text().ascii();
+		info2->thetaAxis = txtPolarThetaAxis->text().ascii();
+		info2->colorCodeBy = txtColorCode->text().ascii();
+	}
+// ## uncomment below to add another graph type ##
+//	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
+//      c->setGraphType(Canvas::_your identification set in Canvas.h_);
+
+}
 
 void MainForm::removeTab()
 {
@@ -456,7 +540,6 @@ void MainForm::removeTab()
 	if (index > -1)
 		removeTab(index);
 }
-
 
 void MainForm::removeTab( int index )
 {
@@ -478,7 +561,7 @@ void MainForm::removeTab( int index )
 	tabNames.erase(tabNames.begin() + index);
 }
 
-
+// rename the current tab, asking the user for the new name
 void MainForm::renameTab()
 {
 	int index = getTabIndex();
@@ -486,8 +569,8 @@ void MainForm::renameTab()
 		renameTab(index);
 }
 
-
-void MainForm::renameTab( int index )
+// rename the tab of index "index", asking user for the new name
+void MainForm::renameTab(int index)
 {
 	if (index < 0 || index > (int) tabIds.size()) return;
 
@@ -503,6 +586,7 @@ void MainForm::renameTab( int index )
 		renameTab(index,name);
 }
 
+// rename the current tab to "name"
 void MainForm::renameTab(QString name)
 {
 	int index = getTabIndex();
@@ -510,17 +594,16 @@ void MainForm::renameTab(QString name)
 		renameTab(index,name);
 }
 
+// rename the tab of index "index" to "name"
 void MainForm::renameTab(int index, QString name)
 {
 	if (index < 0 || index > (int) tabIds.size()) return;
 
-
-	QListViewItem * item = tabNames[index];
+//	QListViewItem * item = tabNames[index];
 		
-	if (item)
-		item->setText(0,name);
+	if (tabNames[index])
+		tabNames[index]->setText(0,name);
 }
-
 
 void MainForm::divideCanvas()
 {
@@ -546,7 +629,6 @@ void MainForm::divideCanvas(int n_columns, int n_rows)
 	addNewSubPad(n_rows * n_columns);
 }
 
-
 void MainForm::addNewSubPad( int n_subpad )
 {
 	QListViewItem * parent_item = tabNames[getTabIndex()];
@@ -556,16 +638,15 @@ void MainForm::addNewSubPad( int n_subpad )
 	QListViewItem * child_item, *after_item;
 	ostringstream ss;
 
-	after_item = parent_item->firstChild();
-	
 	// find the last child under the parent_item
+	after_item = parent_item->firstChild();
 	if (after_item)
 	{
 		while (after_item->nextSibling() != 0)
 			after_item = after_item->nextSibling();
 	}
 	
-
+	// rename the new subpads to Pad 1, Pad 2, etc.
 	for (int i = 1; i <= n_subpad; i++)
 	{
 		ss.str("");
@@ -582,31 +663,29 @@ void MainForm::addNewSubPad( int n_subpad )
 	parent_item->setOpen(true);
 }
 
-
-
 void MainForm::clearGraph()
 {
 	draw->clearCanvas();
 }
-
 
 void MainForm::setMultigraphStatus( bool state )
 {
 	draw->setMultiGraph(state);
 }
 
-
 void MainForm::saveEventCut()
 {
 	cmbEventCuts->insertItem(txtEventCut->text());
 }
-
 
 void MainForm::changeStatus(QString status)
 {
     lblStatus->setText(status);
 }
 
+// given the index (i.e. position) of the item in the graph type drop-down
+// list, this gives the QWidget (i.e. tab) associated with the graph type and
+// the type in the graphTypes enum
 void MainForm::determineGraphType(int index, QWidget** associatedWidget,
 								  Canvas::graphTypes* type)
 {
@@ -641,23 +720,11 @@ void MainForm::selectGraphType( int index )
 	
 	determineGraphType(index,&w,&type);
 
-	wgsAction->raiseWidget(w);
+	if (w)
+		wgsAction->raiseWidget(w);
 	//canvases.at(getTabIndex())->setGraphType(type);
 	
-//	switch (index)
-//	{
-//		case 0:
-//			wgsAction->raiseWidget(tabGraph2D);
-//			break;
-//		case 1:
-//			wgsAction->raiseWidget(tabShowerAngles);
-//			break;
-//		case 2:
-//			wgsAction->raiseWidget(tabPosition);
-//			break;
-//	}
 }
-
 
 void MainForm::viewData()
 {
@@ -672,7 +739,6 @@ void MainForm::viewData()
 	f->setActiveWindow();
 }
 
-
 void MainForm::fillBranchNames()
 {
 	if (!draw->rootTree) return;
@@ -683,7 +749,6 @@ void MainForm::fillBranchNames()
 	for (int i = 0; i < (int) names.size(); i++)
 		cmbBranchNames->insertItem(names[i]);
 }
-
 
 void MainForm::insertBranchName( const QString& name )
 {
@@ -715,4 +780,3 @@ void MainForm::insertBranchName( const QString& name )
 
     delete l; 
 }
-
