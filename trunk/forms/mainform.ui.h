@@ -11,6 +11,7 @@
 *****************************************************************************/
 #include "Draw.h"
 #include "Canvas.h"
+#include "GraphInfos.h"
 #include "Helper.h"
 #include "formviewdata.h"
 #include "CanvasCollection.h"
@@ -78,8 +79,11 @@ void MainForm::init()
 {
 	//don't sort the listview - it messes up the order of inserting tabs
 	lvGraphs->setSorting(-1);
-	
-	addNewTab();	
+
+	//populate the graph type drop-down list
+	for (int i = 0; i < Canvas::numberOfGraphTypes(); ++i)
+		cmbGraphType->insertItem(Canvas::getDescription(
+									 (Canvas::graphTypes) i));
 	
 	// set up statusbar; important: don't attempt to write to status bar
 	// before this!!!
@@ -88,7 +92,8 @@ void MainForm::init()
 	lblStatus->setMinimumSize(lblStatus->sizeHint());
 	statusBar()->addWidget(lblStatus,1);
 	statusBar()->addWidget(lblEventCutStatus);
-
+		
+	addNewTab();	
 	fileOpen();
 	
 }
@@ -333,16 +338,10 @@ void MainForm::addNewTab()
 {
 	Canvas *c = new Canvas();
 	c->setName("Untitled Canvas");
-	
-	if (wgsAction->visibleWidget() == tabPosition)
-		c->setGraphType(Canvas::ANTENNA_POSITION);
-	else if (wgsAction->visibleWidget() == tabGraph2D)
-		c->setGraphType(Canvas::GRAPH_2D);
-	else if (wgsAction->visibleWidget() == tabShowerAngles)
-		c->setGraphType(Canvas::SHOWER_ANGLE);
-// ## uncomment below to add another graph type ##
-//	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
-//      c->setGraphType(Canvas::_your identification set in Canvas.h_);
+	int index = getTabIndex();
+
+	if (index > 0)
+		c->setGraphType(canvases.at(index)->getGraphType());
 	else
 		c->setGraphType(Canvas::GRAPH_2D); // default to 2D graph
 
@@ -441,12 +440,13 @@ void MainForm::loadCanvas(Canvas* c)
 	applyRootCut();
 
 	renameTab(c->getName());
+	wgsAction->raiseWidget(findGraphWidget(c->getGraphType()));
+	cmbGraphType->setCurrentItem(c->getGraphType());
 	
 	switch (c->getGraphType())
 	{
 		case Canvas::GRAPH_2D:
 		{
-			wgsAction->raiseWidget(tabGraph2D);
 			infoGraph2D* info = (infoGraph2D*) c->getGraphInfo();
 
 			ckb2DErrors->setChecked(info->useErrors);
@@ -458,7 +458,6 @@ void MainForm::loadCanvas(Canvas* c)
 		}
 		case Canvas::SHOWER_ANGLE:
 		{
-			wgsAction->raiseWidget(tabShowerAngles);
 			infoShowerAngle* info2 = (infoShowerAngle*) c->getGraphInfo();
 
 			txtPolarThetaAxis->setText(info2->thetaAxis);
@@ -469,23 +468,22 @@ void MainForm::loadCanvas(Canvas* c)
 		case Canvas::GRAPH_POLAR:
 		{
 			//todo
+			break;
 		}
 		case Canvas::ANTENNA_POSITION:
 		{
-			wgsAction->raiseWidget(tabPosition);
+			// nothing to do...
+			break;
 		}
+		// ## add the case for new graph type here
+		// case Canvas::_your new enum graph type enum name_:
+		// {
+		//     fill in the values like above
+		// }
 		default:
 		{
 			cout << "hmm, this should not happen..." << endl;
 		}
-			
-			
-		// ## add the case for new graph type here
-		// case Canvas::_your new enum graph type enum name_:
-		// {
-		//     wgsAction->raiseWidget(_yout new tab widget_);
-		//     fill in the values like above
-		// }
 	}
 			
 }
@@ -494,11 +492,9 @@ void MainForm::loadCanvas(Canvas* c)
 void MainForm::saveToCanvas()
 {
 	int index = getTabIndex();
-
 	if (index < 0) return;
 
 	Canvas* c = canvases.at(index);
-
 	if (!c) return;
 
 	c->setEventCut(txtEventCut->text().ascii());
@@ -532,6 +528,7 @@ void MainForm::saveToCanvas()
 //	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
 //      c->setGraphType(Canvas::_your identification set in Canvas.h_);
 
+	canvases.saveToFile("f");
 }
 
 void MainForm::removeTab()
@@ -683,42 +680,25 @@ void MainForm::changeStatus(QString status)
     lblStatus->setText(status);
 }
 
-// given the index (i.e. position) of the item in the graph type drop-down
-// list, this gives the QWidget (i.e. tab) associated with the graph type and
-// the type in the graphTypes enum
-void MainForm::determineGraphType(int index, QWidget** associatedWidget,
-								  Canvas::graphTypes* type)
+QWidget* MainForm::findGraphWidget(Canvas::graphTypes type)
 {
-	switch (index)
+	switch (type)
 	{
-		case 0:
-			if (associatedWidget)
-				*associatedWidget = tabGraph2D;
-			if (type)
-				*type = Canvas::GRAPH_2D;
-			break;
-		case 1:
-			if (associatedWidget)
-				*associatedWidget = tabShowerAngles;
-			if (type)
-				*type = Canvas::SHOWER_ANGLE;
-			break;
-		case 2:
-			if (associatedWidget)
-				*associatedWidget = tabPosition;
-			if (type)
-				*type = Canvas::ANTENNA_POSITION;
-			break;
+		case Canvas::GRAPH_2D:           return tabGraph2D;
+		case Canvas::SHOWER_ANGLE:       return tabShowerAngles;
+		case Canvas::ANTENNA_POSITION:   return tabPosition;
+		default:                         return tabUnknown;
+	   // ## add case for new graph type; see example above
 	}
 		
 }
 
 void MainForm::selectGraphType( int index )
 {
-	QWidget* w = 0;
-	Canvas::graphTypes type;
+	Canvas::graphTypes type = (Canvas::graphTypes) index;
+	cout << type << endl;
 	
-	determineGraphType(index,&w,&type);
+	QWidget* w = findGraphWidget(type);
 
 	if (w)
 		wgsAction->raiseWidget(w);
