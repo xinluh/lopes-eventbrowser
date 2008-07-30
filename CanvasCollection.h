@@ -13,13 +13,11 @@
 class CanvasCollection
 {
 private:
+	std::vector<Canvas*> canvases;
  	
-
 public:
  	CanvasCollection();
  	~CanvasCollection();
-
-	std::vector<Canvas*> canvases;
 	
 	long size () { return canvases.size(); }
 	Canvas* at(int index) { return canvases[index]; }
@@ -27,7 +25,7 @@ public:
 	void removeCanvas (int index);
 	
 	void print();
-	void saveToFile();
+	void saveToFile(std::string filename);
 	static CanvasCollection* readFromFile();
 //	CanvasCollection* clone();
 	 

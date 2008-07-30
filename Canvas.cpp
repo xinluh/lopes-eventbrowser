@@ -1,15 +1,30 @@
+#include "GraphInfos.h"
 #include "Canvas.h"
 
 #ifdef DEBUG
 #include <iostream>
-using namespace std;
 #endif
+
+using namespace std;
+
+char * Canvas::graphTypeDescriptions[] =
+	{
+		"2D Graph",
+		"Shower Angles",
+		"Antenna Positions",
+		"Polar Graph"
+		// ## add the description for the new graph type in the same order as
+		// in the enum graphTypes
+	};
 
 Canvas::Canvas()
 {
 	graphInfo = 0;
 }
-Canvas::~Canvas() {};
+Canvas::~Canvas()
+{
+	//todo release resources
+};
 
 void Canvas::setGraphType (graphTypes graphType)
 {
@@ -38,10 +53,23 @@ void Canvas::setGraphType (graphTypes graphType)
 		case SHOWER_ANGLE:
 			graphInfo = new infoShowerAngle();
 			break;
+		case GRAPH_POLAR:
+			graphInfo = new infoGraphPolar();
+			break;
 		// ## to add new graph type: case ... see above for example
-
 	}
 
 	type = graphType;
 }
 	
+void Canvas::streamToFile(ofstream & s)
+{
+	// output header in format: [Canvas:_type]
+	s << "[Canvas:"; s << type; s << "]\n";
+	s << "Name = " << getName() << "\n";
+	s << "EventCut = " << getEventCut() << endl;
+	
+	if (graphInfo)
+		graphInfo->print(&s);
+	s << endl;
+}

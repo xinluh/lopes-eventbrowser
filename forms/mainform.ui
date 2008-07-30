@@ -448,21 +448,6 @@
                                     </property>
                                 </widget>
                                 <widget class="QComboBox">
-                                    <item>
-                                        <property name="text">
-                                            <string>2D Graph</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>Shower Angles</string>
-                                        </property>
-                                    </item>
-                                    <item>
-                                        <property name="text">
-                                            <string>Antenna Position</string>
-                                        </property>
-                                    </item>
                                     <property name="name">
                                         <cstring>cmbGraphType</cstring>
                                     </property>
@@ -898,6 +883,27 @@
                                         </vbox>
                                     </widget>
                                 </vbox>
+                            </widget>
+                            <widget class="QWidget">
+                                <property name="name">
+                                    <cstring>tabUnknown</cstring>
+                                </property>
+                                <attribute name="id">
+                                    <number>4</number>
+                                </attribute>
+                                <hbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QLabel">
+                                        <property name="name">
+                                            <cstring>textLabel1_2</cstring>
+                                        </property>
+                                        <property name="text">
+                                            <string>&lt;p align="center"&gt;oops... this is not implemented (yet), sorry!&lt;/p&gt;</string>
+                                        </property>
+                                    </widget>
+                                </hbox>
                             </widget>
                         </widget>
                     </vbox>
@@ -1618,7 +1624,6 @@
     <slot>setMultigraphStatus( bool state )</slot>
     <slot>saveEventCut()</slot>
     <slot>changeStatus( QString status )</slot>
-    <slot>determineGraphType( int index, QWidget * * associatedWidget, Canvas::graphTypes * type )</slot>
     <slot>selectGraphType( int index )</slot>
     <slot>viewData()</slot>
     <slot>fillBranchNames()</slot>
@@ -1626,6 +1631,7 @@
 </slots>
 <functions>
     <function access="private" specifier="non virtual">init()</function>
+    <function returnType="QWidget *">findGraphWidget( Canvas::graphTypes type )</function>
 </functions>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

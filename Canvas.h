@@ -3,24 +3,15 @@
 
 #include <vector>
 #include <string>
+#include <iostream>
+#include <fstream>
 #include "global.h"
 
-
 #ifdef DEBUG
-#include <iostream>
 using namespace std;
 #endif
 
-struct infoGraph
-{
-	virtual ~infoGraph() {};
-	
-	void virtual print()
-	{
-		cout << "dunno about who I am..." << endl;
-	};
-};
-
+struct infoGraph;
 
 class Canvas
 {
@@ -30,12 +21,20 @@ public:
 
 	enum graphTypes
 	{
-		GRAPH_2D,
-		GRAPH_POLAR,
+		GRAPH_2D = 0,
+		SHOWER_ANGLE,
 		ANTENNA_POSITION,
-		SHOWER_ANGLE
+		GRAPH_POLAR,
+
 		// ## add another graph type here
+
+		LAST_ITEM //important! used to find out how many graph types there are
 	};
+
+
+	static int numberOfGraphTypes() {return LAST_ITEM;}
+	static std::string getDescription(graphTypes type)
+		{ return std::string(graphTypeDescriptions[type]); }
 	
 	graphTypes getGraphType() {return type;}
 	std::string getEventCut() {return eventCut;}
@@ -46,9 +45,12 @@ public:
 	void setName (std::string _name) {name = _name;}
 	void setEventCut (std::string cut) {eventCut = cut;}
 	void setGraphType(graphTypes graphType);
-	
+
+	void streamToFile(std::ofstream & s);
 	
  private:
+	static char * graphTypeDescriptions[];
+
 	graphTypes type;
 	infoGraph* graphInfo;
 	std::string name;
@@ -57,43 +59,6 @@ public:
 	std::vector<Canvas*> childPads;
 };
 
-
-struct infoGraph2D : infoGraph
-{
-	bool useErrors;
-	std::string xAxis;
-	std::string xAxis_err;
-	std::string yAxis;
-	std::string yAxis_err;
-
-	void print()
-	{
-		cout << "useErrors = " << useErrors << endl;
-		cout << "xAxis = " << xAxis << endl;
-	}
-};
-
-struct infoShowerAngle : infoGraph
-{
-	std::string rAxis;
-	std::string thetaAxis;
-	std::string colorCodeBy;
-};
-
-struct infoGraphPolar : infoGraph
-{
-	bool useErrors;
-	std::string rAxis;
-	std::string rAxis_err;
-	std::string thetaAxis;
-	std::string thetaAxis_err;
-};
-
-// ## uncomment below to add another graph type ## 
-//struct infoGraphBlahBlah : infoGraph
-//{
-//	all information for graphing go here; see above for example
-//}
 
 
 #endif //_CANVAS_H_
