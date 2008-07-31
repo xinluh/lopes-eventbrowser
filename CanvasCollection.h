@@ -26,7 +26,7 @@ public:
 	
 	void print();
 	void saveToFile(std::string filename);
-	static CanvasCollection* readFromFile();
+	static CanvasCollection* readFromFile(std::string filename);
 //	CanvasCollection* clone();
 	 
 };

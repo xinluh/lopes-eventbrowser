@@ -110,3 +110,41 @@ string joinStrings(vector<string> strings, string separator)
 
 	return s;
 }
+
+// from http://www.codeproject.com/KB/stl/stdstringtrim.aspx 
+string trimString(string& str)
+{
+  string::size_type pos = str.find_last_not_of(' ');
+  if(pos != string::npos) {
+    str.erase(pos + 1);
+    pos = str.find_first_not_of(' ');
+    if(pos != string::npos) str.erase(0, pos);
+  }
+  else str.erase(str.begin(), str.end());
+
+  return str;
+}
+
+bool parseNameValuePair(const std::string& s,
+						std::string& name, std::string& value,
+						std::string separator)
+{
+	int pos = s.find_first_of(separator);
+	
+	if (pos == (int) string::npos) return false; // parse failed
+
+	name = s.substr(0,pos - 1);
+	value = ((pos == (int) s.size() - 1)?
+			 "" : s.substr(pos + 1, string::npos));
+
+	trimString(name);
+	trimString(value);
+
+	return true;
+}
+
+bool atob(const std::string& s)
+{
+	int i = atoi(s.c_str());
+	return (i == 0)? false : true;
+}

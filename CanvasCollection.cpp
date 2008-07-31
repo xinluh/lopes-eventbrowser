@@ -41,6 +41,8 @@ void CanvasCollection::removeCanvas(int index)
 void CanvasCollection::print()
 {
 	cout << "-----------------------------------" << endl;
+	cout << "There are " << size() << " canvases: " << endl;
+	
 	for (int i = 0; i <(int) canvases.size(); ++i)
 	{
 	
@@ -83,23 +85,23 @@ void CanvasCollection::saveToFile(string filename)
  	}
 }
 
-CanvasCollection* CanvasCollection::readFromFile()
+CanvasCollection* CanvasCollection::readFromFile(string filename)
 {
-// 	ifstream f(COLUMN_FILE);
+ 	ifstream file(filename.c_str());
+	string line;
 
-// 	string shown,exp,alias;
+	getline(file,line,END_OF_LINE);
+	// if MAGIC_LINE not found then not a valid file to parse
+	if (line.find(MAGIC_LINE) == string::npos) return NULL;
 
-// 	CanvasCollection* cc = new CanvasCollection;
-// 	Canvas *c;
+ 	CanvasCollection* cc = new CanvasCollection;
+ 	Canvas *c = new Canvas();
 
-// 	while (!getline(f,shown,CFG_SEPARATOR).eof())
-// 	{
-// 		getline(f,exp,CFG_SEPARATOR);
-// 		getline(f,alias);
+	while (c->parseFromFile(file))
+	{
+		cc->push_back(c);
+		c = new Canvas();
+	}
 
-// 		c = new Canvas((shown == "1")? true : false, exp, alias);
-// 		cc->addCanvas(c);
-// 	}
-
-// 	return cc;
+	return cc;
 }

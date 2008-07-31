@@ -1,6 +1,7 @@
 #include "GraphInfos.h"
 #include "Canvas.h"
 
+
 #ifdef DEBUG
 #include <iostream>
 #endif
@@ -40,9 +41,10 @@ void Canvas::setGraphType (graphTypes graphType)
 			case GRAPH_POLAR:   delete (infoGraphPolar*) graphInfo;  break;
 			case SHOWER_ANGLE:  delete (infoShowerAngle*) graphInfo; break;
 			// ## to add new graph type: case ... see above for example
+			default: break;// do nothing 
 		}
 
-		graphInfo = 0;
+		graphInfo = NULL;
 	}
 	
 	switch (graphType)
@@ -57,9 +59,11 @@ void Canvas::setGraphType (graphTypes graphType)
 			graphInfo = new infoGraphPolar();
 			break;
 		// ## to add new graph type: case ... see above for example
+		default: break; // do nothing 
 	}
 
 	type = graphType;
+	graphInfo->parentCanvas = this;
 }
 	
 void Canvas::streamToFile(ofstream & s)
@@ -72,4 +76,73 @@ void Canvas::streamToFile(ofstream & s)
 	if (graphInfo)
 		graphInfo->print(&s);
 	s << endl;
+}
+
+bool Canvas::parseFromFile(ifstream & s)
+{
+	if (!s) return false;
+
+	bool isSectionStarted = false;
+	string line, name, value;
+	int type;
+
+	while (getline(s,line,END_OF_LINE))
+	{
+		// stop parsing when encountered '[', since that's the start of the
+		// next canvas
+		if (isSectionStarted && s.peek() == '[') return true;
+
+		
+		// skip blank and comment line
+		if (line.size() < 1 || line[0] == CFG_COMMENT_CHAR) continue;
+		
+		if (line[0] == '[') // then parse header line
+		{
+			if (sscanf(line.c_str(),"[Canvas:%i]",&type) > 0)
+			{
+				isSectionStarted = true;
+				setGraphType((graphTypes) type);
+			}
+			else
+			{
+				cerr << "malformatted header line; parse aborted" << endl;
+				return false;
+			}
+		}
+			
+		if (isSectionStarted && parseNameValuePair(line,name,value))
+		{
+			if (name == "Name") setName(value);
+			else if (name == "EventCut") setEventCut(value);
+			else getGraphInfo()->enterValue(name,value);
+		}
+
+		
+		if (s.eof()) return false;
+	}
+
+	return true;
+}
+
+bool Canvas::readyToDraw()
+{
+	bool ret;
+
+	if (!getGraphInfo())
+		ret = false;
+	else
+		ret = getGraphInfo()->readyToDraw();
+
+	return ret;
+}
+
+void Canvas::draw(Draw* d)
+{
+	if (graphInfo) graphInfo->draw(d);
+}
+
+
+void Canvas::print()
+{
+	getGraphInfo()->print();
 }

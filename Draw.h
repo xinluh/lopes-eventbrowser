@@ -40,12 +40,12 @@ public:
 	
 	void drawAntennaPosition();
 	void drawGrandeCoordinates();
-	void draw2DGraph(const char * x,const char* y,
-			const char * x_err, const char* y_err);
+	void draw2DGraph(const std::string& x, const std::string& y,
+					 const std::string& x_err, const std::string& y_err);
     void drawPolarGraph(const char * r, const char* theta, const char * r_err,
 						const char * theta_err);
-	void drawShowerAngles(const char * r, const char* theta,
-								const char * colorcode_by);
+	void drawShowerAngles(const std::string& r, const std::string& theta,
+								const std::string& colorcode_by);
 
 	void saveAs(TCanvas *tc, const char * filename,
 				saveAsOptions options = DEFAULT);
