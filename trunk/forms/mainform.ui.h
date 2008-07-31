@@ -65,7 +65,7 @@ static string fileTypeFilterMultiple = "Postscript (*.ps);;"
 // and the widgetstack
 vector<int> tabIds;
 vector<QListViewItem*> tabNames;
-CanvasCollection canvases;
+CanvasCollection* canvases = new CanvasCollection();
 
 bool multiGraphCont = false;
 // statusbar
@@ -189,48 +189,29 @@ void MainForm::helpAbout()
 }
 
 
-void MainForm::enableDrawButton()
-{
-	// the draw button should be disabled if not everything neccesary for
-	// for drawing the specific graph is present
-	
-	if (wgsAction->visibleWidget() == tabGraph2D)
-	{
-		btnDraw->setEnabled(!txt2DXAxis->text().isEmpty() &&
-			                !txt2DYAxis->text().isEmpty());
-		if (ckb2DErrors->isChecked())
-			btnDraw->setEnabled(!txt2DXAxisError->text().isEmpty() &&
-								!txt2DYAxisError->text().isEmpty());
-	}
-	else if (wgsAction->visibleWidget() == tabPosition)
-	{
-		btnDraw->setEnabled(true);
-	}
-	else if (wgsAction->visibleWidget() == tabShowerAngles)
-	{
-		btnDraw->setEnabled(!txtPolarRAxis->text().isEmpty() &&
-			                !txtPolarThetaAxis->text().isEmpty());
-	}
-	else if (wgsAction->visibleWidget() == tabGraphPolar)
-	{
-		btnDraw->setEnabled(!txtPolarRAxis_2->text().isEmpty() &&
-			                !txtPolarThetaAxis_2->text().isEmpty());
-		if (ckb2DErrors->isChecked())
-			btnDraw->setEnabled(!txtPolarRAxisError->text().isEmpty() &&
-								!txtPolarThetaAxisError->text().isEmpty());
-	}
-
-// ## uncomment below to add another graph type ##
-//	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
+//void MainForm::enableDrawButton()
+//{
+//	// the draw button should be disabled if not everything neccesary for
+//	// for drawing the specific graph is present
+//	if (wgsAction->visibleWidget() == tabPosition)
 //	{
-//		btnDraw->setEnabled(_true if all the neccesary fields are completed;
-//							false otherwise);
+//		btnDraw->setEnabled(true);
 //	}
-			 
-}
+//	else
+//		btnDraw->setEnabled(canvases->at(getTabIndex())->readyToDraw());
+//}
 
 void MainForm::Draw()
 {
+	saveToCanvas();
+	
+	if (!canvases->at(getTabIndex())->readyToDraw())
+	{
+		QMessageBox::information(this,"Message","Not enough information is "
+								 "given for drawing. Please check your input");
+		return;
+	}
+	
 	if (ckbNewTab->isChecked())
 		addNewTab();
 	
@@ -248,36 +229,10 @@ void MainForm::Draw()
 				break;
 		}
 	}
-	else if (wgsAction->visibleWidget() == tabGraph2D)
-	{
-		cout << "x" <<txt2DXAxis->text().ascii() << endl;
-		cout << "y" << txt2DYAxis->text().ascii() << endl; 
+	else
+		canvases->at(getTabIndex())->draw(draw);
 
-		draw->draw2DGraph(txt2DXAxis->text().ascii(),
-						  txt2DYAxis->text().ascii(),
-			(ckb2DErrors->isChecked())? txt2DXAxisError->text().ascii() : NULL,
-			(ckb2DErrors->isChecked())? txt2DYAxisError->text().ascii() : NULL
-			 );
-
-		renameTab(txt2DXAxis->text() + " - " + txt2DYAxis->text());
-	}
-	else if (wgsAction->visibleWidget() == tabShowerAngles)
-	{
-		cout << "r=" <<txtPolarRAxis->text().ascii() << endl;
-		draw->drawShowerAngles(txtPolarRAxis->text().ascii(),
-						       txtPolarThetaAxis->text().ascii(),
-							   txtColorCode->text().ascii()	);
-		
-		renameTab(txtEventCut->text());
-	}
- // ## uncomment below to add another graph type ##
-//	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
-//	{
-//	    use the object draw to draw stuff here; root has already been cd to the
-//	    current canvas
-//      also do renameTab(_name_) to change the name of the tab to a more
-//      description name   	
-//	}
+	loadCanvas(canvases->at(getTabIndex()));
 }
 
 void MainForm::applyRootCut()
@@ -341,11 +296,11 @@ void MainForm::addNewTab()
 	int index = getTabIndex();
 
 	if (index > 0)
-		c->setGraphType(canvases.at(index)->getGraphType());
+		c->setGraphType(canvases->at(index)->getGraphType());
 	else
 		c->setGraphType(Canvas::GRAPH_2D); // default to 2D graph
 
-	canvases.push_back(c);
+	canvases->push_back(c);
 	
 	addNewTab(c);	
 }
@@ -428,7 +383,7 @@ void MainForm::selectTab( QListViewItem * sel)
 	else
 		wgStack->raiseWidget(id);
 
-	loadCanvas(canvases.at(index));
+	loadCanvas(canvases->at(index));
 }
 
 // load the inforamtion from the object Canvas to the user interface
@@ -494,7 +449,7 @@ void MainForm::saveToCanvas()
 	int index = getTabIndex();
 	if (index < 0) return;
 
-	Canvas* c = canvases.at(index);
+	Canvas* c = canvases->at(index);
 	if (!c) return;
 
 	c->setEventCut(txtEventCut->text().ascii());
@@ -528,7 +483,7 @@ void MainForm::saveToCanvas()
 //	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
 //      c->setGraphType(Canvas::_your identification set in Canvas.h_);
 
-	canvases.saveToFile("f");
+	canvases->saveToFile("f");
 }
 
 void MainForm::removeTab()
@@ -702,7 +657,7 @@ void MainForm::selectGraphType( int index )
 
 	if (w)
 		wgsAction->raiseWidget(w);
-	//canvases.at(getTabIndex())->setGraphType(type);
+	//canvases->at(getTabIndex())->setGraphType(type);
 	
 }
 

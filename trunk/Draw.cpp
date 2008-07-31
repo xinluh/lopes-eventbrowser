@@ -110,8 +110,8 @@ int getValue_2DTGraphErrors(void* obj,int index,vector<float> values,
 	return 0;
 }
 
-void Draw::draw2DGraph(const char * x,const char* y,
-			const char * x_err, const char* y_err)
+void Draw::draw2DGraph(const string& x,const string& y,
+					   const string& x_err, const string& y_err)
 {
 //	if (!x || !y || !rootTree) return;
 	if (!canvas) return;
@@ -121,8 +121,8 @@ void Draw::draw2DGraph(const char * x,const char* y,
 	vector<string> arg; 
 	arg.push_back(x);
 	arg.push_back(y);
-	arg.push_back((x_err) ? x_err : "");
-	arg.push_back((y_err) ? y_err : "");
+	arg.push_back(x_err);
+	arg.push_back(y_err);
 
 	rootTree->fillValues(&getValue_2DTGraphErrors, g, arg);
 	
@@ -135,8 +135,8 @@ void Draw::draw2DGraph(const char * x,const char* y,
 	s << x << " vs. " << y ;
 		
 	g->SetTitle(s.str().c_str());
-	g->GetXaxis()->SetTitle(x);
-	g->GetYaxis()->SetTitle(y);
+	g->GetXaxis()->SetTitle(x.c_str());
+	g->GetYaxis()->SetTitle(y.c_str());
 	g->SetMarkerColor(getDrawColor());
 	g->SetMarkerStyle(20);
 	g->SetMarkerSize(1);
@@ -257,8 +257,6 @@ int getValue_ShowerAngles2(void* obj,int index,vector<float> values,
 	TLegend* lg = (TLegend*)obj;
 	int color = (int) ((float)50 / (float)total_n * (float)index) +51 ;
  
-	cout << "color " << color << endl;
-	
 	m->SetMarkerColor(color);
 	m->SetMarkerSize(1);
 	m->Draw();
@@ -278,8 +276,8 @@ int getValue_ShowerAngles2(void* obj,int index,vector<float> values,
 	return 0;
 }
 
-void Draw::drawShowerAngles(const char * r, const char* theta,
-						  const char * colorcode_by)
+void Draw::drawShowerAngles(const string& r, const string& theta,
+							const string& colorcode_by)
 {
 	if (!canvas) return;
 
@@ -292,11 +290,11 @@ void Draw::drawShowerAngles(const char * r, const char* theta,
 	arg.push_back(theta);
 	arg.push_back(colorcode_by);
 	
-	TLegend * lg = new TLegend(.92,0.15,.999,0.80,colorcode_by);
+	TLegend * lg = new TLegend(.92,0.15,.999,0.80,colorcode_by.c_str());
 	vector<TMarker> lgBox(50); // for the legend spectrum
 
 	// re-apply the eventcut and sort the event by colorcode_by
-	rootTree->setEventCut(NULL,colorcode_by);
+	rootTree->setEventCut(NULL,colorcode_by.c_str());
 
 	rootTree->fillValues(&getValue_ShowerAngles, g, arg);
 

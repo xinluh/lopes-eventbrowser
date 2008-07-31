@@ -1597,7 +1597,6 @@
     <slot>fileExit()</slot>
     <slot>filePrint()</slot>
     <slot>helpAbout()</slot>
-    <slot>enableDrawButton()</slot>
     <slot>Draw()</slot>
     <slot>applyRootCut()</slot>
     <slot>txtEventCut_changed()</slot>

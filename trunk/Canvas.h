@@ -6,6 +6,8 @@
 #include <iostream>
 #include <fstream>
 #include "global.h"
+#include "Draw.h"
+
 
 #ifdef DEBUG
 using namespace std;
@@ -28,7 +30,8 @@ public:
 
 		// ## add another graph type here
 
-		LAST_ITEM //important! used to find out how many graph types there are
+		// used to find out how many graph types there are
+		LAST_ITEM // must be last!
 	};
 
 
@@ -47,6 +50,10 @@ public:
 	void setGraphType(graphTypes graphType);
 
 	void streamToFile(std::ofstream & s);
+	bool parseFromFile(std::ifstream & s);
+	void print();
+	bool readyToDraw();
+	void draw(Draw* d);
 	
  private:
 	static char * graphTypeDescriptions[];
