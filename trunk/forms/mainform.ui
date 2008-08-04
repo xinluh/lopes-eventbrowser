@@ -1505,34 +1505,10 @@
         <slot>setMultigraphStatus(bool)</slot>
     </connection>
     <connection>
-        <sender>txt2DYAxisError</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>MainForm</receiver>
-        <slot>enableDrawButton()</slot>
-    </connection>
-    <connection>
-        <sender>txt2DXAxisError</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>MainForm</receiver>
-        <slot>enableDrawButton()</slot>
-    </connection>
-    <connection>
         <sender>ckb2DErrors</sender>
         <signal>toggled(bool)</signal>
         <receiver>gb2DErrors</receiver>
         <slot>setEnabled(bool)</slot>
-    </connection>
-    <connection>
-        <sender>txt2DYAxis</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>MainForm</receiver>
-        <slot>enableDrawButton()</slot>
-    </connection>
-    <connection>
-        <sender>txt2DXAxis</sender>
-        <signal>textChanged(const QString&amp;)</signal>
-        <receiver>MainForm</receiver>
-        <slot>enableDrawButton()</slot>
     </connection>
     <connection>
         <sender>txtEventCut</sender>

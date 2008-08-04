@@ -22,22 +22,29 @@ public:
 	Draw();
 	~Draw();
 
-	enum multiGraphStatus {MULTI_START,MULTI_CONT,MULTI_NORMAL};
-
-	ReadRootTree *  rootTree;
-	bool isMultiGraph() {return multiGraph;	}
-	
+//	enum multiGraphStatus {MULTI_START,MULTI_CONT,MULTI_NORMAL};
 	enum saveAsOptions { DEFAULT, OPEN_ONLY, CLOSE_ONLY };
+	
+	ReadRootTree *  rootTree;
 
-	void setCanvas(TCanvas * tc);
-	void setCanvas(TCanvas * tc, int subpadnumber);
+	// "multiGraph" interface: when isMultiGraph() is set to true, any
+	// subsequent draw will be drawn in a different color on top of the
+	// previous graphs and the exisint axises without erasing the previous
+	// graph
+	bool isMultiGraph() {return multiGraph;	}
 	void setMultiGraph(bool isMultiGraph) { colorMultiGraph = 1;
-	                                        multiGraph = isMultiGraph;}
+	                                        multiGraph = isMultiGraph;}	
+
+	void setCanvas(TCanvas * tc); // set the current TCanvas to draw on
+	void setCanvas(TCanvas * tc, int subpadnumber);
 	void setSourceRootTree(std::vector<std::string> root_files,
 						   const char * treeName);
 	void divideCanvas(int n_columns, int n_rows);
 	void clearCanvas();
-	
+	void saveAs(TCanvas *tc, const char * filename,
+				saveAsOptions options = DEFAULT);
+
+	// a bunch of drawing functions; add your own, if you want!
 	void drawAntennaPosition();
 	void drawGrandeCoordinates();
 	void draw2DGraph(const std::string& x, const std::string& y,
@@ -46,22 +53,16 @@ public:
 						const char * theta_err);
 	void drawShowerAngles(const std::string& r, const std::string& theta,
 								const std::string& colorcode_by);
-
-	void saveAs(TCanvas *tc, const char * filename,
-				saveAsOptions options = DEFAULT);
-
 	
  private:
 	TCanvas *canvas; //the curent canva to draw on
 	int padn; //the subpad number
-	multiGraphStatus multiStatus;
+//	multiGraphStatus multiStatus;
 	int colorMultiGraph; // keeping track of the colors used by previous graph
 	bool multiGraph;
+
 	int getDrawColor(); //detect whether is multiGraph and auto increment the
 						//color as needed
-	
-	
-
 };
 
 
