@@ -1,0 +1,24 @@
+#summary The external libraries that this project depends on.
+#labels Phase-Implementation,Phase-Requirements
+
+==ROOT 5.18 ==
+
+This project requires [http://root.cern.ch/ ROOT] compiled with QT3 support. Currently only *ROOT 5.18* is supported, as the older versions have bugs that prevent program from running properly, and the newer versions (>5.18) have dropped QT3 and support only QT4.
+
+One can get the source and the compiled binaries (which has been compiled with QT3 support) [http://root.cern.ch/root/Version518.html here]. 
+
+
+== QT ==
+
+QT version > 3.3 and < 4.0 is needed. A port to QT4 would be nice, but currently not considered. 
+
+One can get QT3 from [http://trolltech.org/ TrollTech].
+
+
+== muParser ==
+
+This is a mathematical library for parsing formulas, see http://muparser.sourceforge.net/. muParser is used extensively within the program to provide flexibility, and make graphing much more customizable and convenient. 
+
+The muParser code is in the source tree under [http://code.google.com/p/lopes-eventbrowser/source/browse#svn/trunk/muParserLib muParserLib], and it is compiled along with the rest of the program.
+
+A slight change is made to the original source code which on can get from its website: the default datatype is changed from double to float to better adapt to the normal usage of the event browser. One can locate the change in source file [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/muParserLib/muParserDef.h muParserDef.h] under the define MUP_BASETYPE.
