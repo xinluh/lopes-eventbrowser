@@ -1,2 +1,11 @@
 To compile:
-simply type qmake;make
+
+* Make sure that the required libraries are present, and the environmental
+variables ROOTSYS and LD_LIBRARY_PATH contains paths to ROOT 5.18.
+
+* Make sure that qmake on the system is from Qt 3; one can check it by typing
+qmake --version.
+
+And then simply type:
+
+qmake && make
