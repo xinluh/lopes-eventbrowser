@@ -1,0 +1,59 @@
+#summary Describes the basic structure of the code in this project.
+
+The code in this project can be roughly divides into three main components:
+ * [WikiSyntax#Wrapper_to_ROOT Wrapper to ROOT] (drawing and interaction with root files)
+ * [WikiSyntax#User_interface User interface]
+ * [WikiSyntax#Program_state_persistence Program state persistence]
+
+----
+
+==Wrapper to ROOT==
+
+The two main classes are [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/ReadRootTree.h ReadRootTree] and [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/Draw.h Draw].
+
+These classes are designed to provide convenient access to the methods and classes of ROOT so that the rest of the program do not need to interact with ROOT directly (the user interface part of the program use these classes instead of ROOT directly).
+
+===_class !ReadRootTree _===
+
+This class interacts with root files and root trees by providing methods to access root trees, apply event cut, and get data from root trees. Once substantiated with appropriate information (see documentation for the contructor), class ReadRootTree provides the following important methods:
+
+ * setEventCut() - apply event cut to the root tree
+ * saveToNewFile() - save the events after a event cut into a new root file
+ * fillValues() - the most important methods which works using a callback (function pointer) interface to provide data from a root tree for plotting, drawing, etc.
+
+For other methods, see the [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/ReadRootTree.h header file] for documentation.
+
+===_class Draw_===
+
+This the class where all the drawing takes place, and it also interfaces methods for TCanvas such as set current TCanvas, clear TCanvas, save to file, etc. 
+
+The drawing part of the class takes information from a ReadRootTree object, which is set using method setSourceRootTree(). A variety of drawing methods exists, such as draw2DGraph(), drawPolarGraph() etc., and one can also add new drawing methods.
+
+The Draw class keeps a private member variable `*canvas` which points to the current TCanvas; therefore to use the Draw class, one has to keep this pointer updated as to where to draw the graph/plot on, using method setCanvas(). In the main user interface in this program (which coordinates several TCanvases), the form calls the setCanvas() every time the user changes to another tab (thus to a different TCanvas). 
+
+====Adding a new drawing method====
+One can have two kinds of drawing methods: 
+ # Simple drawing method. In this kind of method, one simply draws on the `*canvas` pointer using the normal root drawing routines. For exmaples, refer to the methods drawAntennaPosition() and drawGrandeCoordinates().
+ # Drawing methods that takes data from a root tree. This kind of drawing method makes use of the ReadRootTree class and the fillValues() function from that class. Each such drawing method has one or more associated callback function whose names have prefix `getValues_`. The callback function is passed on to the ReadRootTree object when ReadRootTree::fillValues() is called, and then inside the fillValues method, the callback function is called for every event read from the root tree/chain (until the last event available or until the callback function returns a non-zero value). The callback method gets a reference object (like a TGraph) and adds the point to the graph each time it is called. See methods draw2DGraph() and its accompanying getValue_2DTGraphErrors() for an example of how this callback interface works.
+
+----
+
+==User interface==
+
+The user interface consists of several forms, all of which are under the directory [http://code.google.com/p/lopes-eventbrowser/source/browse#svn/trunk/forms forms/]. As customary in QT3 programming, each "form", which is simply a dialog with its code, composes of a .ui file and an optional .ui.h file. 
+ * The .ui file is a xml file containing the layout of the dialog and is generated and edited by the `designer` program which comes with the QT3 development package. One should not edit this file by hand; instead, open this file in the designer program, which one can start by typing `designer` in the terminal if the QT3 development package is installed properly. 
+ * The .ui.h file is rather strange - it is a header file, as it has the extension .h and is included whenever the form is compiled, but it actually contains definitions of the functions used by the form. 
+
+_Note: To change and modify the user interface part of the program, one needs to understand the QT concept of [http://doc.trolltech.com/3.3/signalsandslots.html signals and slots], which connects the user actions such as clicking a button to a function. _
+
+Before the program compiles, a QT tool qmake actually generates a C++ source code from the .ui and .ui.h files, which can be found under the `build` directory after compilation. Note: in the include's, one sometimes finds files that do not seem to exist in the source tree (like "mainform.h", which is included in [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/main.cpp main.cpp]); that is because the file mainform.h is generated before compilation by the qmake program.
+
+The main user interface dialog is mainform.ui. The usual startup place for a c++ program, main() (located in [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/main.cpp main.cpp]), simply substantiate an instance of the class mainform, and starts the mainform dialog. From the mainform dialog, several other dialogs might be called depending on the usage.
+
+===_mainform_===
+This dialog maintains a tabbed-interface consists of a [http://doc.trolltech.com/3.3/qlistview.html QListView], which is the "tab" part of the interface, and a [http://doc.trolltech.com/3.3/qwidgetstack.html QWidgetStack], which contains the actual widgets. Each of the widget in the QWidgetStack contains a TQWidget, the ROOT widget.
+
+----
+
+==Program state persistence==
+This part of the program is responsible of saving the state of the program so that program settings, etc. can be recovered after the program is restarted.
