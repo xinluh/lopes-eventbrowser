@@ -1,9 +1,9 @@
 #summary Describes the basic structure of the code in this project.
 
 The code in this project can be roughly divides into three main components:
- * [WikiSyntax#Wrapper_to_ROOT Wrapper to ROOT] (drawing and interaction with root files)
- * [WikiSyntax#User_interface User interface]
- * [WikiSyntax#Program_state_persistence Program state persistence]
+ * [CodeStructure#Wrapper_to_ROOT Wrapper to ROOT] (drawing and interaction with root files)
+ * [CodeStructure#User_interface User interface]
+ * [CodeStructure#Program_state_persistence Program state persistence]
 
 ----
 
