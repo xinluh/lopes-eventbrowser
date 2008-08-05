@@ -13,6 +13,7 @@
 #include "ColumnCollection.h"
 #include "formChooseDisplayColumns.h"
 #include "Helper.h"
+#include "global.h"
 
 #include <qfiledialog.h>
 #include <qstatusbar.h>
@@ -39,12 +40,18 @@ void formViewData::initialize( ReadRootTree * root_Tree )
 
     rootTree = root_Tree;
 
+    // get the saved cuts from EVENTCUTS_FILE
+    vector<string> cuts;
+    getLines(EVENTCUTS_FILE,cuts);
+    for (int i = 0; i < (int) cuts.size(); ++i)
+        txtEventCut->insertItem(cuts[i]);
+
     txtEventCut->setCurrentText(rootTree->getEventCut());
     if (fileExists(COLUMN_FILE))
         cols = ColumnCollection::readFromFile();
     else
         cols = new ColumnCollection(rootTree->getBranchNames());
-        
+    
     setColumnNames();
     applyCut();
         
