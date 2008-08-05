@@ -31,4 +31,10 @@ bool parseNameValuePair(const std::string& s,
 // convert string to bool
 bool atob(const std::string& s);
 
+void getLines(const std::string& filename, std::vector<std::string>& lines);
+void appendLine(const std::string& filename, const std::string& line);
+
+
 #endif 
+
+

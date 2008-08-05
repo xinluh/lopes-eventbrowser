@@ -1,5 +1,7 @@
 #include "Helper.h"
 
+#include <fstream>
+
 #ifdef DEBUG
 #include <iostream>
 #endif
@@ -147,4 +149,33 @@ bool atob(const std::string& s)
 {
     int i = atoi(s.c_str());
     return (i == 0)? false : true;
+}
+
+
+    
+void getLines(const string& filename, vector<string>& lines)
+{
+    ifstream file(filename.c_str());
+    string line;
+    lines.clear();
+    
+    if (file.is_open())
+    {
+        
+        while (!file.eof())
+        {
+            getline(file,line);
+            if (!line.empty())
+                lines.push_back(line);
+        }
+        file.close();
+    }
+}
+
+void appendLine(const string& filename, const string& line)
+{
+    ofstream file;
+    file.open(filename.c_str(),ios::app);
+    file << line << endl;
+    file.close();
 }

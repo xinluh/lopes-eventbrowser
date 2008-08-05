@@ -93,7 +93,9 @@ void MainForm::init()
     lblStatus->setMinimumSize(lblStatus->sizeHint());
     statusBar()->addWidget(lblStatus,1);
     statusBar()->addWidget(lblEventCutStatus);
-        
+
+    getSavedEventCuts();
+    
     addNewTab();    
     isInitialized = fileOpen();
 }
@@ -612,6 +614,7 @@ void MainForm::setMultigraphStatus( bool state )
 void MainForm::saveEventCut()
 {
     cmbEventCuts->insertItem(txtEventCut->text());
+    appendLine(EVENTCUTS_FILE, txtEventCut->text());
 }
 
 void MainForm::changeStatus(QString status)
@@ -668,7 +671,16 @@ void MainForm::fillBranchNames()
     for (int i = 0; i < (int) names.size(); i++)
         cmbBranchNames->insertItem(names[i]);
 }
+void MainForm::getSavedEventCuts()
+{
+    vector<string> files;
+    cmbEventCuts->clear();
+    
+    getLines(EVENTCUTS_FILE,files);
 
+    for (int i = 0; i < (int) files.size(); ++i)
+        cmbEventCuts->insertItem(files[i]);
+}
 void MainForm::insertBranchName( const QString& name )
 {
     // find the QLineEdit or QTextEdit that has focus and append the branch
