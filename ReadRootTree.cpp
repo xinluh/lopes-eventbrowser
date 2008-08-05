@@ -187,8 +187,6 @@ void ReadRootTree::initBranches()
 			cout << *((int*) branch_address[i]) << endl;
 	}
 #endif
-	cout << "hello from file " << __FILE__ << " line: " << __LINE__  << endl;
-	
 }
 
 void ReadRootTree::initParsers(int n)

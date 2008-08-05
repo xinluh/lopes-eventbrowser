@@ -188,19 +188,6 @@ void MainForm::helpAbout()
 	f.exec();
 }
 
-
-//void MainForm::enableDrawButton()
-//{
-//	// the draw button should be disabled if not everything neccesary for
-//	// for drawing the specific graph is present
-//	if (wgsAction->visibleWidget() == tabPosition)
-//	{
-//		btnDraw->setEnabled(true);
-//	}
-//	else
-//		btnDraw->setEnabled(canvases->at(getTabIndex())->readyToDraw());
-//}
-
 void MainForm::Draw()
 {
 	saveToCanvas();
@@ -215,21 +202,6 @@ void MainForm::Draw()
 	if (ckbNewTab->isChecked())
 		addNewTab();
 	
-	if (wgsAction->visibleWidget() == tabPosition)
-	{
-		switch (cmbPositionType->currentItem())
-		{
-			case 0:
-				draw->drawGrandeCoordinates();
-				renameTab("Grande Coordinates");
-				break;
-			case 1:
-				draw->drawAntennaPosition();
-				renameTab("Antenna Position");
-				break;
-		}
-	}
-	else
 		canvases->at(getTabIndex())->draw(draw);
 
 	loadCanvas(canvases->at(getTabIndex()));
@@ -285,6 +257,8 @@ void MainForm::addNewTab(Canvas* c)
 
 		// make sure that the correct TQtWidget is the current Canvas
 		setTabAsCanvas(newTab);
+
+        loadCanvas(c);
 	}
 
 }
@@ -292,14 +266,14 @@ void MainForm::addNewTab(Canvas* c)
 void MainForm::addNewTab()
 {
 	Canvas *c = new Canvas();
-	c->setName("Untitled Canvas");
 	int index = getTabIndex();
 
-	if (index > 0)
-		c->setGraphType(canvases->at(index)->getGraphType());
+    if (index >= 0) // make copy of the current information in the new Canvas
+        saveToCanvas(c);
 	else
 		c->setGraphType(Canvas::GRAPH_2D); // default to 2D graph
 
+    c->setName("Untitled Canvas");
 	canvases->push_back(c);
 	
 	addNewTab(c);	
@@ -427,7 +401,8 @@ void MainForm::loadCanvas(Canvas* c)
 		}
 		case Canvas::ANTENNA_POSITION:
 		{
-			// nothing to do...
+            cmbPositionType->setCurrentItem(
+                ((infoGraphPosition*)c->getGraphInfo())->positionType);
 			break;
 		}
 		// ## add the case for new graph type here
@@ -443,21 +418,30 @@ void MainForm::loadCanvas(Canvas* c)
 			
 }
 
-// save the current text fields, such as event cut, etc.  to the object Canvas
 void MainForm::saveToCanvas()
 {
 	int index = getTabIndex();
 	if (index < 0) return;
 
 	Canvas* c = canvases->at(index);
+
+    if (c) saveToCanvas(c);
+}
+
+// save the current text fields, such as event cut, etc.  to the object Canvas
+void MainForm::saveToCanvas(Canvas* c)
+{
 	if (!c) return;
 
 	c->setEventCut(txtEventCut->text().ascii());
-	c->setName(tabNames[index]->text(0));
+    c->setName(tabNames[getTabIndex()]->text(0));
 
 	if (wgsAction->visibleWidget() == tabPosition)
 	{
 		c->setGraphType(Canvas::ANTENNA_POSITION);
+        infoGraphPosition* info0 = (infoGraphPosition*) c->getGraphInfo();
+        info0->positionType = (infoGraphPosition::positionTypes)
+                                   cmbPositionType->currentItem();
 	}
 	else if (wgsAction->visibleWidget() == tabGraph2D)
 	{

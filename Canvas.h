@@ -42,7 +42,6 @@ public:
 	graphTypes getGraphType() {return type;}
 	std::string getEventCut() {return eventCut;}
 	std::string getName() {return name;}
-//	int getNumEvents() {return n_events;}
 	infoGraph* getGraphInfo() { return graphInfo; }
 
 	void setName (std::string _name) {name = _name;}
@@ -62,10 +61,10 @@ public:
 	infoGraph* graphInfo;
 	std::string name;
 	std::string eventCut;
-//	int n_events;
-	std::vector<Canvas*> childPads;
+//  std::vector<Canvas*> childPads;
 };
 
 
 
 #endif //_CANVAS_H_
+

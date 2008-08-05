@@ -1,10 +1,6 @@
 #include "GraphInfos.h"
 #include "Canvas.h"
-
-
-#ifdef DEBUG
 #include <iostream>
-#endif
 
 using namespace std;
 
@@ -22,10 +18,35 @@ Canvas::Canvas()
 {
 	graphInfo = 0;
 }
+
+// Canvas::Canvas(const Canvas& c)
+// {
+//     type = c.type;
+//     name = c.name;
+//     eventCut = c.eventCut;
+//     cout << "type " << c.type << endl;
+    
+//      switch (c.type)
+//      {
+//          case GRAPH_2D:
+//              graphInfo = new infoGraph2D(*(infoGraph2D*)c.graphInfo);
+//          case SHOWER_ANGLE:
+//              graphInfo = new infoShowerAngle(*(infoShowerAngle*)c.graphInfo);
+//          case GRAPH_POLAR:
+//              graphInfo = new infoGraphPolar(*(infoGraphPolar*)c.graphInfo);
+//          case ANTENNA_POSITION:
+//              graphInfo = new infoGraphPosition(*(infoGraphPosition*)
+//                                                c.graphInfo);
+//          // ## add a new case for the new graph type; see exmaple above
+//          default:
+//              graphInfo = new infoGraph(*c.graphInfo);
+//      }
+// }
+
 Canvas::~Canvas()
 {
-	//todo release resources
-};
+    delete graphInfo;
+}
 
 void Canvas::setGraphType (graphTypes graphType)
 {
@@ -35,19 +56,23 @@ void Canvas::setGraphType (graphTypes graphType)
 	if (graphInfo)
 	{
 		// delete the old infoGraph struct
-		switch (getGraphType())
-		{
-			case GRAPH_2D:      delete (infoGraph2D*) graphInfo;     break;
-			case GRAPH_POLAR:   delete (infoGraphPolar*) graphInfo;  break;
-			case SHOWER_ANGLE:  delete (infoShowerAngle*) graphInfo; break;
-			// ## to add new graph type: case ... see above for example
-			default: break;// do nothing 
-		}
+//      switch (getGraphType())
+//      {
+//          case GRAPH_2D:      delete (infoGraph2D*) graphInfo;     break;
+//          case GRAPH_POLAR:   delete (infoGraphPolar*) graphInfo;  break;
+//          case SHOWER_ANGLE:  delete (infoShowerAngle*) graphInfo; break;
+//          case ANTENNA_POSITION: delete (infoGraphPosition*) graphInfo; break;
+//          // ## to add new graph type: case ... see above for example
+//          default: break;// do nothing 
+//      }
 
+        delete graphInfo;
 		graphInfo = NULL;
 	}
 	
-	switch (graphType)
+    type = graphType;
+    
+    switch (type)
 	{
 		case GRAPH_2D:
 			graphInfo = new infoGraph2D();
@@ -58,11 +83,14 @@ void Canvas::setGraphType (graphTypes graphType)
 		case GRAPH_POLAR:
 			graphInfo = new infoGraphPolar();
 			break;
+        case ANTENNA_POSITION:
+            graphInfo = new infoGraphPosition();
 		// ## to add new graph type: case ... see above for example
-		default: break; // do nothing 
+        default:
+            graphInfo = new infoGraph();
 	}
 
-	type = graphType;
+    if (graphInfo)
 	graphInfo->parentCanvas = this;
 }
 	
