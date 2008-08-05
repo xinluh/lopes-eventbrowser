@@ -35,124 +35,124 @@ ColumnCollection * cols;
 
 void formViewData::initialize( ReadRootTree * root_Tree )
 {
-	if (!root_Tree) throw "Must give a valid ReadRootTree object when init!";
+    if (!root_Tree) throw "Must give a valid ReadRootTree object when init!";
 
-	rootTree = root_Tree;
+    rootTree = root_Tree;
 
-	txtEventCut->setCurrentText(rootTree->getEventCut());
-	if (fileExists(COLUMN_FILE))
-		cols = ColumnCollection::readFromFile();
-	else
-		cols = new ColumnCollection(rootTree->getBranchNames());
-		
-	setColumnNames();
-	applyCut();
-		
+    txtEventCut->setCurrentText(rootTree->getEventCut());
+    if (fileExists(COLUMN_FILE))
+        cols = ColumnCollection::readFromFile();
+    else
+        cols = new ColumnCollection(rootTree->getBranchNames());
+        
+    setColumnNames();
+    applyCut();
+        
     setEnabled(true);
 }
 
 
 void formViewData::applyCut()
 {
-	rootTree->setEventCut(txtEventCut->currentText().ascii());
-//	btnApplyCut->setEnabled(false);
+    rootTree->setEventCut(txtEventCut->currentText().ascii());
+//    btnApplyCut->setEnabled(false);
 
-	fetchData();
+    fetchData();
 
 
-	
+    
 }
 
 void formViewData::setColumnNames()
 {
-	vector<string> aliases = cols->getAliases(true);
-	table->setNumCols(aliases.size());
-	
-	for (int i = 0; i < (int)aliases.size(); i++)
-			table->horizontalHeader()->setLabel(i,aliases[i]);
+    vector<string> aliases = cols->getAliases(true);
+    table->setNumCols(aliases.size());
+    
+    for (int i = 0; i < (int)aliases.size(); i++)
+            table->horizontalHeader()->setLabel(i,aliases[i]);
 }
 
 
 int callback_fetchData(void* obj,int index, vector<string> values,
-					   long total_n)
+                       long total_n)
 {
-	index++;total_n++; // make compiler shut up about unused param
-	 
-	QTable* table = (QTable*) obj;
-	int row = table->numRows();
-	// insert new row
-	table->setNumRows(table->numRows() + 1);
+    index++;total_n++; // make compiler shut up about unused param
+     
+    QTable* table = (QTable*) obj;
+    int row = table->numRows();
+    // insert new row
+    table->setNumRows(table->numRows() + 1);
 
-	for (int i = 0; i < ((table->numCols() < (int) values.size())?
-			             table->numCols(): (int) values.size()); ++i)
-	{
-	    table->setText(row,i,values[i]);
-		
-	}
+    for (int i = 0; i < ((table->numCols() < (int) values.size())?
+                         table->numCols(): (int) values.size()); ++i)
+    {
+        table->setText(row,i,values[i]);
+        
+    }
 
-	if (index >= MAX_NUM_EVENTS)
-		return 2; // time to abort; don't need anymore data
-	else
-		return 0;
-	
+    if (index >= MAX_NUM_EVENTS)
+        return 2; // time to abort; don't need anymore data
+    else
+        return 0;
+    
 }
 
 void formViewData::fetchData()
 {
-	int retCode;
-	// clear the table first
-	table->setNumRows(0);
+    int retCode;
+    // clear the table first
+    table->setNumRows(0);
 
-	// don't starting fetching if nothing is needed for display
-	if (cols->size(true) == 0) return; 
+    // don't starting fetching if nothing is needed for display
+    if (cols->size(true) == 0) return; 
 
-	// make the table enabled/disabled to indicate visually whether the
-	// data-fetching is still going on
-	table->setEnabled(false);
-	retCode = rootTree->fillValues_str(&callback_fetchData,
-							 table,
-							 cols->getExpressions(true));
+    // make the table enabled/disabled to indicate visually whether the
+    // data-fetching is still going on
+    table->setEnabled(false);
+    retCode = rootTree->fillValues_str(&callback_fetchData,
+                             table,
+                             cols->getExpressions(true));
 
-	QString status  = QString("Current number of events: %1")
-		.arg(rootTree->getNumberEntries());
+    QString status  = QString("Current number of events: %1")
+        .arg(rootTree->getNumberEntries());
 
-	if (retCode == 2)
-		status += QString("; NOTE: only the first %1 events are displayed!")
-			.arg(MAX_NUM_EVENTS);
+    if (retCode == 2)
+        status += QString("; NOTE: only the first %1 events are displayed!")
+            .arg(MAX_NUM_EVENTS);
 
-	cout << status << endl;
-	
-	
-	//lblEventCutStatus->setText(status);
-	statusBar()->message(status);
-	table->setEnabled(true);
+    cout << status << endl;
+    
+    
+    //lblEventCutStatus->setText(status);
+    statusBar()->message(status);
+    table->setEnabled(true);
 }
 
 
 void formViewData::editColumns()
 {
-	// todo: important: make a copy of the ColumnCollection class before
-	// sending it off for editing; otherwise after user canceled the result
-	// could be bad...
+    // todo: important: make a copy of the ColumnCollection class before
+    // sending it off for editing; otherwise after user canceled the result
+    // could be bad...
     formChooseDisplayColumns f(this);
     f.initialize(cols);
 
-	if (f.exec())
-	{
-		setColumnNames();
-		fetchData();
-	}
+    if (f.exec())
+    {
+        setColumnNames();
+        fetchData();
+    }
 }
 
 void formViewData::saveAsNewRoot()
 {
-	QString file = QFileDialog::getSaveFileName(
-		            "newroot.root",
-					"Root file (*.root)",
+    QString file = QFileDialog::getSaveFileName(
+                    "newroot.root",
+                    "Root file (*.root)",
                     this,
                     tr("save file dialog"),
                     tr("Choose a filename to save under"));
 
-	if (file) rootTree->saveToNewFile(file.ascii());
+    if (file) rootTree->saveToNewFile(file.ascii());
 }
-	
+    

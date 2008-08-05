@@ -15,18 +15,18 @@ std::string validateFilename(std::string s);
 bool fileExists(std::string filename);
 
 int getFileList(std::string dir, std::vector<std::string> &files,
-				std::string extension);
+                std::string extension);
 
 std::string getCurrentDir();
 
 std::string joinStrings(std::vector<std::string> strings,
-					   std::string separator);
+                       std::string separator);
 
 std::string trimString(std::string& s);
 
 bool parseNameValuePair(const std::string& s,
-						std::string& name, std::string& value,
-						std::string separator = "=");
+                        std::string& name, std::string& value,
+                        std::string separator = "=");
 
 // convert string to bool
 bool atob(const std::string& s);

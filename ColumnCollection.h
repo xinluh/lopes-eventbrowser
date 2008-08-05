@@ -14,51 +14,51 @@
 
 struct singleColumn
 {
-	std::string alias;
-	std::string expression;
-	bool shown;
+    std::string alias;
+    std::string expression;
+    bool shown;
 
-	singleColumn();
-	singleColumn(std::string exp)
-	{
-		alias = validateFilename(exp);
-		expression = exp;
-		shown = true;
-	}
-	singleColumn(bool _shown, std::string exp, std::string _alias)
-	{
-		shown = _shown;
-		expression = exp;
-		alias = _alias;
-	}
-			
+    singleColumn();
+    singleColumn(std::string exp)
+    {
+        alias = validateFilename(exp);
+        expression = exp;
+        shown = true;
+    }
+    singleColumn(bool _shown, std::string exp, std::string _alias)
+    {
+        shown = _shown;
+        expression = exp;
+        alias = _alias;
+    }
+            
 };
 
 class ColumnCollection
  {
  private:
- 	
+     
 
   public:
- 	ColumnCollection();
- 	ColumnCollection(std::vector<std::string> columns);
- 	~ColumnCollection();
+     ColumnCollection();
+     ColumnCollection(std::vector<std::string> columns);
+     ~ColumnCollection();
 
-	std::vector<singleColumn*> columns;
-	
-	// when considerShown is true, the expression/alias from the column marked
-	// as not shown is not included
-	std::vector<std::string> getExpressions(bool considerShown = false);
-	std::vector<std::string> getAliases(bool considerShown = false);
-	int size(bool considerShown = false);
-	void addColumn (singleColumn * c);
-	void removeColumn (int index);
-	
-	void print();
-	void saveToFile();
-	static ColumnCollection* readFromFile();
-//	ColumnCollection* clone();
-	 
+    std::vector<singleColumn*> columns;
+    
+    // when considerShown is true, the expression/alias from the column marked
+    // as not shown is not included
+    std::vector<std::string> getExpressions(bool considerShown = false);
+    std::vector<std::string> getAliases(bool considerShown = false);
+    int size(bool considerShown = false);
+    void addColumn (singleColumn * c);
+    void removeColumn (int index);
+    
+    void print();
+    void saveToFile();
+    static ColumnCollection* readFromFile();
+//    ColumnCollection* clone();
+     
  };
 
 
