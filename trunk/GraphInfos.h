@@ -116,7 +116,7 @@ struct infoShowerAngle : infoGraph
 	void virtual draw(Draw* d)
 	{
 		d->drawShowerAngles(rAxis,thetaAxis,colorCodeBy);		
-		parentCanvas->setName(parentCanvas->getEventCut());
+        parentCanvas->setName("Shower Angles");
 	}			
 };
 
@@ -157,6 +157,44 @@ struct infoGraphPolar : infoGraph
 	}
 };
 
+struct infoGraphPosition : infoGraph
+{
+    enum positionTypes {GRANDE_COORD = 0,ANTENNA_POS};
+
+    positionTypes positionType;
+    
+    void print(ostream* s)
+    {
+        if (!s)
+            s = &cout;
+
+        *s << "positionType  "  <<  " = "  << positionType  << endl;
+    }
+
+    void enterValue(const string& name, const string& value)
+    {
+        if   (name == "positionType")
+            positionType = (positionTypes) atoi(value.c_str());
+    }
+    
+    bool virtual readyToDraw() { return true; }
+
+    void virtual draw(Draw* d)
+    {
+        if (positionType == GRANDE_COORD)
+        {
+            d->drawGrandeCoordinates();
+            parentCanvas->setName("Grande Coordinates");
+        }
+        else if (positionType == ANTENNA_POS)
+        {
+            d->drawAntennaPosition();
+            parentCanvas->setName("Antenna Position");
+        }
+    }
+};
+
+
 // ## uncomment below to add another graph type ## 
 //struct infoGraphBlahBlah : infoGraph
 //{
@@ -165,10 +203,25 @@ struct infoGraphPolar : infoGraph
 //	{
 //  }
 //
-//  void enterValue(const string&, const string& value)
+//  void enterValue(const string& name, const string& value)
 //  {
+//      if (!s)
+//          s = &cout;
+//
+//      *s << "_name-of-param_"  <<  " = "  << _param_  << endl;
+//
 //  }
+//  bool virtual readyToDraw()
+//  {
+//       return _true if ready; false if not_;
 //}
+//  void virtual draw(Draw* d)
+//  {
+//       d->_drawSomething_();
+//       parentCanvas->setName(_an appropriate name for the canvas_);
+//  }
+//};
 
 
 #endif /* _GRAPHINFOS_H_ */
+
