@@ -7,6 +7,7 @@
 // contains some global definitions
 
 #define COLUMN_FILE "columns.cfg"
+#define EVENTCUTS_FILE "eventcuts.cfg"
 #define CFG_SEPARATOR '|'
 #define CFG_COMMENT_CHAR ';'
 
