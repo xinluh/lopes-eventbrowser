@@ -35,7 +35,7 @@
 #endif
 
 #define NOT_IMPLEMENTED QMessageBox::information(this, \
-					    "Message","Sorry, not implemented yet." );
+                        "Message","Sorry, not implemented yet." );
 
 using namespace std;
 
@@ -77,353 +77,353 @@ QLabel* lblEventCutStatus;
 
 void MainForm::init()
 {
-	//don't sort the listview - it messes up the order of inserting tabs
-	lvGraphs->setSorting(-1);
+    //don't sort the listview - it messes up the order of inserting tabs
+    lvGraphs->setSorting(-1);
 
-	//populate the graph type drop-down list
-	for (int i = 0; i < Canvas::numberOfGraphTypes(); ++i)
-		cmbGraphType->insertItem(Canvas::getDescription(
-									 (Canvas::graphTypes) i));
-	
-	// set up statusbar; important: don't attempt to write to status bar
-	// before this!!!
-	lblStatus = new QLabel("Ready",this);
-	lblEventCutStatus = new QLabel("Current number of events: 00000",this);
-	lblStatus->setMinimumSize(lblStatus->sizeHint());
-	statusBar()->addWidget(lblStatus,1);
-	statusBar()->addWidget(lblEventCutStatus);
-		
-	addNewTab();	
-	fileOpen();
-	
+    //populate the graph type drop-down list
+    for (int i = 0; i < Canvas::numberOfGraphTypes(); ++i)
+        cmbGraphType->insertItem(Canvas::getDescription(
+                                     (Canvas::graphTypes) i));
+    
+    // set up statusbar; important: don't attempt to write to status bar
+    // before this!!!
+    lblStatus = new QLabel("Ready",this);
+    lblEventCutStatus = new QLabel("Current number of events: 00000",this);
+    lblStatus->setMinimumSize(lblStatus->sizeHint());
+    statusBar()->addWidget(lblStatus,1);
+    statusBar()->addWidget(lblEventCutStatus);
+        
+    addNewTab();    
+    fileOpen();
+    
 }
 
 void MainForm::fileOpen()
 {
-	formOpenFile f(this);
-	f.initialize(draw->rootTree);
-	
-	if (f.exec())
-		draw->rootTree = f.getReadRootTree();
-	else if (!(draw->rootTree)) // for the first time when program opens
-	{
-		QMessageBox::information(this,"Open files",
-								 "You must select some root files to"
-								 "start with! Use File -> "
-								 "Open to open root files.");
- 		return;
-	}
+    formOpenFile f(this);
+    f.initialize(draw->rootTree);
+    
+    if (f.exec())
+        draw->rootTree = f.getReadRootTree();
+    else if (!(draw->rootTree)) // for the first time when program opens
+    {
+        QMessageBox::information(this,"Open files",
+                                 "You must select some root files to"
+                                 "start with! Use File -> "
+                                 "Open to open root files.");
+         return;
+    }
 
-	txtEventCut->setText("");
-	applyRootCut();
-	fillBranchNames();
+    txtEventCut->setText("");
+    applyRootCut();
+    fillBranchNames();
 
-	this->setCaption("Browser - " +
-					 joinStrings(draw->rootTree->getListOfFiles(),"; "));
-	//changeStatus("Opened files: " + joinStrings(filenames, ", "));
+    this->setCaption("Browser - " +
+                     joinStrings(draw->rootTree->getListOfFiles(),"; "));
+    //changeStatus("Opened files: " + joinStrings(filenames, ", "));
 }
 
 void MainForm::fileSave()
 {
-	QString file = QFileDialog::getSaveFileName(
-		           validateFilename(tabNames[getTabIndex()]->text(0)),
-					fileTypeFilterSingle,
+    QString file = QFileDialog::getSaveFileName(
+                   validateFilename(tabNames[getTabIndex()]->text(0)),
+                    fileTypeFilterSingle,
                     this,
                     tr("save file dialog"),
                     tr("Choose a filename to save under"));
 
 
-	if (file) draw->saveAs(NULL,file.ascii());
+    if (file) draw->saveAs(NULL,file.ascii());
 }
 
 
 void MainForm::fileSaveAllSingle()
 {
-	int tabcount = (int) tabIds.size();
-	TQtWidget * tqtw;
+    int tabcount = (int) tabIds.size();
+    TQtWidget * tqtw;
 
-	if (tabcount < 1) return;
+    if (tabcount < 1) return;
 
-	QString file = QFileDialog::getSaveFileName("",
-					fileTypeFilterMultiple,
+    QString file = QFileDialog::getSaveFileName("",
+                    fileTypeFilterMultiple,
                     this,
                     tr("save file dialog"),
                     tr("Choose a filename to save under"));
 
-	if (!file) return;
+    if (!file) return;
 
-	//open for saving multiple canvas in one file
-	draw->saveAs(NULL,file.ascii(),Draw::OPEN_ONLY); 
-	
-	for (int i = 0; i<tabcount ; i++)
-	{
-		tqtw = (TQtWidget*) wgStack->widget(tabIds[i])
-			    ->child("tqtw","TQtWidget", FALSE);
-		if (tqtw)
-		{
-			draw->saveAs(tqtw->GetCanvas(),file.ascii());
-		}
-	}
+    //open for saving multiple canvas in one file
+    draw->saveAs(NULL,file.ascii(),Draw::OPEN_ONLY); 
+    
+    for (int i = 0; i<tabcount ; i++)
+    {
+        tqtw = (TQtWidget*) wgStack->widget(tabIds[i])
+                ->child("tqtw","TQtWidget", FALSE);
+        if (tqtw)
+        {
+            draw->saveAs(tqtw->GetCanvas(),file.ascii());
+        }
+    }
 
-	draw->saveAs(NULL,file.ascii(),Draw::CLOSE_ONLY);
+    draw->saveAs(NULL,file.ascii(),Draw::CLOSE_ONLY);
 }
 
 void MainForm::fileSaveAllMultiple()
 {
-	NOT_IMPLEMENTED
+    NOT_IMPLEMENTED
 }
 
 void MainForm::fileExit()
 {
-	close();
+    close();
 }
 void MainForm::filePrint()
 {
-	NOT_IMPLEMENTED
+    NOT_IMPLEMENTED
 }
 
 void MainForm::helpAbout()
 {
-	formAbout f(this);
-	f.exec();
+    formAbout f(this);
+    f.exec();
 }
 
 void MainForm::Draw()
 {
-	saveToCanvas();
-	
-	if (!canvases->at(getTabIndex())->readyToDraw())
-	{
-		QMessageBox::information(this,"Message","Not enough information is "
-								 "given for drawing. Please check your input");
-		return;
-	}
-	
-	if (ckbNewTab->isChecked())
-		addNewTab();
-	
-		canvases->at(getTabIndex())->draw(draw);
+    saveToCanvas();
+    
+    if (!canvases->at(getTabIndex())->readyToDraw())
+    {
+        QMessageBox::information(this,"Message","Not enough information is "
+                                 "given for drawing. Please check your input");
+        return;
+    }
+    
+    if (ckbNewTab->isChecked())
+        addNewTab();
+    
+        canvases->at(getTabIndex())->draw(draw);
 
-	loadCanvas(canvases->at(getTabIndex()));
+    loadCanvas(canvases->at(getTabIndex()));
 }
 
 void MainForm::applyRootCut()
 {
-	if (!draw->rootTree) return;
-	
-	draw->rootTree->setEventCut(txtEventCut->text().ascii());
-	btnApplyCut->setEnabled(false);
+    if (!draw->rootTree) return;
+    
+    draw->rootTree->setEventCut(txtEventCut->text().ascii());
+    btnApplyCut->setEnabled(false);
 
-	QString status  = QString("Current number of events: %1")
-		.arg(draw->rootTree->getNumberEntries());
+    QString status  = QString("Current number of events: %1")
+        .arg(draw->rootTree->getNumberEntries());
 
-	cout << status << endl;
+    cout << status << endl;
 
-	lblEventCutStatus->setText(status);
+    lblEventCutStatus->setText(status);
 }
 
 
 void MainForm::txtEventCut_changed()
 {
-	btnApplyCut->setEnabled(true);
+    btnApplyCut->setEnabled(true);
 }
 
 void MainForm::addNewTab(Canvas* c)
 {
-	if (!c) return;
-	
-	int id = -1;
-	QListViewItem * item;
-	
-	newTab = new QWidget(wgStack,"tab_"); //todo add number!
-	newTqtw = new TQtWidget(newTab,"tqtw");
-	newLayout = new QVBoxLayout(newTab,0,6,"tabLayout");
-	newLayout->addWidget(newTqtw);
-	
-	id = wgStack->addWidget(newTab);
+    if (!c) return;
+    
+    int id = -1;
+    QListViewItem * item;
+    
+    newTab = new QWidget(wgStack,"tab_"); //todo add number!
+    newTqtw = new TQtWidget(newTab,"tqtw");
+    newLayout = new QVBoxLayout(newTab,0,6,"tabLayout");
+    newLayout->addWidget(newTqtw);
+    
+    id = wgStack->addWidget(newTab);
 
-	if (id != -1)
-	{
-		tabIds.push_back(id);
+    if (id != -1)
+    {
+        tabIds.push_back(id);
 
-		//create an item after the last one in the listview
-		item = new QListViewItem(lvGraphs,
-			  (tabNames.size() == 0)? 0 : tabNames[(int)tabNames.size() - 1],
-								 c->getName());
-		tabNames.push_back(item);
-		
-		//focus on the newly created tab
-		lvGraphs->setSelected(item,true);
+        //create an item after the last one in the listview
+        item = new QListViewItem(lvGraphs,
+              (tabNames.size() == 0)? 0 : tabNames[(int)tabNames.size() - 1],
+                                 c->getName());
+        tabNames.push_back(item);
+        
+        //focus on the newly created tab
+        lvGraphs->setSelected(item,true);
 
-		// make sure that the correct TQtWidget is the current Canvas
-		setTabAsCanvas(newTab);
+        // make sure that the correct TQtWidget is the current Canvas
+        setTabAsCanvas(newTab);
 
         loadCanvas(c);
-	}
+    }
 
 }
 
 void MainForm::addNewTab()
 {
-	Canvas *c = new Canvas();
-	int index = getTabIndex();
+    Canvas *c = new Canvas();
+    int index = getTabIndex();
 
     if (index >= 0) // make copy of the current information in the new Canvas
         saveToCanvas(c);
-	else
-		c->setGraphType(Canvas::GRAPH_2D); // default to 2D graph
+    else
+        c->setGraphType(Canvas::GRAPH_2D); // default to 2D graph
 
     c->setName("Untitled Canvas");
-	canvases->push_back(c);
-	
-	addNewTab(c);	
+    canvases->push_back(c);
+    
+    addNewTab(c);    
 }
 
 void MainForm::enableTabActionButtons()
 {
-	bool y = (getTabIndex() != -1);
-	
-	btnRemoveTab->setEnabled(y);
-	btnRenameTab->setEnabled(y);
+    bool y = (getTabIndex() != -1);
+    
+    btnRemoveTab->setEnabled(y);
+    btnRenameTab->setEnabled(y);
 }
 
 
 void MainForm::setTabAsCanvas( QWidget * qw )
 {
-	// find the TQtWidget belong to the tab page
-	TQtWidget * tqtw = (TQtWidget*) qw->child("tqtw","TQtWidget", FALSE);
-	// if found, set it as current canvas for drawing
-	if (tqtw) draw->setCanvas(tqtw->GetCanvas());
+    // find the TQtWidget belong to the tab page
+    TQtWidget * tqtw = (TQtWidget*) qw->child("tqtw","TQtWidget", FALSE);
+    // if found, set it as current canvas for drawing
+    if (tqtw) draw->setCanvas(tqtw->GetCanvas());
 }
 
 
 // get the index in the arrays tabIds and tabNames for the currently selected
 int MainForm::getTabIndex()
 {
-	return getTabIndex(wgStack->id(wgStack->visibleWidget()));
+    return getTabIndex(wgStack->id(wgStack->visibleWidget()));
 }
 
 
 int MainForm::getTabIndex( int widgetID )
 {
-	int id = (widgetID == 0)? wgStack->id(wgStack->visibleWidget()) : widgetID;
+    int id = (widgetID == 0)? wgStack->id(wgStack->visibleWidget()) : widgetID;
 
-	if (id == 0) return -1;
+    if (id == 0) return -1;
 
-	for (int i = 0; i < (int)tabIds.size(); i++)
-		if (tabIds[i] == id) return i;
+    for (int i = 0; i < (int)tabIds.size(); i++)
+        if (tabIds[i] == id) return i;
 
-	return -1;
+    return -1;
 }
 
 int MainForm::getTabIndex( QListViewItem * item )
 {
-	if (!item) return -1;
-	
-	// find the index for item corresponding to this QListViewItem
-	for (int i = 0; i < (int)tabIds.size(); i++)
-		if (tabNames[i] == item) return i;
+    if (!item) return -1;
+    
+    // find the index for item corresponding to this QListViewItem
+    for (int i = 0; i < (int)tabIds.size(); i++)
+        if (tabNames[i] == item) return i;
 
     return -1;
 }
 
 void MainForm::selectTab( QListViewItem * sel)
 {
-	saveToCanvas();
-	
-	multiGraphCont = false; // make sure that a new graph with axis is started
-	
-	int index = (sel)? getTabIndex(sel) : getTabIndex();
-	int id;
-//	int subpad;
+    saveToCanvas();
+    
+    multiGraphCont = false; // make sure that a new graph with axis is started
+    
+    int index = (sel)? getTabIndex(sel) : getTabIndex();
+    int id;
+//    int subpad;
 
-	if (index < 0) //not a canvas; select subpad if applicable
-	{
-		if (!sel || !sel->parent()) return;
+    if (index < 0) //not a canvas; select subpad if applicable
+    {
+        if (!sel || !sel->parent()) return;
 
-		index = getTabIndex(sel->parent());
+        index = getTabIndex(sel->parent());
 
-		if (index < 0) return;
+        if (index < 0) return;
 
-		// todo cd to the subpad
+        // todo cd to the subpad
 
-		return;
-	}
+        return;
+    }
 
-	id = tabIds[index];
-	
-	if (id == 0)
-		wgStack->raiseWidget(wgStack->id(wgEmtpyPage));
-	else
-		wgStack->raiseWidget(id);
+    id = tabIds[index];
+    
+    if (id == 0)
+        wgStack->raiseWidget(wgStack->id(wgEmtpyPage));
+    else
+        wgStack->raiseWidget(id);
 
-	loadCanvas(canvases->at(index));
+    loadCanvas(canvases->at(index));
 }
 
 // load the inforamtion from the object Canvas to the user interface
 void MainForm::loadCanvas(Canvas* c)
 {
-	if (!c) return;
+    if (!c) return;
 
-	txtEventCut->setText(c->getEventCut());
-	applyRootCut();
+    txtEventCut->setText(c->getEventCut());
+    applyRootCut();
 
-	renameTab(c->getName());
-	wgsAction->raiseWidget(findGraphWidget(c->getGraphType()));
-	cmbGraphType->setCurrentItem(c->getGraphType());
-	
-	switch (c->getGraphType())
-	{
-		case Canvas::GRAPH_2D:
-		{
-			infoGraph2D* info = (infoGraph2D*) c->getGraphInfo();
+    renameTab(c->getName());
+    wgsAction->raiseWidget(findGraphWidget(c->getGraphType()));
+    cmbGraphType->setCurrentItem(c->getGraphType());
+    
+    switch (c->getGraphType())
+    {
+        case Canvas::GRAPH_2D:
+        {
+            infoGraph2D* info = (infoGraph2D*) c->getGraphInfo();
 
-			ckb2DErrors->setChecked(info->useErrors);
-			txt2DXAxis->setText(info->xAxis);
-			txt2DYAxis->setText(info->yAxis);
-			txt2DXAxisError->setText(info->xAxis_err);
-			txt2DYAxisError->setText(info->yAxis_err);
-			break;
-		}
-		case Canvas::SHOWER_ANGLE:
-		{
-			infoShowerAngle* info2 = (infoShowerAngle*) c->getGraphInfo();
+            ckb2DErrors->setChecked(info->useErrors);
+            txt2DXAxis->setText(info->xAxis);
+            txt2DYAxis->setText(info->yAxis);
+            txt2DXAxisError->setText(info->xAxis_err);
+            txt2DYAxisError->setText(info->yAxis_err);
+            break;
+        }
+        case Canvas::SHOWER_ANGLE:
+        {
+            infoShowerAngle* info2 = (infoShowerAngle*) c->getGraphInfo();
 
-			txtPolarThetaAxis->setText(info2->thetaAxis);
-			txtPolarRAxis->setText(info2->rAxis);
-			txtColorCode->setText(info2->colorCodeBy);
-			break;
-		}
-		case Canvas::GRAPH_POLAR:
-		{
-			//todo
-			break;
-		}
-		case Canvas::ANTENNA_POSITION:
-		{
+            txtPolarThetaAxis->setText(info2->thetaAxis);
+            txtPolarRAxis->setText(info2->rAxis);
+            txtColorCode->setText(info2->colorCodeBy);
+            break;
+        }
+        case Canvas::GRAPH_POLAR:
+        {
+            //todo
+            break;
+        }
+        case Canvas::ANTENNA_POSITION:
+        {
             cmbPositionType->setCurrentItem(
                 ((infoGraphPosition*)c->getGraphInfo())->positionType);
-			break;
-		}
-		// ## add the case for new graph type here
-		// case Canvas::_your new enum graph type enum name_:
-		// {
-		//     fill in the values like above
-		// }
-		default:
-		{
-			cout << "hmm, this should not happen..." << endl;
-		}
-	}
-			
+            break;
+        }
+        // ## add the case for new graph type here
+        // case Canvas::_your new enum graph type enum name_:
+        // {
+        //     fill in the values like above
+        // }
+        default:
+        {
+            cout << "hmm, this should not happen..." << endl;
+        }
+    }
+            
 }
 
 void MainForm::saveToCanvas()
 {
-	int index = getTabIndex();
-	if (index < 0) return;
+    int index = getTabIndex();
+    if (index < 0) return;
 
-	Canvas* c = canvases->at(index);
+    Canvas* c = canvases->at(index);
 
     if (c) saveToCanvas(c);
 }
@@ -431,187 +431,187 @@ void MainForm::saveToCanvas()
 // save the current text fields, such as event cut, etc.  to the object Canvas
 void MainForm::saveToCanvas(Canvas* c)
 {
-	if (!c) return;
+    if (!c) return;
 
-	c->setEventCut(txtEventCut->text().ascii());
+    c->setEventCut(txtEventCut->text().ascii());
     c->setName(tabNames[getTabIndex()]->text(0));
 
-	if (wgsAction->visibleWidget() == tabPosition)
-	{
-		c->setGraphType(Canvas::ANTENNA_POSITION);
+    if (wgsAction->visibleWidget() == tabPosition)
+    {
+        c->setGraphType(Canvas::ANTENNA_POSITION);
         infoGraphPosition* info0 = (infoGraphPosition*) c->getGraphInfo();
         info0->positionType = (infoGraphPosition::positionTypes)
                                    cmbPositionType->currentItem();
-	}
-	else if (wgsAction->visibleWidget() == tabGraph2D)
-	{
-		c->setGraphType(Canvas::GRAPH_2D);
+    }
+    else if (wgsAction->visibleWidget() == tabGraph2D)
+    {
+        c->setGraphType(Canvas::GRAPH_2D);
 
-		infoGraph2D* info = (infoGraph2D*) c->getGraphInfo();
-		info->useErrors = ckb2DErrors->isChecked();
-		info->xAxis = string(txt2DXAxis->text().ascii());
-		info->yAxis = txt2DYAxis->text().ascii();
-		info->xAxis_err = txt2DXAxisError->text().ascii();
-		info->yAxis_err = txt2DYAxisError->text().ascii();
-	}
-	else if (wgsAction->visibleWidget() == tabShowerAngles)
-	{
-		c->setGraphType(Canvas::SHOWER_ANGLE);
-		
-		infoShowerAngle* info2 = (infoShowerAngle*) c->getGraphInfo();
-		info2->rAxis = txtPolarRAxis->text().ascii();
-		info2->thetaAxis = txtPolarThetaAxis->text().ascii();
-		info2->colorCodeBy = txtColorCode->text().ascii();
-	}
+        infoGraph2D* info = (infoGraph2D*) c->getGraphInfo();
+        info->useErrors = ckb2DErrors->isChecked();
+        info->xAxis = string(txt2DXAxis->text().ascii());
+        info->yAxis = txt2DYAxis->text().ascii();
+        info->xAxis_err = txt2DXAxisError->text().ascii();
+        info->yAxis_err = txt2DYAxisError->text().ascii();
+    }
+    else if (wgsAction->visibleWidget() == tabShowerAngles)
+    {
+        c->setGraphType(Canvas::SHOWER_ANGLE);
+        
+        infoShowerAngle* info2 = (infoShowerAngle*) c->getGraphInfo();
+        info2->rAxis = txtPolarRAxis->text().ascii();
+        info2->thetaAxis = txtPolarThetaAxis->text().ascii();
+        info2->colorCodeBy = txtColorCode->text().ascii();
+    }
 // ## uncomment below to add another graph type ##
-//	else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
+//    else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
 //      c->setGraphType(Canvas::_your identification set in Canvas.h_);
 
-	canvases->saveToFile("f");
+    canvases->saveToFile("f");
 }
 
 void MainForm::removeTab()
 {
-	int index = getTabIndex();
-	if (index > -1)
-		removeTab(index);
+    int index = getTabIndex();
+    if (index > -1)
+        removeTab(index);
 }
 
 void MainForm::removeTab( int index )
 {
-	if (index < 0 || index > (int) tabIds.size()) return;
+    if (index < 0 || index > (int) tabIds.size()) return;
 
-	// the new index to be selected
-	int s_index = ((index == (int)tabIds.size() - 1)?
-				   (index - 1) : (index + 1));
+    // the new index to be selected
+    int s_index = ((index == (int)tabIds.size() - 1)?
+                   (index - 1) : (index + 1));
 
-	cout << "select index " << s_index << endl;
-	
- 	// select the tab above
-	if (s_index > 0)
-		selectTab(tabNames[s_index]); 
+    cout << "select index " << s_index << endl;
+    
+     // select the tab above
+    if (s_index > 0)
+        selectTab(tabNames[s_index]); 
 
-	delete tabNames[index];
+    delete tabNames[index];
 
-	tabIds.erase(tabIds.begin() +  index);
-	tabNames.erase(tabNames.begin() + index);
+    tabIds.erase(tabIds.begin() +  index);
+    tabNames.erase(tabNames.begin() + index);
 }
 
 // rename the current tab, asking the user for the new name
 void MainForm::renameTab()
 {
-	int index = getTabIndex();
-	if (index > -1)
-		renameTab(index);
+    int index = getTabIndex();
+    if (index > -1)
+        renameTab(index);
 }
 
 // rename the tab of index "index", asking user for the new name
 void MainForm::renameTab(int index)
 {
-	if (index < 0 || index > (int) tabIds.size()) return;
+    if (index < 0 || index > (int) tabIds.size()) return;
 
-	bool ok;
-	
-	QString name = QInputDialog::getText(tr("Rename Canvas"),
-										 tr("Enter a new name:"),
-										 QLineEdit::Normal,
-										 tabNames[index]->text(0),
-										 &ok,
-										 this);
-	if (ok && !name.isEmpty())
-		renameTab(index,name);
+    bool ok;
+    
+    QString name = QInputDialog::getText(tr("Rename Canvas"),
+                                         tr("Enter a new name:"),
+                                         QLineEdit::Normal,
+                                         tabNames[index]->text(0),
+                                         &ok,
+                                         this);
+    if (ok && !name.isEmpty())
+        renameTab(index,name);
 }
 
 // rename the current tab to "name"
 void MainForm::renameTab(QString name)
 {
-	int index = getTabIndex();
-	if (index > -1)
-		renameTab(index,name);
+    int index = getTabIndex();
+    if (index > -1)
+        renameTab(index,name);
 }
 
 // rename the tab of index "index" to "name"
 void MainForm::renameTab(int index, QString name)
 {
-	if (index < 0 || index > (int) tabIds.size()) return;
+    if (index < 0 || index > (int) tabIds.size()) return;
 
-//	QListViewItem * item = tabNames[index];
-		
-	if (tabNames[index])
-		tabNames[index]->setText(0,name);
+//    QListViewItem * item = tabNames[index];
+        
+    if (tabNames[index])
+        tabNames[index]->setText(0,name);
 }
 
 void MainForm::divideCanvas()
 {
-	bool ok;
-	
-	QString s = QInputDialog::getText(tr("Divide Canvas"),
-									  tr("How to divide? e.g. 3x2"),
-									  QLineEdit::Normal,
-									  "3x2",
-									  &ok,
-									  this);
-	if (ok && !s.isEmpty())
-	{
-		int n_columns, n_rows;
-		sscanf(s.ascii(),"%ix%i",&n_columns,&n_rows);
-		divideCanvas(n_columns,n_rows);
-	}	
+    bool ok;
+    
+    QString s = QInputDialog::getText(tr("Divide Canvas"),
+                                      tr("How to divide? e.g. 3x2"),
+                                      QLineEdit::Normal,
+                                      "3x2",
+                                      &ok,
+                                      this);
+    if (ok && !s.isEmpty())
+    {
+        int n_columns, n_rows;
+        sscanf(s.ascii(),"%ix%i",&n_columns,&n_rows);
+        divideCanvas(n_columns,n_rows);
+    }    
 }
 
 void MainForm::divideCanvas(int n_columns, int n_rows)
 {
-	draw->divideCanvas(n_columns,n_rows);
-	addNewSubPad(n_rows * n_columns);
+    draw->divideCanvas(n_columns,n_rows);
+    addNewSubPad(n_rows * n_columns);
 }
 
 void MainForm::addNewSubPad( int n_subpad )
 {
-	QListViewItem * parent_item = tabNames[getTabIndex()];
+    QListViewItem * parent_item = tabNames[getTabIndex()];
 
-	if (!parent_item) return;
-	
-	QListViewItem * child_item, *after_item;
-	ostringstream ss;
+    if (!parent_item) return;
+    
+    QListViewItem * child_item, *after_item;
+    ostringstream ss;
 
-	// find the last child under the parent_item
-	after_item = parent_item->firstChild();
-	if (after_item)
-	{
-		while (after_item->nextSibling() != 0)
-			after_item = after_item->nextSibling();
-	}
-	
-	// rename the new subpads to Pad 1, Pad 2, etc.
-	for (int i = 1; i <= n_subpad; i++)
-	{
-		ss.str("");
-		ss << "Pad " << i;
-		
-		if (after_item)
-			child_item = new QListViewItem(parent_item,after_item,ss.str());
-		else
-			child_item = new QListViewItem(parent_item,ss.str());
+    // find the last child under the parent_item
+    after_item = parent_item->firstChild();
+    if (after_item)
+    {
+        while (after_item->nextSibling() != 0)
+            after_item = after_item->nextSibling();
+    }
+    
+    // rename the new subpads to Pad 1, Pad 2, etc.
+    for (int i = 1; i <= n_subpad; i++)
+    {
+        ss.str("");
+        ss << "Pad " << i;
+        
+        if (after_item)
+            child_item = new QListViewItem(parent_item,after_item,ss.str());
+        else
+            child_item = new QListViewItem(parent_item,ss.str());
 
-		after_item = child_item;
-	}
+        after_item = child_item;
+    }
 
-	parent_item->setOpen(true);
+    parent_item->setOpen(true);
 }
 
 void MainForm::clearGraph()
 {
-	draw->clearCanvas();
+    draw->clearCanvas();
 }
 
 void MainForm::setMultigraphStatus( bool state )
 {
-	draw->setMultiGraph(state);
+    draw->setMultiGraph(state);
 }
 
 void MainForm::saveEventCut()
 {
-	cmbEventCuts->insertItem(txtEventCut->text());
+    cmbEventCuts->insertItem(txtEventCut->text());
 }
 
 void MainForm::changeStatus(QString status)
@@ -621,80 +621,80 @@ void MainForm::changeStatus(QString status)
 
 QWidget* MainForm::findGraphWidget(Canvas::graphTypes type)
 {
-	switch (type)
-	{
-		case Canvas::GRAPH_2D:           return tabGraph2D;
-		case Canvas::SHOWER_ANGLE:       return tabShowerAngles;
-		case Canvas::ANTENNA_POSITION:   return tabPosition;
-		default:                         return tabUnknown;
-	   // ## add case for new graph type; see example above
-	}
-		
+    switch (type)
+    {
+        case Canvas::GRAPH_2D:           return tabGraph2D;
+        case Canvas::SHOWER_ANGLE:       return tabShowerAngles;
+        case Canvas::ANTENNA_POSITION:   return tabPosition;
+        default:                         return tabUnknown;
+       // ## add case for new graph type; see example above
+    }
+        
 }
 
 void MainForm::selectGraphType( int index )
 {
-	Canvas::graphTypes type = (Canvas::graphTypes) index;
-	cout << type << endl;
-	
-	QWidget* w = findGraphWidget(type);
+    Canvas::graphTypes type = (Canvas::graphTypes) index;
+    cout << type << endl;
+    
+    QWidget* w = findGraphWidget(type);
 
-	if (w)
-		wgsAction->raiseWidget(w);
-	//canvases->at(getTabIndex())->setGraphType(type);
-	
+    if (w)
+        wgsAction->raiseWidget(w);
+    //canvases->at(getTabIndex())->setGraphType(type);
+    
 }
 
 void MainForm::viewData()
 {
     static formViewData* f;
 
-	if (!f)
-		f = new formViewData(this);
-	
+    if (!f)
+        f = new formViewData(this);
+    
     f->initialize(draw->rootTree);
     f->show();
-	f->raise();
-	f->setActiveWindow();
+    f->raise();
+    f->setActiveWindow();
 }
 
 void MainForm::fillBranchNames()
 {
-	if (!draw->rootTree) return;
+    if (!draw->rootTree) return;
 
-	cmbBranchNames->clear();
-	
-	vector<string> names = draw->rootTree->getBranchNames();
-	for (int i = 0; i < (int) names.size(); i++)
-		cmbBranchNames->insertItem(names[i]);
+    cmbBranchNames->clear();
+    
+    vector<string> names = draw->rootTree->getBranchNames();
+    for (int i = 0; i < (int) names.size(); i++)
+        cmbBranchNames->insertItem(names[i]);
 }
 
 void MainForm::insertBranchName( const QString& name )
 {
-	// find the QLineEdit or QTextEdit that has focus and append the branch
-	// name to it; the find method relies on the fact that all the textboxes
-	// are named with prefix txt
-	QObjectList *l = topLevelWidget()->queryList(NULL,"txt*");
+    // find the QLineEdit or QTextEdit that has focus and append the branch
+    // name to it; the find method relies on the fact that all the textboxes
+    // are named with prefix txt
+    QObjectList *l = topLevelWidget()->queryList(NULL,"txt*");
     QObjectListIt it( *l );
-	QWidget* w;
-		
+    QWidget* w;
+        
     while ((w = (QWidget*) it.current()) != 0 )
-	{
-		++it;
-		if (w->hasFocus())
-		{
-			if (dynamic_cast<QLineEdit*>(w) != 0)
-			{
-				((QLineEdit*)w)->setText(((QLineEdit*)w)->text() + name);
-				break;
-			}
+    {
+        ++it;
+        if (w->hasFocus())
+        {
+            if (dynamic_cast<QLineEdit*>(w) != 0)
+            {
+                ((QLineEdit*)w)->setText(((QLineEdit*)w)->text() + name);
+                break;
+            }
 
-			if ((QTextEdit*)w != 0)
-			{
-				((QTextEdit*)w)->setText(((QTextEdit*)w)->text() + name);
-				break;
-			}
-		}
+            if ((QTextEdit*)w != 0)
+            {
+                ((QTextEdit*)w)->setText(((QTextEdit*)w)->text() + name);
+                break;
+            }
+        }
     }
 
     delete l; 

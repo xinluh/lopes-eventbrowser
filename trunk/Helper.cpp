@@ -9,20 +9,20 @@ using namespace std;
 
 string validateFilename(string s)
 {
-	if (s.empty()) return s;
+    if (s.empty()) return s;
 
-	for (int i = 0; i < (int) invalidFilenameCharacters.length(); i++)
-	{
-		replace(s.begin(),s.end(),invalidFilenameCharacters.c_str()[i],
-				INVALID_CHAR_REPLACEMENT_CHAR);
-	}
+    for (int i = 0; i < (int) invalidFilenameCharacters.length(); i++)
+    {
+        replace(s.begin(),s.end(),invalidFilenameCharacters.c_str()[i],
+                INVALID_CHAR_REPLACEMENT_CHAR);
+    }
 
-	if (s.length() > MAX_LENGTH_SAVE_FILENAME)
-		s.erase(MAX_LENGTH_SAVE_FILENAME); //truncate the name if too long
-	
-	//  cout << s << endl;
+    if (s.length() > MAX_LENGTH_SAVE_FILENAME)
+        s.erase(MAX_LENGTH_SAVE_FILENAME); //truncate the name if too long
+    
+    //  cout << s << endl;
 
-	return s;
+    return s;
 } 
 
 // from http://www.techbytes.ca/techbyte103.html
@@ -58,57 +58,57 @@ int getFileList (string dir, vector<string> &files, string extension)
     DIR *dp;
     struct dirent *dirp;
 
-	files.clear();
+    files.clear();
 
-	if (dir.length() == 0)
-		dir = getCurrentDir();
+    if (dir.length() == 0)
+        dir = getCurrentDir();
 
-	if((dp  = opendir(dir.c_str())) == NULL)
-	{
+    if((dp  = opendir(dir.c_str())) == NULL)
+    {
         cerr << "Error opening " << dir << endl;
         return -1;
     }
 
     while ((dirp = readdir(dp)) != NULL)
-	{
-		string s(dirp->d_name);
+    {
+        string s(dirp->d_name);
 
-		if (s.length() > extension.length() &&
-		    (s.compare(s.length() - extension.length(),
-					   extension.length(),extension) == 0))
-			files.push_back(string(dirp->d_name));
+        if (s.length() > extension.length() &&
+            (s.compare(s.length() - extension.length(),
+                       extension.length(),extension) == 0))
+            files.push_back(string(dirp->d_name));
     }
 
-	closedir(dp);
+    closedir(dp);
     return 0;
 }
 
 string getCurrentDir()
 {
-	char * s = new char[250];
-	string *str;
-	if (getcwd(s,250))
-		str = new string(s);
-	else
-		str = new string;
+    char * s = new char[250];
+    string *str;
+    if (getcwd(s,250))
+        str = new string(s);
+    else
+        str = new string;
 
-	delete s;
-	return *str;
+    delete s;
+    return *str;
 }
 
 string joinStrings(vector<string> strings, string separator)
 {
-	string s;
+    string s;
 
-	for (int i = 0; i < (int) strings.size(); ++i)
-	{
-		if (s.length() != 0)
-			s += separator;
+    for (int i = 0; i < (int) strings.size(); ++i)
+    {
+        if (s.length() != 0)
+            s += separator;
 
-		s += strings[i];
-	}
+        s += strings[i];
+    }
 
-	return s;
+    return s;
 }
 
 // from http://www.codeproject.com/KB/stl/stdstringtrim.aspx 
@@ -126,25 +126,25 @@ string trimString(string& str)
 }
 
 bool parseNameValuePair(const std::string& s,
-						std::string& name, std::string& value,
-						std::string separator)
+                        std::string& name, std::string& value,
+                        std::string separator)
 {
-	int pos = s.find_first_of(separator);
-	
-	if (pos == (int) string::npos) return false; // parse failed
+    int pos = s.find_first_of(separator);
+    
+    if (pos == (int) string::npos) return false; // parse failed
 
-	name = s.substr(0,pos - 1);
-	value = ((pos == (int) s.size() - 1)?
-			 "" : s.substr(pos + 1, string::npos));
+    name = s.substr(0,pos - 1);
+    value = ((pos == (int) s.size() - 1)?
+             "" : s.substr(pos + 1, string::npos));
 
-	trimString(name);
-	trimString(value);
+    trimString(name);
+    trimString(value);
 
-	return true;
+    return true;
 }
 
 bool atob(const std::string& s)
 {
-	int i = atoi(s.c_str());
-	return (i == 0)? false : true;
+    int i = atoi(s.c_str());
+    return (i == 0)? false : true;
 }
