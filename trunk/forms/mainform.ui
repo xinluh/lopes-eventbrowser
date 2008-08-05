@@ -1566,7 +1566,7 @@
     <include location="local" impldecl="in implementation">mainform.ui.h</include>
 </includes>
 <slots>
-    <slot>fileOpen()</slot>
+    <slot returnType="bool">fileOpen()</slot>
     <slot>fileSave()</slot>
     <slot>fileSaveAllSingle()</slot>
     <slot>fileSaveAllMultiple()</slot>

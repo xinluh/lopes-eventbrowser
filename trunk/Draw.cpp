@@ -10,6 +10,7 @@ using namespace std;
 Draw::Draw()
 {
     colorMultiGraph = 1;
+    rootTree = NULL;
 }
 
 Draw::~Draw(){}; //todo: release resources!

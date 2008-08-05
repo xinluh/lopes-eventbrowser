@@ -25,7 +25,8 @@ struct infoGraph
     {
         if (!s)
             s = &cout;
-        *s << "don't know about how to describe myself...; "
+        *s << "don't know about how to describe myself..."
+           << "(this really should NOT happen!);"
            << "overwrite my print() method please ;)" << endl;
     }
 
