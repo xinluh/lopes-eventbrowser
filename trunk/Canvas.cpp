@@ -50,6 +50,7 @@ void Canvas::setGraphType (graphTypes graphType)
             break;
         case ANTENNA_POSITION:
             graphInfo = new infoGraphPosition();
+            break;
         // ## to add new graph type: case ... see above for example
         default:
             graphInfo = new infoGraph();
