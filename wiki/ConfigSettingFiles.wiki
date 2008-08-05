@@ -13,6 +13,7 @@ Any line that begins with COMMENT_CHAR defined in [http://code.google.com/p/lope
 
 This file is not essential for the program; the program will automatically detect the existing branches in a root tree and use them if no branch configuration file is specified.
 
+
 =columns.cfg=
 
 This file is not essential for the program. It defines the columns to be displayed when the View Data dialog is invoked. Each line defines one column, and the syntax is 
@@ -30,3 +31,9 @@ Alias is just a name for the column, which could be useful for giving a meaningf
 columns.cfg can be created either manually or from the save button in the
 Choose Column dialog. When such a file exists, it would be read; if not, the
 default (all branches from branches.txt) will be used.
+
+
+=eventcuts.cfg=
+This file contains the "saved" event cuts, created when the user clicked "Save Cut" button in the main dialog; each line corresponds to one cut. 
+
+One can edit this file as wished, and this file will be created automatically by the program if not existent.
