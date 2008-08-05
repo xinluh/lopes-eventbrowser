@@ -327,7 +327,7 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
             for (int i = 0; i < (int) branches.size(); i++)
             {
                 // if a expression corresponds to an integer branch type then
-                // mark the expression to be substituted (not evaluated)
+                // mark the expression to be not evaluated
                 if (branch_types[i] == 'I' &&  expressions[j] == branches[i])
                 {
                     iexp[j] = i;

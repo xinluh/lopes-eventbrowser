@@ -68,6 +68,7 @@ vector<QListViewItem*> tabNames;
 CanvasCollection* canvases = new CanvasCollection();
 
 bool multiGraphCont = false;
+bool isInitialized = false;
 // statusbar
 QLabel* lblStatus;
 QLabel* lblEventCutStatus;
@@ -94,11 +95,10 @@ void MainForm::init()
     statusBar()->addWidget(lblEventCutStatus);
         
     addNewTab();    
-    fileOpen();
-    
+    isInitialized = fileOpen();
 }
 
-void MainForm::fileOpen()
+bool MainForm::fileOpen()
 {
     formOpenFile f(this);
     f.initialize(draw->rootTree);
@@ -111,7 +111,7 @@ void MainForm::fileOpen()
                                  "You must select some root files to"
                                  "start with! Use File -> "
                                  "Open to open root files.");
-         return;
+         return false;
     }
 
     txtEventCut->setText("");
@@ -121,6 +121,7 @@ void MainForm::fileOpen()
     this->setCaption("Browser - " +
                      joinStrings(draw->rootTree->getListOfFiles(),"; "));
     //changeStatus("Opened files: " + joinStrings(filenames, ", "));
+    return true;
 }
 
 void MainForm::fileSave()
@@ -366,7 +367,8 @@ void MainForm::loadCanvas(Canvas* c)
     if (!c) return;
 
     txtEventCut->setText(c->getEventCut());
-    applyRootCut();
+    if (isInitialized)
+        applyRootCut();
 
     renameTab(c->getName());
     wgsAction->raiseWidget(findGraphWidget(c->getGraphType()));
@@ -485,8 +487,6 @@ void MainForm::removeTab( int index )
     int s_index = ((index == (int)tabIds.size() - 1)?
                    (index - 1) : (index + 1));
 
-    cout << "select index " << s_index << endl;
-    
      // select the tab above
     if (s_index > 0)
         selectTab(tabNames[s_index]); 
