@@ -99,12 +99,9 @@ void Draw::drawGrandeCoordinates()
 
 
 //callback function for ReadRootTree class
-int getValue_2DTGraphErrors(void* obj,int index,vector<float> values,
-                            long total_n)
+int getValue_2DTGraphErrors(void* obj,int index,vector<float> values, long)
 {
-    total_n++;    // make the compiler shut up about unused param
     TGraphErrors * g = (TGraphErrors  * ) obj;
-//    cout << index << " " << values[0] << " " << values[1] << endl;
 
     g->SetPoint(index,values[0],values[1]);
     g->SetPointError(index,values[2],values[3]);
@@ -146,15 +143,9 @@ void Draw::draw2DGraph(const string& x,const string& y,
     canvas->Update();
 }
 
-int getValue_PolarGraphErrors(void* obj,int index,vector<float> values,
-                            long total_n)
+int getValue_PolarGraphErrors(void* obj,int index,vector<float> values, long)
 {
-    total_n++; // make compiler shut up about unused param
-    TGraphPolar * g = (TGraphPolar  * ) obj;
-
-//    cout << index << " r = " << values[0] << "; theta = " << values[1] << endl;
-    cout << "g->SetPoint(" << index << "," << values[0] << "," << values[1]
-         << ");" << endl;
+    TGraphPolar* g = (TGraphPolar*) obj;
 
     // SetPoint(index,theta-value,r-value)
     g->SetPoint(index,values[1],values[0]);
@@ -162,8 +153,8 @@ int getValue_PolarGraphErrors(void* obj,int index,vector<float> values,
     return 0;
 }
 
-void Draw::drawPolarGraph(const char * r, const char* theta,
-                          const char * r_err,const char * theta_err)
+void Draw::drawPolarGraph(const string& r, const string& theta,
+                          const string& r_err,const string& theta_err)
 {
     if (!canvas) return;
     
@@ -172,76 +163,33 @@ void Draw::drawPolarGraph(const char * r, const char* theta,
     vector<string> arg;
     arg.push_back(r);
     arg.push_back(theta);
-    arg.push_back((r_err) ? r_err : "");
-    arg.push_back((theta_err) ? theta_err : "");
+    arg.push_back(r_err);
+    arg.push_back(theta_err);
     
     rootTree->fillValues(&getValue_PolarGraphErrors, g, arg);
     
-    //g.SetLogy();
     canvas->SetBorderSize(0);
     canvas->SetFrameFillColor(0);
 
-    g->SetFillColor(10);
-    
     ostringstream s;
     s << r << " vs. " << theta ;
-        
-//    g->SetTitle(s.str().c_str());
-//    g->GetXaxis()->SetTitle(r);
-//    g->GetYaxis()->SetTitle(theta);
-
-//     if (multiStatus == MULTI_START)
-//     {
-//         g->Draw("AOP");
-//         multiStatus = MULTI_CONT;
-//     }
-//     else if (multiStatus == MULTI_CONT)
-//         g->Draw("P");
-//     else if (multiStatus == MULTI_NORMAL)
-//         g->Draw("AOP");
-
-    g->Draw(isMultiGraph()? "P" : "AOP");
+    g->SetTitle(s.str().c_str());
     
-    canvas->Update();
+    g->Draw((string(isMultiGraph()? "P" : "AOP")
+            // and if r_err not empty, paint errors (using option "E")
+            + string((r_err != "") ? "E" : "")).c_str()); 
 
-    // set the axis division; has to be done after Draw() and Update()
-    g->GetPolargram()->SetNdivRadial(105);
-    g->GetPolargram()->SetNdivPolar(104);
-    g->GetPolargram()->SetToDegree();
-
-//     if (multiStatus == MULTI_START)
-//     {
-//         g->SetMarkerColor(1);
-//         colorMultiGraph = 1;
-//     }
-//     else if (multiStatus == MULTI_CONT)
-//     {
-//         colorMultiGraph = (colorMultiGraph == 9)? 1: colorMultiGraph +1;
-//         g->SetMarkerColor(colorMultiGraph);
-//     }
-//     else if (multiStatus == MULTI_NORMAL)
-//         g->SetMarkerColor(4);
-
+    g->SetFillColor(10);
     g->SetMarkerColor(getDrawColor());
-    
     g->SetMarkerStyle(21);
     g->SetMarkerSize(0.8);
-
     g->SetMinRadial(0);
-    g->GetPolargram()->SetRadialLabelSize(0.05);
-
-    g->GetPolargram()->SetPolarLabel(0,"E");
-    g->GetPolargram()->SetPolarLabel(1,"N");
-    g->GetPolargram()->SetPolarLabel(2,"W");
-    g->GetPolargram()->SetPolarLabel(3,"S");
     
     canvas->Update();
 }
 
-int getValue_ShowerAngles(void* obj,int index,vector<float> values,
-                            long total_n)
+int getValue_ShowerAngles(void* obj,int index,vector<float> values, long)
 {
-    total_n++; // make compiler shut up about unused param!
     TGraphPolar * g = (TGraphPolar*) obj;
     g->SetPoint(index,values[1],values[0]);
     return 0;
@@ -251,9 +199,11 @@ int getValue_ShowerAngles2(void* obj,int index,vector<float> values,
                             long total_n)
 {
     float theta = values[1],
-          r = values[0]/50,  //need to scale the r value
+          r = values[0]/50,  //need to scale the r value; 50 is the max on
+                             //r-scale
           colorcode_by = values[2]; 
-     TMarker* m = new TMarker(r*cos(theta),r*sin(theta),kFullSquare);
+
+    TMarker* m = new TMarker(r*cos(theta),r*sin(theta),kFullSquare);
     TMarker* m2= new TMarker(0,0,kFullSquare); // for legend
     TLegend* lg = (TLegend*)obj;
     int color = (int) ((float)50 / (float)total_n * (float)index) +51 ;
@@ -376,4 +326,3 @@ void Draw::clearCanvas()
     canvas->Clear();
     canvas->Update();
 }
-

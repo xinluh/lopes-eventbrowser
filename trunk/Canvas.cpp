@@ -9,6 +9,7 @@ char * Canvas::graphTypeDescriptions[] =
         "2D Graph",
         "Shower Angles",
         "Antenna Positions",
+        "1D Histogram",
         "Polar Graph"
         // ## add the description for the new graph type in the same order as
         // in the enum graphTypes
@@ -140,3 +141,5 @@ void Canvas::print()
 {
     getGraphInfo()->print();
 }
+
+

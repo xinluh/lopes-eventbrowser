@@ -193,7 +193,7 @@ void MainForm::helpAbout()
 
 void MainForm::Draw()
 {
-    saveToCanvas();
+    saveToCanvas(); // first save the information into the canvas
     
     if (!canvases->at(getTabIndex())->readyToDraw())
     {
@@ -204,9 +204,11 @@ void MainForm::Draw()
     
     if (ckbNewTab->isChecked())
         addNewTab();
-    
-        canvases->at(getTabIndex())->draw(draw);
 
+    // calling the draw method of the canvas
+    canvases->at(getTabIndex())->draw(draw);
+
+    // update the user interface if needed
     loadCanvas(canvases->at(getTabIndex()));
 }
 
@@ -220,11 +222,10 @@ void MainForm::applyRootCut()
     QString status  = QString("Current number of events: %1")
         .arg(draw->rootTree->getNumberEntries());
 
-    cout << status << endl;
+//    cout << status << endl;
 
     lblEventCutStatus->setText(status);
 }
-
 
 void MainForm::txtEventCut_changed()
 {
@@ -400,7 +401,13 @@ void MainForm::loadCanvas(Canvas* c)
         }
         case Canvas::GRAPH_POLAR:
         {
-            //todo
+            infoGraphPolar* i3 = (infoGraphPolar*) c->getGraphInfo();
+
+            ckbPolarErrors->setChecked(i3->useErrors);
+            txtPolarRAxis_2->setText(i3->rAxis);
+            txtPolarThetaAxis_2->setText(i3->thetaAxis);
+            txtPolarRAxisError->setText(i3->rAxis_err);
+            txtPolarThetaAxisError->setText(i3->thetaAxis_err);
             break;
         }
         case Canvas::ANTENNA_POSITION:
@@ -412,7 +419,8 @@ void MainForm::loadCanvas(Canvas* c)
         // ## add the case for new graph type here
         // case Canvas::_your new enum graph type enum name_:
         // {
-        //     fill in the values like above
+        //     take the values from the infoGraph struct and fill in the user
+        //     interface like above
         // }
         default:
         {
@@ -453,7 +461,7 @@ void MainForm::saveToCanvas(Canvas* c)
 
         infoGraph2D* info = (infoGraph2D*) c->getGraphInfo();
         info->useErrors = ckb2DErrors->isChecked();
-        info->xAxis = string(txt2DXAxis->text().ascii());
+        info->xAxis = txt2DXAxis->text().ascii();
         info->yAxis = txt2DYAxis->text().ascii();
         info->xAxis_err = txt2DXAxisError->text().ascii();
         info->yAxis_err = txt2DYAxisError->text().ascii();
@@ -467,9 +475,24 @@ void MainForm::saveToCanvas(Canvas* c)
         info2->thetaAxis = txtPolarThetaAxis->text().ascii();
         info2->colorCodeBy = txtColorCode->text().ascii();
     }
+    else if (wgsAction->visibleWidget() == tabGraphPolar)
+    {
+        c->setGraphType(Canvas::GRAPH_POLAR);
+
+        infoGraphPolar* i3 = (infoGraphPolar*) c->getGraphInfo();
+        i3->useErrors = ckbPolarErrors->isChecked();
+        i3->rAxis = txtPolarRAxis_2->text().ascii();
+        i3->thetaAxis = txtPolarThetaAxis_2->text().ascii();
+        i3->rAxis_err = txtPolarRAxisError->text().ascii();
+        i3->thetaAxis_err = txtPolarThetaAxisError->text().ascii();
+    }
 // ## uncomment below to add another graph type ##
-//    else if (wgsAction->visibleWidget() = _the "tab page" widget you created_)
+//  else if (wgsAction->visibleWidget() == _the "tab page" widget you created_)
+//  {
 //      c->setGraphType(Canvas::_your identification set in Canvas.h_);
+//      // take information from the user interface to the infoGraph struct
+//      // like above
+//  }
 
     canvases->saveToFile("f");
 }
@@ -629,10 +652,11 @@ QWidget* MainForm::findGraphWidget(Canvas::graphTypes type)
         case Canvas::GRAPH_2D:           return tabGraph2D;
         case Canvas::SHOWER_ANGLE:       return tabShowerAngles;
         case Canvas::ANTENNA_POSITION:   return tabPosition;
+        case Canvas::GRAPH_POLAR:        return tabGraphPolar;
+       // ## add case for new graph type to return your new "tab" widget; see
+       // example above
         default:                         return tabUnknown;
-       // ## add case for new graph type; see example above
     }
-        
 }
 
 void MainForm::selectGraphType( int index )
@@ -644,8 +668,6 @@ void MainForm::selectGraphType( int index )
 
     if (w)
         wgsAction->raiseWidget(w);
-    //canvases->at(getTabIndex())->setGraphType(type);
-    
 }
 
 void MainForm::viewData()

@@ -49,8 +49,8 @@ public:
 	void drawGrandeCoordinates();
 	void draw2DGraph(const std::string& x, const std::string& y,
 					 const std::string& x_err, const std::string& y_err);
-    void drawPolarGraph(const char * r, const char* theta, const char * r_err,
-						const char * theta_err);
+    void drawPolarGraph(const std::string& r, const std::string& theta,
+                       const std::string& r_err, const std::string& theta_err);
 	void drawShowerAngles(const std::string& r, const std::string& theta,
 								const std::string& colorcode_by);
 	
