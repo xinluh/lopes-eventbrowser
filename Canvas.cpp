@@ -64,7 +64,7 @@ void Canvas::setGraphType (graphTypes graphType)
 void Canvas::streamToFile(ofstream & s)
 {
     // output header in format: [Canvas:_type]
-    s << "[Canvas:"; s << type; s << "]\n";
+    s << "[Canvas:"; s << (int) type; s << "]\n";
     s << "Name = " << getName() << "\n";
     s << "EventCut = " << getEventCut() << endl;
     
@@ -141,5 +141,3 @@ void Canvas::print()
 {
     getGraphInfo()->print();
 }
-
-

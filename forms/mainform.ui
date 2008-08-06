@@ -1188,6 +1188,9 @@
             <action name="fileSave_AllSeparate_PostscritpsAction"/>
         </item>
         <separator/>
+        <action name="fileImport_CanvasesAction"/>
+        <action name="fileExport_CanvasesAction"/>
+        <separator/>
         <action name="filePrintAction"/>
         <separator/>
         <action name="fileExitAction"/>
@@ -1526,6 +1529,36 @@
             <string>&amp;4 x 2</string>
         </property>
     </action>
+    <action>
+        <property name="name">
+            <cstring>fileImport_CanvasesAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Import Canvases</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Import Canvases</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>fileExport_CanvasesAction</cstring>
+        </property>
+        <property name="text">
+            <string>&amp;Export Canvases</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;Export Canvases</string>
+        </property>
+    </action>
+    <action>
+        <property name="name">
+            <cstring>Action</cstring>
+        </property>
+        <property name="text">
+            <string>Unnamed</string>
+        </property>
+    </action>
 </actions>
 <images>
     <image name="image0">
@@ -1737,6 +1770,18 @@
         <receiver>gbPolarErrors</receiver>
         <slot>setEnabled(bool)</slot>
     </connection>
+    <connection>
+        <sender>fileExport_CanvasesAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>exportCanvases()</slot>
+    </connection>
+    <connection>
+        <sender>fileImport_CanvasesAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>importCanvases()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">string</include>
@@ -1744,8 +1789,14 @@
     <include location="local" impldecl="in declaration">Canvas.h</include>
     <include location="local" impldecl="in implementation">mainform.ui.h</include>
 </includes>
+<forwards>
+    <forward>class CanvasCollection;</forward>
+</forwards>
 <slots>
     <slot returnType="bool">fileOpen()</slot>
+    <slot>importCanvases()</slot>
+    <slot>exportCanvases()</slot>
+    <slot>loadCanvasCollection( CanvasCollection * cc )</slot>
     <slot>fileSave()</slot>
     <slot>fileSaveAllSingle()</slot>
     <slot>fileSaveAllMultiple()</slot>
@@ -1755,6 +1806,7 @@
     <slot>Draw()</slot>
     <slot>applyRootCut()</slot>
     <slot>txtEventCut_changed()</slot>
+    <slot>addNewTab( Canvas * c, bool autoDraw )</slot>
     <slot>addNewTab( Canvas * c )</slot>
     <slot>addNewTab()</slot>
     <slot>enableTabActionButtons()</slot>
@@ -1768,6 +1820,7 @@
     <slot>saveToCanvas( Canvas * c )</slot>
     <slot>removeTab()</slot>
     <slot>removeTab( int index )</slot>
+    <slot>removeAllTabs()</slot>
     <slot>renameTab()</slot>
     <slot>renameTab( int index )</slot>
     <slot>renameTab( QString name )</slot>
