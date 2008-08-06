@@ -69,6 +69,9 @@ CanvasCollection* canvases = new CanvasCollection();
 
 bool multiGraphCont = false;
 bool isInitialized = false;
+bool isDrawingInNewTab = false; // keep track of when is drawing in new tab so
+                                // that the old tab's information is not
+                                // overrided; I know, it's a ugly hack ;P
 // statusbar
 QLabel* lblStatus;
 QLabel* lblEventCutStatus;
@@ -124,6 +127,53 @@ bool MainForm::fileOpen()
                      joinStrings(draw->rootTree->getListOfFiles(),"; "));
     //changeStatus("Opened files: " + joinStrings(filenames, ", "));
     return true;
+}
+
+void MainForm::importCanvases()
+{
+    QString file = QFileDialog::getOpenFileName("",
+                    "Config files (*.cfg)",
+                    this,
+                    tr("Open file dialog"),
+                    tr("Choose file that contains canvas definitions"));
+
+    if (!file) return;
+
+    CanvasCollection * cc = CanvasCollection::readFromFile(file);
+
+    if (!cc)
+    {
+        QMessageBox::warning(this,"File parse failed","Unable to parse the "
+                             "canvas definition file. It maybe of a wrong "
+                             "type or contains corrupted information.");
+        return;
+    }
+    else
+        loadCanvasCollection(cc);
+}
+
+void MainForm::exportCanvases()
+{
+    QString file = QFileDialog::getSaveFileName(
+                    "canvases.cfg",
+                    "Config file (*.cfg)",
+                    this,
+                    tr("save file dialog"),
+                    tr("Choose a filename to save under"));
+
+    if (file) canvases->saveToFile(file);
+}
+
+void MainForm::loadCanvasCollection(CanvasCollection* cc)
+{
+    if (!cc) return;
+    removeAllTabs();
+
+    canvases = cc;
+
+    for (int i = 0; i < (int) canvases->size(); ++i)
+        addNewTab(canvases->at(i),true);
+    
 }
 
 void MainForm::fileSave()
@@ -193,7 +243,14 @@ void MainForm::helpAbout()
 
 void MainForm::Draw()
 {
-    saveToCanvas(); // first save the information into the canvas
+    if (ckbNewTab->isChecked())
+    {
+        isDrawingInNewTab = true;
+        addNewTab();
+        isDrawingInNewTab = false;
+    }
+
+    saveToCanvas(); // first save the information into the canvas object
     
     if (!canvases->at(getTabIndex())->readyToDraw())
     {
@@ -202,9 +259,6 @@ void MainForm::Draw()
         return;
     }
     
-    if (ckbNewTab->isChecked())
-        addNewTab();
-
     // calling the draw method of the canvas
     canvases->at(getTabIndex())->draw(draw);
 
@@ -232,7 +286,7 @@ void MainForm::txtEventCut_changed()
     btnApplyCut->setEnabled(true);
 }
 
-void MainForm::addNewTab(Canvas* c)
+void MainForm::addNewTab(Canvas* c, bool autoDraw)
 {
     if (!c) return;
     
@@ -263,8 +317,14 @@ void MainForm::addNewTab(Canvas* c)
         setTabAsCanvas(newTab);
 
         loadCanvas(c);
-    }
 
+        if (autoDraw) Draw();
+    }
+}    
+
+void MainForm::addNewTab(Canvas* c)
+{
+    addNewTab(c,false);
 }
 
 void MainForm::addNewTab()
@@ -333,7 +393,8 @@ int MainForm::getTabIndex( QListViewItem * item )
 
 void MainForm::selectTab( QListViewItem * sel)
 {
-    saveToCanvas();
+    if (!isDrawingInNewTab)
+        saveToCanvas();
     
     multiGraphCont = false; // make sure that a new graph with axis is started
     
@@ -361,7 +422,8 @@ void MainForm::selectTab( QListViewItem * sel)
     else
         wgStack->raiseWidget(id);
 
-    loadCanvas(canvases->at(index));
+    if (!isDrawingInNewTab)
+        loadCanvas(canvases->at(index));
 }
 
 // load the inforamtion from the object Canvas to the user interface
@@ -489,12 +551,10 @@ void MainForm::saveToCanvas(Canvas* c)
 // ## uncomment below to add another graph type ##
 //  else if (wgsAction->visibleWidget() == _the "tab page" widget you created_)
 //  {
-//      c->setGraphType(Canvas::_your identification set in Canvas.h_);
+//      c->setGraphType(Canvas::_your enum member in Canvas.h_);
 //      // take information from the user interface to the infoGraph struct
 //      // like above
 //  }
-
-    canvases->saveToFile("f");
 }
 
 void MainForm::removeTab()
@@ -516,10 +576,18 @@ void MainForm::removeTab( int index )
     if (s_index > 0)
         selectTab(tabNames[s_index]); 
 
-    delete tabNames[index];
+    delete tabNames[index]; // free memory
 
+    // delete entries in all three appropriate arrays
     tabIds.erase(tabIds.begin() +  index);
     tabNames.erase(tabNames.begin() + index);
+    canvases->removeCanvas(index);
+}
+
+void MainForm::removeAllTabs()
+{
+    while (tabIds.size() > 0)
+        removeTab(0);
 }
 
 // rename the current tab, asking the user for the new name
@@ -662,7 +730,6 @@ QWidget* MainForm::findGraphWidget(Canvas::graphTypes type)
 void MainForm::selectGraphType( int index )
 {
     Canvas::graphTypes type = (Canvas::graphTypes) index;
-    cout << type << endl;
     
     QWidget* w = findGraphWidget(type);
 

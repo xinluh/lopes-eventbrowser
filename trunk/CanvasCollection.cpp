@@ -87,15 +87,15 @@ void CanvasCollection::saveToFile(string filename)
 
 CanvasCollection* CanvasCollection::readFromFile(string filename)
 {
-     ifstream file(filename.c_str());
+    ifstream file(filename.c_str());
     string line;
 
     getline(file,line,END_OF_LINE);
     // if MAGIC_LINE not found then not a valid file to parse
     if (line.find(MAGIC_LINE) == string::npos) return NULL;
 
-     CanvasCollection* cc = new CanvasCollection;
-     Canvas *c = new Canvas();
+    CanvasCollection* cc = new CanvasCollection();
+    Canvas *c = new Canvas();
 
     while (c->parseFromFile(file))
     {

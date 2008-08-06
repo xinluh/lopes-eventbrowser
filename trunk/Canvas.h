@@ -64,7 +64,4 @@ public:
 //  std::vector<Canvas*> childPads;
 };
 
-
-
 #endif //_CANVAS_H_
-
