@@ -26,8 +26,8 @@ public:
         GRAPH_2D = 0,
         SHOWER_ANGLE,
         ANTENNA_POSITION,
+        HIST_1D,
         GRAPH_POLAR,
-
         // ## add another graph type here
 
         // used to find out how many graph types there are

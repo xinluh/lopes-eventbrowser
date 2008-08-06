@@ -80,11 +80,8 @@ void formViewData::setColumnNames()
 }
 
 
-int callback_fetchData(void* obj,int index, vector<string> values,
-                       long total_n)
+int callback_fetchData(void* obj,int index, vector<string> values,long)
 {
-    index++;total_n++; // make compiler shut up about unused param
-     
     QTable* table = (QTable*) obj;
     int row = table->numRows();
     // insert new row

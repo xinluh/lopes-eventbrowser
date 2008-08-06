@@ -123,7 +123,7 @@ struct infoShowerAngle : infoGraph
 
 struct infoGraphPolar : infoGraph
 {
-    bool         useErrors      ;
+    bool    useErrors      ;
     string  rAxis          ;
     string  rAxis_err      ;
     string  thetaAxis      ;
@@ -156,6 +156,16 @@ struct infoGraphPolar : infoGraph
         return (!rAxis.empty() && !thetaAxis.empty() && (!useErrors ||
              (useErrors && !thetaAxis_err.empty() && !rAxis_err.empty())));
     }
+
+    void draw(Draw* d)
+    {
+        d->drawPolarGraph(rAxis,thetaAxis,
+                           useErrors ? rAxis_err : "",
+                           useErrors ? thetaAxis_err : "");
+        parentCanvas->setName("Polar: [" + rAxis + "] vs. ["
+                              + thetaAxis + "]");
+    }
+
 };
 
 struct infoGraphPosition : infoGraph
@@ -197,26 +207,38 @@ struct infoGraphPosition : infoGraph
 
 
 // ## uncomment below to add another graph type ## 
-//struct infoGraphBlahBlah : infoGraph
+//struct infoGraph_BlahBlah_ : infoGraph
 //{
-//    all information for graphing go here; see above for example
+//  //  all information for graphing go here; see above for example
+//
+//  // this function should print information in this struct to a stream;
+//  // this is used to save the information to a file and for debugging
 //  void print(ostream* s)
-//    {
+//  {
 //  }
 //
+//  // this should read a name-value pair of information into the data member
+//  // in this struct; this is used for retrieving previous saved information
+//  // in a file back to the memory
 //  void enterValue(const string& name, const string& value)
-//  {
-//      if (!s)
-//          s = &cout;
+//  { if (!s) s = &cout;
 //
 //      *s << "_name-of-param_"  <<  " = "  << _param_  << endl;
 //
 //  }
-//  bool virtual readyToDraw()
+//
+//  // tell the rest of the program whether all the information necessary for
+//  // graphing is already present thus it is ready to draw; must return
+//  // something! 
+//  bool readyToDraw()
 //  {
 //       return _true if ready; false if not_;
-//}
-//  void virtual draw(Draw* d)
+//  }
+//
+//  // this is where one will draw something. It is best to define all the
+//  // details for drawing in a function in the class Draw, not here; here one
+//  // should only call helper functions
+//  void draw(Draw* d)
 //  {
 //       d->_drawSomething_();
 //       parentCanvas->setName(_an appropriate name for the canvas_);
@@ -225,4 +247,3 @@ struct infoGraphPosition : infoGraph
 
 
 #endif /* _GRAPHINFOS_H_ */
-
