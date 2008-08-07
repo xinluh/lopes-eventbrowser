@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2006 Ingo Berg
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -33,6 +33,10 @@
 #include "muParserDef.h"
 #include "muParserError.h"
 #include "muParserToken.h"
+
+/** \file
+    \brief Definition of the parser bytecode class.
+*/
 
 
 namespace mu
@@ -113,6 +117,9 @@ public:
 
     void Finalize();
     void clear();
+
+    std::size_t GetBufSize() const;
+
     const map_type* GetRawData() const;
 
     /** \brief Return size of a value entry. 

@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2006 Ingo Berg
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -32,6 +32,10 @@
 
 #include "muParserFixes.h"
 
+/** \file
+    \brief This file contains standard definitions used by the parser.
+*/
+
 /** \brief Define the base datatype for values.
 
   This datatype must be a built in value type. You can not use custom classes.
@@ -40,11 +44,12 @@
 */
 #define MUP_BASETYPE float
 
+/** \brief Definition of the basic bytecode datatype.
 
-/** \brief Definition of the basic bytecode datatype. */
+  This defines the smalles entity used in the bytecode.
+*/
 #define MUP_BYTECODE_TYPE long
 
-/** \brief Maybe I use this for unicode support later. */
 #if defined(_UNICODE)
   /** \brief Definition of the basic parser string type. */
   #define MUP_STRING_TYPE std::wstring
@@ -121,13 +126,19 @@ namespace mu
 
 #else
 
-  /** \brief Encapsulate cout. */
+  /** \brief Encapsulate cout. 
+  
+    Used for supporting UNICODE more easily.
+  */
   inline std::ostream& console()
   {
     return std::cout;
   }
 
-  /** \brief Encapsulate cin. */
+  /** \brief Encapsulate cin. 
+
+    Used for supporting UNICODE more easily.
+  */
   inline std::istream& console_in()
   {
     return std::cin;
@@ -162,20 +173,17 @@ namespace mu
     cmASSIGN        = 14,  ///< Operator item:  Assignment operator
     cmBO            = 15,  ///< Operator item:  opening bracket
     cmBC            = 16,  ///< Operator item:  closing bracket
-    cmCOMMA         = 17,  ///< Operator item:  comma
-    cmVAR           = 18,  ///< variable item
-    cmSTRVAR        = 19,
-    cmVAL           = 20,  ///< value item
-
-    cmFUNC          = 21,  ///< Code for a function item
-    cmFUNC_STR      = 22,  ///< Code for a function with a string parameter
-
-    cmSTRING        = 23,  ///< Code for a string token
-    cmOPRT_BIN      = 24,  ///< user defined binary operator
-    cmOPRT_POSTFIX  = 25,  ///< code for postfix operators
-    cmOPRT_INFIX    = 26,  ///< code for infix operators
-    cmEND           = 27,  ///< end of formula
-    cmUNKNOWN       = 28   ///< uninitialized item
+    cmARG_SEP,             ///< function argument separator
+    cmVAR,                 ///< variable item
+    cmVAL,                 ///< value item
+    cmFUNC,                ///< Code for a function item
+    cmFUNC_STR,            ///< Code for a function with a string parameter
+    cmSTRING,              ///< Code for a string token
+    cmOPRT_BIN,            ///< user defined binary operator
+    cmOPRT_POSTFIX,        ///< code for postfix operators
+    cmOPRT_INFIX,          ///< code for infix operators
+    cmEND,                 ///< end of formula
+    cmUNKNOWN,             ///< uninitialized item
   };
 
   //------------------------------------------------------------------------------
@@ -183,9 +191,9 @@ namespace mu
   */
   enum ETypeCode
   {
-    tpSTR  = 0,     ///> String type (Function arguments and constants only, no string variables)
-    tpDBL  = 1,     ///> Floating point variables
-    tpVOID = 2      ///> Undefined type.
+    tpSTR  = 0,     ///< String type (Function arguments and constants only, no string variables)
+    tpDBL  = 1,     ///< Floating point variables
+    tpVOID = 2      ///< Undefined type.
   };
 
   //------------------------------------------------------------------------------
@@ -193,47 +201,114 @@ namespace mu
   enum EPrec
   {
     // binary operators
-    prLOGIC   = 1,  ///> logic operators
-    prCMP     = 2,  ///> comparsion operators
-    prADD_SUB = 3,  ///> addition
-    prMUL_DIV = 4,  ///> multiplication/division
-    prPOW     = 5,  ///> power operator priority (highest)
+    prLOGIC   = 1,  ///< logic operators
+    prCMP     = 2,  ///< comparsion operators
+    prADD_SUB = 3,  ///< addition
+    prMUL_DIV = 4,  ///< multiplication/division
+    prPOW     = 5,  ///< power operator priority (highest)
 
     // infix operators
-    prINFIX    = 4, ///> Signs have a higher priority than ADD_SUB, but lower than power operator
-    prPOSTFIX  = 4  ///> Postfix operator priority (currently unused)
+    prINFIX    = 4, ///< Signs have a higher priority than ADD_SUB, but lower than power operator
+    prPOSTFIX  = 4  ///< Postfix operator priority (currently unused)
   };
 
   //------------------------------------------------------------------------------
   // basic types
+
+  /** \brief The numeric datatype used by the parser. 
+  
+    Normally this is a floating point type either single or double precision.
+  */
   typedef MUP_BASETYPE value_type;
+
+  /** \brief The stringtype used by the parser. 
+
+    Depends on wether UNICODE is used or not.
+  */
   typedef MUP_STRING_TYPE string_type;
+
+  /** \brief The bytecode type used by the parser. 
+  
+    The bytecode type depends on the value_type.
+  */
   typedef MUP_BYTECODE_TYPE bytecode_type;
+
+  /** \brief The character type used by the parser. 
+  
+    Depends on wether UNICODE is used or not.
+  */
   typedef string_type::value_type char_type;
+
+  /** \brief Typedef for easily using stringstream that respect the parser stringtype. */
   typedef std::basic_stringstream<char_type,
                                   std::char_traits<char_type>,
                                   std::allocator<char_type> > stringstream_type;
 
   // Data container types
+
+  /** \brief Type used for storing variables. */
   typedef std::map<string_type, value_type*> varmap_type;
+  
+  /** \brief Type used for storing constants. */
   typedef std::map<string_type, value_type> valmap_type;
+  
+  /** \brief Type for assigning a string name to an index in the internal string table. */
   typedef std::map<string_type, std::size_t> strmap_type;
 
   // Parser callbacks
+  
+  /** \brief Callback type used for functions without arguments. */
   typedef value_type (*fun_type0)();
+
+  /** \brief Callback type used for functions with a single arguments. */
   typedef value_type (*fun_type1)(value_type);
+
+  /** \brief Callback type used for functions with two arguments. */
   typedef value_type (*fun_type2)(value_type, value_type);
+
+  /** \brief Callback type used for functions with three arguments. */
   typedef value_type (*fun_type3)(value_type, value_type, value_type);
+
+  /** \brief Callback type used for functions with four arguments. */
   typedef value_type (*fun_type4)(value_type, value_type, value_type, value_type);
+
+  /** \brief Callback type used for functions with five arguments. */
   typedef value_type (*fun_type5)(value_type, value_type, value_type, value_type, value_type);
+
+  /** \brief Callback type used for functions with a variable argument list. */
   typedef value_type (*multfun_type)(const value_type*, int);
+
+  /** \brief Callback type used for functions taking a string as an argument. */
   typedef value_type (*strfun_type1)(const char_type*);
+
+  /** \brief Callback type used for functions taking a string and a value as arguments. */
   typedef value_type (*strfun_type2)(const char_type*, value_type);
+
+  /** \brief Callback type used for functions taking a string and two values as arguments. */
   typedef value_type (*strfun_type3)(const char_type*, value_type, value_type);
 
-  // Parser utility callback functions (unrelated to the math callbacks)
+  /** \brief Callback used for functions that identify values in a string. */
   typedef int (*identfun_type)(const char_type *sExpr, int *nPos, value_type *fVal);
+
+  /** \brief Callback used for variable creation factory functions. */
   typedef value_type* (*facfun_type)(const char_type*, void*);
+
+  //------------------------------------------------------------------------------
+  /** \brief Static type checks
+    
+     I took the static assert from boost, but did not want to 
+     add boost as a dependency to this project. For the original go to:
+  
+     http://www.boost.org/doc/html/boost_staticassert.html
+  */
+  template <bool> struct STATIC_ASSERTION_FAILURE;
+  template <> struct STATIC_ASSERTION_FAILURE<true> {};
+
+  /** \brief This is a static typecheck.
+      
+      If you get a compiler error here you tried to use an unsigned bytecode map type!
+  */
+  typedef char MAP_TYPE_CANT_BE_UNSIGNED[ sizeof( STATIC_ASSERTION_FAILURE< bytecode_type(-1)<0 >) ];
 } // end fo namespace
 
 #endif

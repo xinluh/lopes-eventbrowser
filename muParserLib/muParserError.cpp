@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2007 Ingo Berg
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -73,7 +73,7 @@ namespace mu
     m_vErrMsg[ecINVALID_VAR_PTR]     = _T("Invalid pointer to variable.");
     m_vErrMsg[ecUNEXPECTED_OPERATOR] = _T("Unexpected operator \"$TOK$\" found at position $POS$");
     m_vErrMsg[ecUNEXPECTED_EOF]      = _T("Unexpected end of formula at position $POS$");
-    m_vErrMsg[ecUNEXPECTED_COMMA]    = _T("Unexpected comma at position $POS$");
+    m_vErrMsg[ecUNEXPECTED_ARG_SEP]  = _T("Unexpected argument separator at position $POS$");
     m_vErrMsg[ecUNEXPECTED_PARENS]   = _T("Unexpected parenthesis \"$TOK$\" at position $POS$");
     m_vErrMsg[ecUNEXPECTED_FUN]      = _T("Unexpected function \"$TOK$\" at position $POS$");
     m_vErrMsg[ecUNEXPECTED_VAL]      = _T("Unexpected value \"$TOK$\" found at position $POS$");
@@ -86,13 +86,14 @@ namespace mu
     m_vErrMsg[ecDOMAIN_ERROR]        = _T("Domain error");
     m_vErrMsg[ecNAME_CONFLICT]       = _T("Name conflict");
     m_vErrMsg[ecOPT_PRI]             = _T("Invalid value for operator priority (must be greater or equal to zero).");
-    m_vErrMsg[ecBUILTIN_OVERLOAD]    = _T("Binary operator identifier conflicts with a built in operator.");
+    m_vErrMsg[ecBUILTIN_OVERLOAD]    = _T("user defined binary operator \"$TOK$\" conflicts with a built in operator.");
     m_vErrMsg[ecUNEXPECTED_STR]      = _T("Unexpected string token found at position $POS$.");
     m_vErrMsg[ecUNTERMINATED_STRING] = _T("Unterminated string starting at position $POS$.");
     m_vErrMsg[ecSTRING_EXPECTED]     = _T("String function called with a non string type of argument.");
     m_vErrMsg[ecVAL_EXPECTED]        = _T("String value used where a numerical argument is expected.");
     m_vErrMsg[ecOPRT_TYPE_CONFLICT]  = _T("No suitable overload for operator \"$TOK$\" at position $POS$.");
     m_vErrMsg[ecGENERIC]             = _T("Parser error.");
+    m_vErrMsg[ecLOCALE]              = _T("Decimal separator is identic to function argument separator.");
     m_vErrMsg[ecSTR_RESULT]          = _T("Function result is a string.");
 
     #if defined(_DEBUG)
@@ -112,7 +113,7 @@ namespace mu
   //
   //---------------------------------------------------------------------------
 
-  //------------------------------------------------------------------------------
+  /** \brief Default constructor. */
   ParserError::ParserError()
     :m_strMsg()
     ,m_strFormula()
@@ -136,6 +137,7 @@ namespace mu
   }
 
   //------------------------------------------------------------------------------
+  /** \brief Construct an error from a message text. */
   ParserError::ParserError(const string_type &sMsg) 
     :m_ErrMsg(ParserErrorMsg::Instance())
   {
@@ -144,15 +146,21 @@ namespace mu
   }
 
   //------------------------------------------------------------------------------
-  ParserError::ParserError( EErrorCodes a_iErrc,
+  /** \brief Construct an error object. 
+      \param [in] a_iErrc the error code.
+      \param [in] sTok The token string related to this error.
+      \param [in] sExpr The expression related to the error.
+      \param [in] a_iPos the position in the expression where the error occured. 
+  */
+  ParserError::ParserError( EErrorCodes iErrc,
                             const string_type &sTok,
-                            const string_type &sFormula,
-                            int a_iPos )
+                            const string_type &sExpr,
+                            int iPos )
     :m_strMsg()
-    ,m_strFormula(sFormula)
+    ,m_strFormula(sExpr)
     ,m_strTok(sTok)
-    ,m_iPos(a_iPos)
-    ,m_iErrc(a_iErrc)
+    ,m_iPos(iPos)
+    ,m_iErrc(iErrc)
     ,m_ErrMsg(ParserErrorMsg::Instance())
   {
     m_strMsg = m_ErrMsg[m_iErrc];
@@ -163,12 +171,17 @@ namespace mu
   }
 
   //------------------------------------------------------------------------------
-  ParserError::ParserError( EErrorCodes a_iErrc, int a_iPos, const string_type &sTok) 
+  /** \brief Construct an error object. 
+      \param [in] iErrc the error code.
+      \param [in] iPos the position in the expression where the error occured. 
+      \param [in] sTok The token string related to this error.
+  */
+  ParserError::ParserError(EErrorCodes iErrc, int iPos, const string_type &sTok) 
     :m_strMsg()
     ,m_strFormula()
     ,m_strTok(sTok)
-    ,m_iPos(a_iPos)
-    ,m_iErrc(a_iErrc)
+    ,m_iPos(iPos)
+    ,m_iErrc(iErrc)
     ,m_ErrMsg(ParserErrorMsg::Instance())
   {
     m_strMsg = m_ErrMsg[m_iErrc];
@@ -179,11 +192,16 @@ namespace mu
   }
 
   //------------------------------------------------------------------------------
-  ParserError::ParserError( const char_type *a_szMsg, int a_iPos, const string_type &sTok) 
-    :m_strMsg(a_szMsg)
+  /** \brief Construct an error object. 
+      \param [in] szMsg The error message text.
+      \param [in] iPos the position related to the error.
+      \param [in] sTok The token string related to this error.
+  */
+  ParserError::ParserError(const char_type *szMsg, int iPos, const string_type &sTok) 
+    :m_strMsg(szMsg)
     ,m_strFormula()
     ,m_strTok(sTok)
-    ,m_iPos(a_iPos)
+    ,m_iPos(iPos)
     ,m_iErrc(ecGENERIC)
     ,m_ErrMsg(ParserErrorMsg::Instance())
   {
@@ -194,6 +212,7 @@ namespace mu
   }
 
   //------------------------------------------------------------------------------
+  /** \brief Copy constructor. */
   ParserError::ParserError(const ParserError &a_Obj)
     :m_strMsg(a_Obj.m_strMsg)
     ,m_strFormula(a_Obj.m_strFormula)
@@ -205,6 +224,7 @@ namespace mu
   }
 
   //------------------------------------------------------------------------------
+  /** \brief Assignment operator. */
   ParserError& ParserError::operator=(const ParserError &a_Obj)
   {
     if (this==&a_Obj)
@@ -220,10 +240,13 @@ namespace mu
 
   //------------------------------------------------------------------------------
   ParserError::~ParserError()
-  {
-  }
+  {}
 
-  /** \brief Replace all ocuurences of a substring with another string. */
+  //------------------------------------------------------------------------------
+  /** \brief Replace all ocuurences of a substring with another string. 
+      \param strFind The string that shall be replaced.
+      \param strReplaceWith The string that should be inserted instead of strFind
+  */
   void ParserError::ReplaceSubString( string_type &strSource,
                                       const string_type &strFind,
                                       const string_type &strReplaceWith)
@@ -247,6 +270,7 @@ namespace mu
   }
 
   //------------------------------------------------------------------------------
+  /** \brief Reset the erro object. */
   void ParserError::Reset()
   {
     m_strMsg = _T("");
@@ -257,18 +281,21 @@ namespace mu
   }
       
   //------------------------------------------------------------------------------
+  /** \brief Set the expression related to this error. */
   void ParserError::SetFormula(const string_type &a_strFormula)
   {
     m_strFormula = a_strFormula;
   }
 
   //------------------------------------------------------------------------------
+  /** \brief gets the expression related tp this error.*/
   const string_type& ParserError::GetExpr() const 
   {
     return m_strFormula;
   }
 
   //------------------------------------------------------------------------------
+  /** \brief Returns the message string for this error. */
   const string_type& ParserError::GetMsg() const
   {
     return m_strMsg;

@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2006 Ingo Berg
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -25,6 +25,10 @@
 
 #ifndef MU_PARSER_FIXES_H
 #define MU_PARSER_FIXES_H
+
+/** \file
+    \brief This file contains compatibility fixes for some platforms.
+*/
 
 //
 // Compatibility fixes
@@ -67,7 +71,7 @@
 
     Hijack auto_ptr and replace it with a version that actually does
     what an auto_ptr normally does. If you use std::auto_ptr in your other code
-    it might either explode or work much better. The original crap created
+    might either explode or work much better. The original crap created
     by Microsoft, called auto_ptr and bundled with MSVC6 is not standard compliant.
 */
 #define auto_ptr _my_auto_ptr

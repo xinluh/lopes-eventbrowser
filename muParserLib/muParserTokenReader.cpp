@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2007 Ingo Berg
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -31,6 +31,10 @@
 
 #include "muParserTokenReader.h"
 #include "muParserBase.h"
+
+/** \file
+    \brief This file contains the parser token reader implementation.
+*/
 
 
 namespace mu
@@ -92,6 +96,7 @@ namespace mu
     m_pFactory = a_Reader.m_pFactory;
     m_pFactoryData = a_Reader.m_pFactoryData;
     m_iBrackets = a_Reader.m_iBrackets;
+    m_cArgSep = a_Reader.m_cArgSep;
   }
 
   //---------------------------------------------------------------------------
@@ -123,19 +128,12 @@ namespace mu
     ,m_fZero(0)
     ,m_iBrackets(0)
     ,m_lastTok()
+    ,m_cArgSep(',')
   {
     assert(m_pParser);
     SetParent(m_pParser);
   }
     
-  //---------------------------------------------------------------------------
-  /** \brief Destructor (trivial).
-  
-      \throw nothrow
-  */
-  ParserTokenReader::~ParserTokenReader()
-  {}
-
   //---------------------------------------------------------------------------
   /** \brief Create instance of a ParserTokenReader identical with this 
               and return its pointer. 
@@ -214,24 +212,6 @@ namespace mu
   }
 
   //---------------------------------------------------------------------------
-  void ParserTokenReader::SetDefs( const funmap_type *a_pFunDef, 
-                                   const funmap_type *a_pOprtDef,
-                                   const funmap_type *a_pInfixOprtDef,
-                                   const funmap_type *a_pPostOprtDef,
-                                   varmap_type *a_pVarDef,
-                                   const strmap_type *a_pStrVarDef,
-                                   const valmap_type *a_pConstDef )
-  {
-    m_pFunDef = a_pFunDef;
-    m_pOprtDef = a_pOprtDef;
-    m_pInfixOprtDef = a_pInfixOprtDef;
-    m_pPostOprtDef = a_pPostOprtDef;
-    m_pVarDef = a_pVarDef;
-    m_pStrVarDef = a_pStrVarDef;
-    m_pConstDef = a_pConstDef;
-  }
-
-  //---------------------------------------------------------------------------
   /** \brief Set Flag that contronls behaviour in case of undefined variables beeing found. 
   
     If true, the parser does not throw an exception if an undefined variable is found. 
@@ -278,8 +258,9 @@ namespace mu
 
     if ( IsEOF(tok) ) return SaveBeforeReturn(tok);        // Check for end of formula
     if ( IsOprt(tok) )   return SaveBeforeReturn(tok);     // Check for user defined binary operator
-    if ( IsBuiltIn(tok) ) return SaveBeforeReturn(tok);    // Check built in operators / tokens
     if ( IsFunTok(tok) ) return SaveBeforeReturn(tok);     // Check for function token
+    if ( IsBuiltIn(tok) ) return SaveBeforeReturn(tok);    // Check built in operators / tokens
+    if ( IsArgSep(tok) ) return SaveBeforeReturn(tok);     // Check for function argument separators
     if ( IsValTok(tok) ) return SaveBeforeReturn(tok);     // Check for values / constant tokens
     if ( IsVarTok(tok) ) return SaveBeforeReturn(tok);     // Check for variable tokens
     if ( IsStrVarTok(tok) ) return SaveBeforeReturn(tok);  // Check for string variables
@@ -333,7 +314,8 @@ namespace mu
     \throw nothrow
   */
   int ParserTokenReader::ExtractToken( const char_type *a_szCharSet, 
-                                       string_type &a_sTok, int a_iPos ) const
+                                       string_type &a_sTok, 
+                                       int a_iPos ) const
   {
     int iEnd = (int)m_strFormula.find_first_not_of(a_szCharSet, a_iPos);
 
@@ -352,22 +334,15 @@ namespace mu
   */
   bool ParserTokenReader::IsBuiltIn(token_type &a_Tok)
   {
-    const char_type **pOprtDef = m_pParser->GetOprtDef();
-    const char_type* szFormula = m_strFormula.c_str();
+    const char_type **const pOprtDef = m_pParser->GetOprtDef(),
+                     *const szFormula = m_strFormula.c_str();
 
     // Compare token with function and operator strings
     // check string for operator/function
     for (int i=0; pOprtDef[i]; i++)
     {
-#if !defined _UNICODE
-      std::size_t len = std::strlen( pOprtDef[i] );
-      if ( !std::strncmp(&szFormula[m_iPos], pOprtDef[i], len) )
-#else
-      // this would work for both UNICODE and char but it's so god damn ugly!!
-      // apart from this this cant be fast
       std::size_t len( std::char_traits<char_type>::length(pOprtDef[i]) );
       if ( string_type(pOprtDef[i]) == string_type(szFormula + m_iPos, szFormula + m_iPos + len) )
-#endif
       {
         switch(i)
 	      {
@@ -386,57 +361,53 @@ namespace mu
 		    case cmDIV:
 		    case cmPOW:
         case cmASSIGN:
-                      // The assignement operator need special treatment
-                      if (i==cmASSIGN && m_iSynFlags & noASSIGN)
-                        Error(ecUNEXPECTED_OPERATOR, m_iPos, pOprtDef[i]);
+              //if (len!=sTok.length())
+              //  continue;
 
-                      if (!m_pParser->HasBuiltInOprt()) continue;
-                      if (m_iSynFlags & noOPT) 
-                      {
-                        // Maybe its an infix operator not an operator
-                        // Both operator types can share characters in 
-                        // their identifiers
-                        if ( IsInfixOpTok(a_Tok) ) 
-                          return true;
+              // The assignement operator need special treatment
+              if (i==cmASSIGN && m_iSynFlags & noASSIGN)
+                Error(ecUNEXPECTED_OPERATOR, m_iPos, pOprtDef[i]);
 
-                        Error(ecUNEXPECTED_OPERATOR, m_iPos, pOprtDef[i]);
-                      }
+              if (!m_pParser->HasBuiltInOprt()) continue;
+              if (m_iSynFlags & noOPT) 
+              {
+                // Maybe its an infix operator not an operator
+                // Both operator types can share characters in 
+                // their identifiers
+                if ( IsInfixOpTok(a_Tok) ) 
+                  return true;
 
-                      m_iSynFlags  = noBC | noOPT | noCOMMA | noPOSTOP | noASSIGN;
-				              m_iSynFlags |= ( (i != cmEND) && ( i != cmBC) ) ? noEND : 0;
-				              break;
+                Error(ecUNEXPECTED_OPERATOR, m_iPos, pOprtDef[i]);
+              }
 
-		    case cmCOMMA:
-				              if (m_iSynFlags & noCOMMA)
-					              Error(ecUNEXPECTED_COMMA, m_iPos, pOprtDef[i]);
-        			
-				              m_iSynFlags  = noBC | noOPT | noEND | noCOMMA | noPOSTOP | noASSIGN;
-			                break;
+              m_iSynFlags  = noBC | noOPT | noARG_SEP | noPOSTOP | noASSIGN;
+              m_iSynFlags |= ( (i != cmEND) && ( i != cmBC) ) ? noEND : 0;
+              break;
 
 		    case cmBO:
-				              if (m_iSynFlags & noBO)
-					              Error(ecUNEXPECTED_PARENS, m_iPos, pOprtDef[i]);
-                      
-                      if (m_lastTok.GetCode()==cmFUNC)
-				                m_iSynFlags = noOPT | noEND | noCOMMA | noPOSTOP | noASSIGN;
-                      else
-				                m_iSynFlags = noBC | noOPT | noEND | noCOMMA | noPOSTOP | noASSIGN;
+              if (m_iSynFlags & noBO)
+	              Error(ecUNEXPECTED_PARENS, m_iPos, pOprtDef[i]);
+              
+              if (m_lastTok.GetCode()==cmFUNC)
+                m_iSynFlags = noOPT | noEND | noARG_SEP | noPOSTOP | noASSIGN;
+              else
+                m_iSynFlags = noBC | noOPT | noEND | noARG_SEP | noPOSTOP | noASSIGN;
 
-                      ++m_iBrackets;
-				              break;
+              ++m_iBrackets;
+              break;
 
 		    case cmBC:
-				              if (m_iSynFlags & noBC)
-					              Error(ecUNEXPECTED_PARENS, m_iPos, pOprtDef[i]);
+              if (m_iSynFlags & noBC)
+                Error(ecUNEXPECTED_PARENS, m_iPos, pOprtDef[i]);
 
-				              m_iSynFlags  = noBO | noVAR | noVAL | noFUN | noINFIXOP | noSTR | noASSIGN;
+              m_iSynFlags  = noBO | noVAR | noVAL | noFUN | noINFIXOP | noSTR | noASSIGN;
 
-                      if (--m_iBrackets<0)
-                        Error(ecUNEXPECTED_PARENS, m_iPos, pOprtDef[i]);
-                      break;
+              if (--m_iBrackets<0)
+                Error(ecUNEXPECTED_PARENS, m_iPos, pOprtDef[i]);
+              break;
       	
 		    default:      // The operator is listed in c_DefaultOprt, but not here. This is a bad thing...
-                      Error(ecINTERNAL_ERROR);
+              Error(ecINTERNAL_ERROR);
 	      } // switch operator id
 
         m_iPos += (int)len;
@@ -445,6 +416,30 @@ namespace mu
 	    } // if operator string found
     } // end of for all operator strings
   
+    return false;
+  }
+
+  //---------------------------------------------------------------------------
+  bool ParserTokenReader::IsArgSep(token_type &a_Tok)
+  {
+    const char_type* szFormula = m_strFormula.c_str();
+
+    if (szFormula[m_iPos]==m_cArgSep)
+    {
+      // copy the separator into null terminated string
+      char_type szSep[2];
+      szSep[0] = m_cArgSep;
+      szSep[1] = 0;
+
+      if (m_iSynFlags & noARG_SEP)
+        Error(ecUNEXPECTED_ARG_SEP, m_iPos, szSep);
+
+      m_iSynFlags  = noBC | noOPT | noEND | noARG_SEP | noPOSTOP | noASSIGN;
+      m_iPos++;
+      a_Tok.Set(cmARG_SEP, szSep);
+      return true;
+    }
+
     return false;
   }
 
@@ -560,7 +555,7 @@ namespace mu
     }
 
     m_iPos = (int)iEnd;
-    m_iSynFlags  = noBC | noOPT | noCOMMA | noPOSTOP | noEND | noBC | noASSIGN;
+    m_iSynFlags  = noBC | noOPT | noARG_SEP | noPOSTOP | noEND | noBC | noASSIGN;
     return true;
   }
 
@@ -721,7 +716,7 @@ namespace mu
 
     a_Tok.SetString(m_pParser->m_vStringVarBuf[item->second], m_pParser->m_vStringVarBuf.size() );
 
-    m_iSynFlags = m_iSynFlags = noANY ^ ( noBC | noOPT | noEND | noCOMMA);
+    m_iSynFlags = m_iSynFlags = noANY ^ ( noBC | noOPT | noEND | noARG_SEP);
     return true;
   }
 
@@ -813,7 +808,7 @@ namespace mu
     a_Tok.SetString(strTok, m_pParser->m_vStringBuf.size());
 
     m_iPos += (int)strTok.length() + 2 + (int)iSkip;  // +2 wg Anführungszeichen; +iSkip für entfernte escape zeichen
-    m_iSynFlags = m_iSynFlags = noANY ^ ( noCOMMA | noBC | noOPT | noEND );
+    m_iSynFlags = m_iSynFlags = noANY ^ ( noARG_SEP | noBC | noOPT | noEND );
 
     return true;
   }
@@ -833,6 +828,18 @@ namespace mu
                                   const string_type &a_sTok) const
   {
     m_pParser->Error(a_iErrc, a_iPos, a_sTok);
+  }
+
+  //---------------------------------------------------------------------------
+  void ParserTokenReader::SetArgSep(char_type cArgSep)
+  {
+    m_cArgSep = cArgSep;
+  }
+
+  //---------------------------------------------------------------------------
+  char_type ParserTokenReader::GetArgSep() const
+  {
+    return m_cArgSep;
   }
 } // namespace mu
 

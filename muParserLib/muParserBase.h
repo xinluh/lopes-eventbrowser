@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2007 Ingo Berg
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -25,12 +25,14 @@
 #ifndef MU_PARSER_BASE_H
 #define MU_PARSER_BASE_H
 
+//--- Standard includes ------------------------------------------------------------------------
 #include <cmath>
 #include <string>
 #include <iostream>
 #include <map>
 #include <memory>
 
+//--- Parser includes --------------------------------------------------------------------------
 #include "muParserDef.h"
 #include "muParserStack.h"
 #include "muParserTokenReader.h"
@@ -40,10 +42,14 @@
 
 namespace mu
 {
+/** \file
+    \brief This file contains the class definition of the muparser engine.
+*/
 
+//--------------------------------------------------------------------------------------------------
 /** \brief Mathematical expressions parser (base parser engine).
   
-  Version 1.28 (20070624)
+  Version 1.30 (20080413)
 
   This is the implementation of a bytecode based mathematical expressions parser. 
   The formula will be parsed from string and converted into a bytecode. 
@@ -52,21 +58,33 @@ namespace mu
   Complementary to a set of internally implemented functions the parser is able to handle 
   user defined functions and variables. 
 
-  \author (C) 2004-2007 Ingo Berg
+  \author (C) 2004-2008 Ingo Berg
 */
 class ParserBase 
 {
 friend class ParserTokenReader;
 
 private:
-    typedef value_type (ParserBase::*ParseFunction)() const;  
-    typedef ParserToken<value_type, string_type> token_type;
-    typedef std::vector<string_type> stringbuf_type;
-    typedef ParserTokenReader token_reader_type;
 
-    static const char_type *c_DefaultOprt[]; 
+    /** \brief Typedef for the parse functions. 
+    
+      The parse function do the actual work. The parser exchanges
+      the function pointer to the parser function depending on 
+      which state it is in. (i.e. bytecode parser vs. string parser)
+    */
+    typedef value_type (ParserBase::*ParseFunction)() const;  
+
+    /** \brief Type for a vector of strings. */
+    typedef std::vector<string_type> stringbuf_type;
+
+    /** \brief Typedef for the token reader. */
+    typedef ParserTokenReader token_reader_type;
+    
+    /** \brief Type used for parser tokens. */
+    typedef ParserToken<value_type, string_type> token_type;
 
  public:
+
     /** \brief Type of the error class. 
     
       Included for backwards compatibility.
@@ -74,16 +92,10 @@ private:
     typedef ParserError exception_type;
 
     ParserBase(); 
-    ParserBase( const ParserBase &a_Parser );
+    ParserBase(const ParserBase &a_Parser);
     ParserBase& operator=(const ParserBase &a_Parser);
 
-    //---------------------------------------------------------------------------
-    /** \brief Destructor. (trivial) 
-
-        \throw nothrow
-    */
-    virtual ~ParserBase()
-    {}
+    virtual ~ParserBase();
     
     //---------------------------------------------------------------------------
     /** \brief Calculate the result.
@@ -101,7 +113,7 @@ private:
       \return The evaluation result
       \throw ParseException if no Formula is set or in case of any other error related to the formula.
     */
-  	inline value_type Eval() const
+	  inline value_type Eval() const
     {
       return (this->*m_pParseFormula)(); 
     }
@@ -143,7 +155,7 @@ private:
     void DefineInfixOprt(const string_type &a_strName, fun_type1 a_pOprt, int a_iPrec=prINFIX, bool a_bAllowOpt=true);
 
     // Clear user defined variables, constants or functions
-  	void ClearVar();
+	  void ClearVar();
     void ClearFun();
     void ClearConst();
     void ClearInfixOprt();
@@ -157,102 +169,35 @@ private:
     const string_type& GetExpr() const;
     const funmap_type& GetFunDef() const;
 
-    //---------------------------------------------------------------------------
-    /** \brief Return the strings of all Operator identifiers. 
-    
-        GetOprt is a const function returning a pinter to an array of const char pointers.
-        
-        \return Returns a pointer to the c_DefaultOprt array of const char *.
-        \throw nothrow
-    */
-    const char_type ** GetOprtDef() const
-    {
-      return (const char_type **)(&c_DefaultOprt[0]);
-    }
+    const char_type ** GetOprtDef() const;
+    void DefineNameChars(const char_type *a_szCharset);
+    void DefineOprtChars(const char_type *a_szCharset);
+    void DefineInfixOprtChars(const char_type *a_szCharset);
 
-    //---------------------------------------------------------------------------
-    /** \brief Define the set of valid characters to be used in names of
-               functions, variables, constants.
-    */
-    void DefineNameChars(const char_type *a_szCharset)
-    {
-      m_sNameChars = a_szCharset;
-    }
+    const char_type* ValidNameChars() const;
+    const char_type* ValidOprtChars() const;
+    const char_type* ValidInfixOprtChars() const;
 
-    //---------------------------------------------------------------------------
-    /** \brief Define the set of valid characters to be used in names of
-               binary operators and postfix operators.
-    */
-    void DefineOprtChars(const char_type *a_szCharset)
-    {
-      m_sOprtChars = a_szCharset;
-    }
+    void SetArgSep(char_type cArgSep);
+    char_type GetArgSep() const;
 
-    //---------------------------------------------------------------------------
-    /** \brief Define the set of valid characters to be used in names of
-               infix operators.
-    */
-    void DefineInfixOprtChars(const char_type *a_szCharset)
-    {
-      m_sInfixOprtChars = a_szCharset;
-    }
-
-    //---------------------------------------------------------------------------
-    /** \brief Virtual function that defines the characters allowed in name identifiers. 
-        \sa #ValidOprtChars, #ValidPrefixOprtChars
-    */ 
-    const char_type* ValidNameChars() const
-    {
-      assert(m_sNameChars.size());
-      return m_sNameChars.c_str();
-    }
-
-    //---------------------------------------------------------------------------
-    /** \brief Virtual function that defines the characters allowed in operator definitions. 
-        \sa #ValidNameChars, #ValidPrefixOprtChars
-    */
-    const char_type* ValidOprtChars() const
-    {
-      assert(m_sOprtChars.size());
-      return m_sOprtChars.c_str();
-    }
-
-    //---------------------------------------------------------------------------
-    /** \brief Virtual function that defines the characters allowed in infix operator definitions.
-        \sa #ValidNameChars, #ValidOprtChars
-    */
-    const char_type* ValidInfixOprtChars() const
-    {
-      assert(m_sInfixOprtChars.size());
-      return m_sInfixOprtChars.c_str();
-    }
-
-    void  Error( EErrorCodes a_iErrc, 
-                 int a_iPos = (int)mu::string_type::npos, 
-                 const string_type &a_strTok = string_type() ) const;
+    void  Error(EErrorCodes a_iErrc, 
+                int a_iPos = (int)mu::string_type::npos, 
+                const string_type &a_strTok = string_type() ) const;
 
  protected:
 	  
-    //---------------------------------------------------------------------------
-    /** \brief Initialize user defined functions. 
-     
-      Calls the virtual functions InitFun(), InitConst() and InitOprt().
-    */
-    void Init()
-    {
-      InitCharSets();
-      InitFun();
-      InitConst();
-      InitOprt();
-    }
+    void Init();
 
-    //---------------------------------------------------------------------------
     virtual void InitCharSets() = 0;
     virtual void InitFun() = 0;
     virtual void InitConst() = 0;
     virtual void InitOprt() = 0; 
 
+    static char_type *c_DefaultOprt[]; 
+
  private:
+
     void Assign(const ParserBase &a_Parser);
     void InitTokenReader();
     void ReInit() const;
@@ -299,8 +244,7 @@ private:
     mutable stringbuf_type  m_vStringBuf; ///< String buffer, used for storing string function arguments
     stringbuf_type  m_vStringVarBuf;
 
-    /** \brief Managed pointer to the token reader object. */
-    std::auto_ptr<token_reader_type> m_pTokenReader; 
+    std::auto_ptr<token_reader_type> m_pTokenReader; ///< Managed pointer to the token reader object.
 
     funmap_type  m_FunDef;        ///< Map of function names and pointers.
     funmap_type  m_PostOprtDef;   ///< Postfix operator callbacks
