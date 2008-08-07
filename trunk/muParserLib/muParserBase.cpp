@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2007 Ingo Berg
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -25,14 +25,20 @@
 
 #include "muParser.h"
 
+//--- Standard includes ------------------------------------------------------------------------
 #include <cassert>
 #include <cmath>
 #include <memory>
 #include <vector>
+#include <deque>
 #include <sstream>
+#include <locale>
 
 using namespace std;
 
+/** \file
+    \brief This file contains the basic implementation of the muparser engine.
+*/
 
 namespace mu
 {
@@ -42,21 +48,20 @@ namespace mu
       When defining custom binary operators with #AddOprt(...) make sure not to choose 
       names conflicting with these definitions. 
   */
-  const char_type* ParserBase::c_DefaultOprt[] = 
+  char_type* ParserBase::c_DefaultOprt[] = 
   { 
-    _T("<="), _T(">="), _T("!="), 
-    _T("=="), _T("<"),  _T(">"), 
-    _T("+"),  _T("-"),  _T("*"), 
-    _T("/"),  _T("^"), _T("and"), 
+    _T("<="), _T(">="),  _T("!="), 
+    _T("=="), _T("<"),   _T(">"), 
+    _T("+"),  _T("-"),   _T("*"), 
+    _T("/"),  _T("^"),   _T("and"), 
     _T("or"), _T("xor"), _T("="), 
-    _T("("), _T(")"), _T(","), 0 
+    _T("("),  _T(")"), 0 
   };
-
 
   //------------------------------------------------------------------------------
   /** \brief Constructor.
-    \param a_szFormula the formula to interpret.
-    \throw ParserException if a_szFormula is null.
+      \param a_szFormula the formula to interpret.
+      \throw ParserException if a_szFormula is null.
   */
   ParserBase::ParserBase()
     :m_pParseFormula(&ParserBase::ParseString)
@@ -81,12 +86,7 @@ namespace mu
     InitTokenReader();
   }
 
-
   //---------------------------------------------------------------------------
-  /** \brief Copy constructor. 
-
-  Implemented by calling Assign(a_Parser)
-  */
   ParserBase::ParserBase(const ParserBase &a_Parser)
     :m_pParseFormula(&ParserBase::ParseString)
     ,m_pCmdCode(0)
@@ -108,6 +108,9 @@ namespace mu
     Assign(a_Parser);
   }
 
+  //---------------------------------------------------------------------------
+  ParserBase::~ParserBase()
+  {}
 
   //---------------------------------------------------------------------------
   /** \brief Assignement operator. 
@@ -122,7 +125,6 @@ namespace mu
     Assign(a_Parser);
     return *this;
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief Copy state of a parser object to this. 
@@ -162,7 +164,6 @@ namespace mu
     m_sInfixOprtChars = a_Parser.m_sInfixOprtChars;
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Initialize the token reader. 
 
@@ -191,20 +192,17 @@ namespace mu
     m_pTokenReader->ReInit();
   }
 
-
   //---------------------------------------------------------------------------
   void ParserBase::AddValIdent(identfun_type a_pCallback)
   {
     m_pTokenReader->AddValIdent(a_pCallback);
   }
 
-
   //---------------------------------------------------------------------------
   void ParserBase::SetVarFactory(facfun_type a_pFactory, void *pUserData)
   {
     m_pTokenReader->SetVarCreator(a_pFactory, pUserData);  
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief Add a function or operator callback to the parser. */
@@ -236,7 +234,6 @@ namespace mu
     ReInit();
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Check if a name contains invalid characters. 
 
@@ -253,7 +250,6 @@ namespace mu
     }
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Set the formula. 
       \param a_strFormula Formula as string_type
@@ -264,6 +260,11 @@ namespace mu
   */
   void ParserBase::SetExpr(const string_type &a_sExpr)
   {
+    // Check locale compatibility
+    std::locale loc;
+    if (m_pTokenReader->GetArgSep()==std::use_facet<numpunct<char_type> >(loc).decimal_point())
+      Error(ecLOCALE);
+
     // <ibg> 20060222: Bugfix for Borland-Kylix:
     // adding a space to the expression will keep Borlands KYLIX from going wild
     // when calling tellg on a stringstream created from the expression after 
@@ -274,29 +275,106 @@ namespace mu
     ReInit();
   }
 
+  //---------------------------------------------------------------------------
+  /** \brief Get the default symbols used for the built in operators. 
+      \sa c_DefaultOprt
+  */
+  const char_type** ParserBase::GetOprtDef() const
+  {
+    return (const char_type **)(&c_DefaultOprt[0]);
+  }
+
+  //---------------------------------------------------------------------------
+  /** \brief Define the set of valid characters to be used in names of
+             functions, variables, constants.
+  */
+  void ParserBase::DefineNameChars(const char_type *a_szCharset)
+  {
+    m_sNameChars = a_szCharset;
+  }
+
+  //---------------------------------------------------------------------------
+  /** \brief Define the set of valid characters to be used in names of
+             binary operators and postfix operators.
+  */
+  void ParserBase::DefineOprtChars(const char_type *a_szCharset)
+  {
+    m_sOprtChars = a_szCharset;
+  }
+
+  //---------------------------------------------------------------------------
+  /** \brief Define the set of valid characters to be used in names of
+             infix operators.
+  */
+  void ParserBase::DefineInfixOprtChars(const char_type *a_szCharset)
+  {
+    m_sInfixOprtChars = a_szCharset;
+  }
+
+  //---------------------------------------------------------------------------
+  /** \brief Virtual function that defines the characters allowed in name identifiers. 
+      \sa #ValidOprtChars, #ValidPrefixOprtChars
+  */ 
+  const char_type* ParserBase::ValidNameChars() const
+  {
+    assert(m_sNameChars.size());
+    return m_sNameChars.c_str();
+  }
+
+  //---------------------------------------------------------------------------
+  /** \brief Virtual function that defines the characters allowed in operator definitions. 
+      \sa #ValidNameChars, #ValidPrefixOprtChars
+  */
+  const char_type* ParserBase::ValidOprtChars() const
+  {
+    assert(m_sOprtChars.size());
+    return m_sOprtChars.c_str();
+  }
+
+  //---------------------------------------------------------------------------
+  /** \brief Virtual function that defines the characters allowed in infix operator definitions.
+      \sa #ValidNameChars, #ValidOprtChars
+  */
+  const char_type* ParserBase::ValidInfixOprtChars() const
+  {
+    assert(m_sInfixOprtChars.size());
+    return m_sInfixOprtChars.c_str();
+  }
 
   //---------------------------------------------------------------------------
   /** \brief Add a user defined operator. 
       \post Will reset the Parser to string parsing mode.
   */
   void ParserBase::DefinePostfixOprt(const string_type &a_sName, 
-                                    fun_type1 a_pFun,
-                                    bool a_bAllowOpt)
+                                     fun_type1 a_pFun,
+                                     bool a_bAllowOpt)
   {
-    AddCallback( a_sName, 
+    AddCallback(a_sName, 
                 ParserCallback(a_pFun, a_bAllowOpt, prPOSTFIX, cmOPRT_POSTFIX),
                 m_PostOprtDef, 
                 ValidOprtChars() );
   }
 
+  //---------------------------------------------------------------------------
+  /** \brief Initialize user defined functions. 
+   
+    Calls the virtual functions InitFun(), InitConst() and InitOprt().
+  */
+  void ParserBase::Init()
+  {
+    InitCharSets();
+    InitFun();
+    InitConst();
+    InitOprt();
+  }
 
   //---------------------------------------------------------------------------
   /** \brief Add a user defined operator. 
       \post Will reset the Parser to string parsing mode.
-      \param a_sName [in] operator Identifier 
-      \param a_pFun [in] Operator callback function
-      \param a_iPrec [in] Operator Precedence (default=prSIGN)
-      \param a_bAllowOpt [in] True if operator is volatile (default=false)
+      \param [in] a_sName  operator Identifier 
+      \param [in] a_pFun  Operator callback function
+      \param [in] a_iPrec  Operator Precedence (default=prSIGN)
+      \param [in] a_bAllowOpt  True if operator is volatile (default=false)
       \sa EPrec
   */
   void ParserBase::DefineInfixOprt(const string_type &a_sName, 
@@ -304,7 +382,7 @@ namespace mu
                                   int a_iPrec, 
                                   bool a_bAllowOpt)
   {
-    AddCallback( a_sName, 
+    AddCallback(a_sName, 
                 ParserCallback(a_pFun, a_bAllowOpt, a_iPrec, cmOPRT_INFIX), 
                 m_InfixOprtDef, 
                 ValidOprtChars() );
@@ -312,15 +390,20 @@ namespace mu
 
 
   //---------------------------------------------------------------------------
+  /** \brief Define a binary operator. 
+      \param [in] a_pFun Pointer to the callback function.
+      \param [in] a_iPrec Precedence of the operator.
+      \param [in] a_bAllowOpt If this is true the operator may be optimized away.
+  */
   void ParserBase::DefineOprt( const string_type &a_sName, 
                                fun_type2 a_pFun, 
                                unsigned a_iPrec, 
                                bool a_bAllowOpt )
   {
     // Check for conflicts with built in operator names
-    for (int i=0; m_bBuiltInOp && i<cmCOMMA; ++i)
+    for (int i=0; m_bBuiltInOp && i<cmARG_SEP; ++i)
       if (a_sName == string_type(c_DefaultOprt[i]))
-        Error(ecBUILTIN_OVERLOAD);
+        Error(ecBUILTIN_OVERLOAD, -1, a_sName);
 
     AddCallback( a_sName, 
                 ParserCallback(a_pFun, a_bAllowOpt, a_iPrec, cmOPRT_BIN), 
@@ -328,8 +411,11 @@ namespace mu
                 ValidOprtChars() );
   }
 
-
   //---------------------------------------------------------------------------
+  /** \brief Define a new string constant.
+      \param [in] a_strName The name of the constant.
+      \param [in] a_strVal the value of the constant. 
+  */
   void ParserBase::DefineStrConst(const string_type &a_strName, const string_type &a_strVal)
   {
     // Test if a constant with that names already exists
@@ -338,18 +424,16 @@ namespace mu
 
     CheckName(a_strName, ValidNameChars());
     
-    // Store variable string in internal buffer
-    m_vStringVarBuf.push_back(a_strVal);
-
-    // bind buffer index to variable name
-    m_StrVarDef[a_strName] = m_vStringBuf.size();
+    m_vStringVarBuf.push_back(a_strVal);           // Store variable string in internal buffer
+    m_StrVarDef[a_strName] = m_vStringBuf.size();  // bind buffer index to variable name
 
     ReInit();
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Add a user defined variable. 
+      \param [in] a_sName the variable name
+      \param [in] a_pVar A pointer to the variable vaule.
       \post Will reset the Parser to string parsing mode.
       \pre [assert] a_fVar!=0
       \throw ParserException in case the name contains invalid signs.
@@ -371,9 +455,10 @@ namespace mu
     ReInit();
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Add a user defined constant. 
+      \param [in] a_sName The name of the constant.
+      \param [in] a_fVal the value of the constant.
       \post Will reset the Parser to string parsing mode.
       \throw ParserException in case the name contains invalid signs.
   */
@@ -383,7 +468,6 @@ namespace mu
     m_ConstDef[a_sName] = a_fVal;
     ReInit();
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief Get operator priority.
@@ -395,25 +479,25 @@ namespace mu
     switch (a_Tok.GetCode())
     {
     // built in operators
-    case cmEND:        return -5;
-	  case cmCOMMA:      return -4;
+    case cmEND:      return -5;
+	  case cmARG_SEP:    return -4;
     case cmBO :	
-    case cmBC :        return -2;
-    case cmASSIGN:     return -1;               
+    case cmBC :      return -2;
+    case cmASSIGN:   return -1;               
     case cmAND:
     case cmXOR:
-    case cmOR:         return  prLOGIC;  
-    case cmLT :
-    case cmGT :
-    case cmLE :
-    case cmGE :
+    case cmOR:       return  prLOGIC;  
+    case cmLT:
+    case cmGT:
+    case cmLE:
+    case cmGE:
     case cmNEQ:
-    case cmEQ :        return  prCMP; 
+    case cmEQ:       return  prCMP; 
     case cmADD:
-    case cmSUB:        return  prADD_SUB;
+    case cmSUB:      return  prADD_SUB;
     case cmMUL:
-    case cmDIV:        return  prMUL_DIV;
-    case cmPOW:        return  prPOW;
+    case cmDIV:      return  prMUL_DIV;
+    case cmPOW:      return  prPOW;
 
     // user defined binary operators
     case cmOPRT_INFIX: 
@@ -422,7 +506,6 @@ namespace mu
               return 999;
     }  
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief Return a map containing the used variables only. */
@@ -448,7 +531,6 @@ namespace mu
     return m_pTokenReader->GetUsedVar();
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Return a map containing the used variables only. */
   const varmap_type& ParserBase::GetVar() const
@@ -456,14 +538,12 @@ namespace mu
     return m_VarDef;
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Return a map containing all parser constants. */
   const valmap_type& ParserBase::GetConst() const
   {
     return m_ConstDef;
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief Return prototypes of all parser functions.
@@ -481,7 +561,6 @@ namespace mu
     return m_FunDef;
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Retrieve the formula. */
   const string_type& ParserBase::GetExpr() const
@@ -489,10 +568,9 @@ namespace mu
     return m_pTokenReader->GetFormula();
   }
 
-
   //---------------------------------------------------------------------------
-  ParserBase::token_type ParserBase::ApplyNumFunc( const token_type &a_FunTok,
-                                                   const std::vector<token_type> &a_vArg) const
+  ParserBase::token_type ParserBase::ApplyNumFunc(const token_type &a_FunTok,
+                                                  const std::vector<token_type> &a_vArg) const
   {
     token_type  valTok;
     int  iArgCount = (unsigned)a_vArg.size();
@@ -504,15 +582,14 @@ namespace mu
     {
       case -1:
             // Function with variable argument count
- 		        // copy arguments into a vector<value_type>
+ 		        // copy arguments into a vector<value_type> 
 	          {
               if (iArgCount==0)
                 Error(ecTOO_FEW_PARAMS, m_pTokenReader->GetPos(), a_FunTok.GetAsString());
 
-              /** \todo remove the unnecessary argument vector by changing order in stArg. */
-              std::vector<value_type> vArg;
+              std::vector<value_type> vArg(iArgCount);
 		          for (int i=0; i<iArgCount; ++i)
-		            vArg.push_back(a_vArg[i].GetVal());
+		            vArg[iArgCount-(i+1)] = a_vArg[i].GetVal();
 
               valTok.SetVal( ((multfun_type)a_FunTok.GetFuncAddr())(&vArg[0], (int)vArg.size()) );  
 	          }
@@ -575,7 +652,6 @@ namespace mu
   #endif
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Execute a function that takes a single string argument.
       \param a_FunTok Function token.
@@ -628,7 +704,6 @@ namespace mu
     
     return valTok;
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief Apply a function token. 
@@ -704,7 +779,6 @@ namespace mu
       a_stVal.push( token );
     }
   }
-
 
   //---------------------------------------------------------------------------
   void ParserBase::ApplyBinOprt( ParserStack<token_type> &a_stOpt,
@@ -797,7 +871,6 @@ namespace mu
       a_stVal.push( resTok );
     }
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief Parse the command code.
@@ -935,7 +1008,6 @@ namespace mu
   #endif
   }
 
-
   //---------------------------------------------------------------------------
   /** \brief Return result for constant functions.
 
@@ -947,7 +1019,6 @@ namespace mu
   {
     return *(value_type*)(&m_pCmdCode[2]);
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief One of the two main parse functions.
@@ -984,7 +1055,7 @@ namespace mu
         // Next three are different kind of value entries
         //
         case cmSTRING:
-                opt.SetIdx((int)m_vStringBuf.size()); // Assign buffer index to token 
+                opt.SetIdx((int)m_vStringBuf.size());      // Assign buffer index to token 
                 stVal.push(opt);
 		            m_vStringBuf.push_back(opt.GetAsString()); // Store string in internal buffer
                 break;
@@ -999,9 +1070,9 @@ namespace mu
                 m_vByteCode.AddVal( opt.GetVal() );
                 break;
 
-        case cmCOMMA:
+        case cmARG_SEP:
                 if (stArgCount.empty())
-                  Error(ecUNEXPECTED_COMMA, m_pTokenReader->GetPos());
+                  Error(ecUNEXPECTED_ARG_SEP, m_pTokenReader->GetPos());
 
                 ++stArgCount.top();
                 // fall through...
@@ -1146,7 +1217,15 @@ namespace mu
 
     if (m_bUseByteCode)
     {
-      m_pParseFormula = (m_pCmdCode[1]==cmVAL && m_pCmdCode[6]==cmEND) ? 
+      // (n is a double requires if it is stored in the bytecode)
+      // pos 0:      stack index must be 0 for the final result
+      // pos 1:      code signaling the next entry is a value (cmVal==20)
+      // pos 2..2+n: the final result
+      // pos 2+n+1:  the bytecode end marker
+      // 
+      // Check if the bytecode contains only a single constant, if so parsing is no longer necessary.
+      std::size_t checkEnd = 2 + m_vByteCode.GetValSize();  // 
+      m_pParseFormula = (m_pCmdCode[1]==cmVAL && checkEnd<m_vByteCode.GetBufSize() && m_pCmdCode[checkEnd]==cmEND) ? 
                               &ParserBase::ParseValue :
                               &ParserBase::ParseCmdCode;
     }
@@ -1157,7 +1236,6 @@ namespace mu
     #pragma warning( default : 4311 )
   #endif
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief Create an error containing the parse error position.
@@ -1175,7 +1253,6 @@ namespace mu
     throw exception_type(a_iErrc, a_sTok, m_pTokenReader->GetFormula(), a_iPos);
   }
 
-
   //------------------------------------------------------------------------------
   /** \brief Clear all user defined variables.
       \throw nothrow
@@ -1187,7 +1264,6 @@ namespace mu
     m_VarDef.clear();
     ReInit();
   }
-
 
   //------------------------------------------------------------------------------
   /** \brief Remove a variable from internal storage.
@@ -1205,7 +1281,6 @@ namespace mu
     }
   }
 
-
   //------------------------------------------------------------------------------
   /** \brief Clear the formula. 
       \post Resets the parser to string parsing mode.
@@ -1221,7 +1296,6 @@ namespace mu
     ReInit();
   }
 
-
   //------------------------------------------------------------------------------
   /** \brief Clear all functions.
       \post Resets the parser to string parsing mode.
@@ -1232,7 +1306,6 @@ namespace mu
     m_FunDef.clear();
     ReInit();
   }
-
 
   //------------------------------------------------------------------------------
   /** \brief Clear all user defined constants.
@@ -1248,7 +1321,6 @@ namespace mu
     ReInit();
   }
 
-
   //------------------------------------------------------------------------------
   /** \brief Clear all user defined postfix operators.
       \post Resets the parser to string parsing mode.
@@ -1259,7 +1331,6 @@ namespace mu
     m_PostOprtDef.clear();
     ReInit();
   }
-
 
   //------------------------------------------------------------------------------
   /** \brief Clear all user defined binary operators.
@@ -1272,7 +1343,6 @@ namespace mu
     ReInit();
   }
 
-
   //------------------------------------------------------------------------------
   /** \brief Clear the user defined Prefix operators. 
       \post Resets the parser to string parser mode.
@@ -1284,7 +1354,6 @@ namespace mu
     ReInit();
   }
 
-
   //------------------------------------------------------------------------------
   /** \brief Enable or disable the formula optimization feature. 
       \post Resets the parser to string parser mode.
@@ -1295,7 +1364,6 @@ namespace mu
     m_bOptimize = a_bIsOn;
     ReInit();
   }
-
 
   //------------------------------------------------------------------------------
   /** \brief Enable or disable parsing from Bytecode. 
@@ -1309,7 +1377,6 @@ namespace mu
     if (!a_bIsOn)
       ReInit();
   }
-
 
   //------------------------------------------------------------------------------
   /** \brief Enable or disable the built in binary operators.
@@ -1327,7 +1394,6 @@ namespace mu
     ReInit();
   }
 
-
   //------------------------------------------------------------------------------
   /** \brief Query status of built in variables.
       \return #m_bBuiltInOp; true if built in operators are enabled.
@@ -1338,6 +1404,22 @@ namespace mu
     return m_bBuiltInOp;
   }
 
+  //------------------------------------------------------------------------------
+  /** \brief Get the argument separator character. 
+  */
+  char_type ParserBase::GetArgSep() const
+  {
+    return m_pTokenReader->GetArgSep();
+  }
+
+  //------------------------------------------------------------------------------
+  /** \brief Set argument separator. 
+      \param cArgSep the argument separator character.
+  */
+  void ParserBase::SetArgSep(char_type cArgSep)
+  {
+    m_pTokenReader->SetArgSep(cArgSep);
+  }
 
 #if defined(MUP_DUMP_STACK) | defined(MUP_DUMP_CMDCODE)
   //------------------------------------------------------------------------------

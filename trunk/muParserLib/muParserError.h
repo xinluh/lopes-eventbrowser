@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2006 Ingo Berg
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -35,6 +35,9 @@
 
 #include "muParserDef.h"
 
+/** \file 
+    \brief This file defines the error class used by the parser.
+*/
 
 namespace mu
 {
@@ -46,7 +49,7 @@ enum EErrorCodes
   ecUNEXPECTED_OPERATOR = 0,  ///< Unexpected binary operator found
   ecUNASSIGNABLE_TOKEN  = 1,  ///< Token cant be identified.
   ecUNEXPECTED_EOF      = 2,  ///< Unexpected end of formula. (Example: "2+sin(")
-  ecUNEXPECTED_COMMA    = 3,  ///< An unexpected comma has been found. (Example: "1,23")
+  ecUNEXPECTED_ARG_SEP  = 3,  ///< An unexpected comma has been found. (Example: "1,23")
   ecUNEXPECTED_ARG      = 4,  ///< An unexpected argument has been found
   ecUNEXPECTED_VAL      = 5,  ///< An unexpected value token has been found
   ecUNEXPECTED_VAR      = 6,  ///< An unexpected variable token has been found
@@ -74,9 +77,10 @@ enum EErrorCodes
   ecDOMAIN_ERROR        = 25, ///< catch division by zero, sqrt(-1), log(0) (currently unused)
   ecDIV_BY_ZERO         = 26, ///< Division by zero (currently unused)
   ecGENERIC             = 27, ///< Generic error
+  ecLOCALE              = 28, ///< Conflict with current locale
 
   // internal errors
-  ecINTERNAL_ERROR      = 28, ///< Internal error of any kind.
+  ecINTERNAL_ERROR      = 29, ///< Internal error of any kind.
 
   // The last two are special entries 
   ecCOUNT,                    ///< This is no error code, It just stores just the total number of error codes
@@ -84,6 +88,8 @@ enum EErrorCodes
 };
 
 //---------------------------------------------------------------------------
+/** \brief A class that handles the error messages.
+*/
 class ParserErrorMsg
 {
 public:
@@ -99,8 +105,8 @@ public:
     string_type operator[](unsigned a_iIdx) const;
 
 private:
-    std::vector<string_type>  m_vErrMsg;
-    static const self_type m_Instance;
+    std::vector<string_type>  m_vErrMsg;  ///< A vector with the predefined error messages
+    static const self_type m_Instance;    ///< The instance pointer
 };
 
 //---------------------------------------------------------------------------

@@ -5,7 +5,7 @@
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2007 Ingo Berg
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -35,26 +35,23 @@
 #include "muParserError.h"
 #include "muParserToken.h"
 
+/** \file
+    \brief Implementation of the parser bytecode class.
+*/
+
 
 namespace mu
 {
-
   //---------------------------------------------------------------------------
-  /** \brief Bytecode default constructor. 
-     
-      \pre [assert] sizeof(value_type)>=sizeof(map_type)
-      \pre [assert] sizeof(value_type*)>=sizeof(map_type)
-  */
+  /** Bytecode default constructor. */
   ParserByteCode::ParserByteCode()
     :m_iStackPos(0)
     ,m_vBase()
-    ,mc_iSizeVal( sizeof(value_type) / sizeof(map_type) )
-    ,mc_iSizePtr( std::max( (int)sizeof(value_type*) / 
-                            (int)sizeof(map_type), 1 ) )
+    ,mc_iSizeVal( std::max( (int)sizeof(value_type)  / (int)sizeof(map_type), 1 ) )
+    ,mc_iSizePtr( std::max( (int)sizeof(value_type*) / (int)sizeof(map_type), 1 ) )
     ,mc_iSizeValEntry( 2 + mc_iSizeVal)
   {
     m_vBase.reserve(1000);
-    assert( sizeof(value_type)>=sizeof(map_type) );
   }
 
   //---------------------------------------------------------------------------
@@ -148,10 +145,10 @@ namespace mu
 
     StorePtr(a_pVar);
 
-    int iSize = GetValSize()-GetPtrSize();
+    const int iSize = mc_iSizeVal - mc_iSizePtr;
     assert(iSize>=0);
 
-    // Make sure variable entries have the same size like value entries.
+    // Make sure variable entries have the same size as value entries.
     // (necessary for optimization; fill with zeros)
     for (int i=0; i<iSize; ++i)
       m_vBase.push_back(0);
@@ -264,10 +261,9 @@ namespace mu
   */
   void ParserByteCode::Finalize()
   {
-    // yes we need the end code three times!! (I forgot why)
     m_vBase.push_back(cmEND);	
     m_vBase.push_back(cmEND);	
-    m_vBase.push_back(cmEND);	
+//    m_vBase.push_back(cmEND);	
 
     // shrink bytecode vector to fit
     storage_type(m_vBase).swap(m_vBase);
@@ -279,6 +275,12 @@ namespace mu
   {
     assert(m_vBase.size());
     return &m_vBase[0];
+  }
+
+  //---------------------------------------------------------------------------
+  std::size_t ParserByteCode::GetBufSize() const
+  {
+    return m_vBase.size();
   }
 
   //---------------------------------------------------------------------------
@@ -330,7 +332,7 @@ namespace mu
 
     while ( i<(int)m_vBase.size() && m_vBase[i] != cmEND)
     {
-      std::cout << "IDX[" << m_vBase[i++] << "]\t";
+      std::cout << "IDX[" << (int)m_vBase[i++] << "]\t";
       switch (m_vBase[i])
       {
         case cmVAL: std::cout << "VAL "; ++i;
@@ -349,15 +351,15 @@ namespace mu
       			
         case cmFUNC:
                     std::cout << "CALL\t"; ++i;
-                    std::cout << "[ARG:" << std::dec << m_vBase[i] << "]"; ++i;
+                    std::cout << "[ARG:" << std::dec << (int)m_vBase[i] << "]"; ++i;
 	                  std::cout << "[ADDR: 0x" << std::hex << *(value_type**)&m_vBase[i] << "]\n"; 
                     i += mc_iSizePtr;
                     break;
 
         case cmFUNC_STR:
                     std::cout << "CALL STRFUNC\t"; ++i;
-                    std::cout << "[ARG:" << std::dec << m_vBase[i] << "]"; ++i;
-                    std::cout << "[IDX:" << std::dec << m_vBase[i] << "]"; ++i;
+                    std::cout << "[ARG:" << std::dec << (int)m_vBase[i] << "]"; ++i;
+                    std::cout << "[IDX:" << std::dec << (int)m_vBase[i] << "]"; ++i;
                     std::cout << "[ADDR: 0x" << *(value_type**)&m_vBase[i] << "]\n"; 
                     i += mc_iSizePtr;
                     break;
@@ -383,7 +385,7 @@ namespace mu
                     i += mc_iSizePtr;
                     break; 
 
-        default:    std::cout << "(unknown code: " << m_vBase[i] << ")\n"; 
+        default:    std::cout << "(unknown code: " << (int)m_vBase[i] << ")\n"; 
                     ++i;	
                     break;
       } // switch cmdCode

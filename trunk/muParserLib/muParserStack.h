@@ -34,25 +34,30 @@
 #include "muParserError.h"
 #include "muParserToken.h"
 
+/** \file 
+    \brief This file defines the stack used by muparser.
+*/
 
 namespace mu
 {
 
   /** \brief Parser stack implementation. 
 
-  Stack implementation based on a std::stack. The behaviour of pop() had been
-  slightly changed in order to get an error code if the stack is empty.
-  The stack is used within the Parser both as a value stack and as an operator stack.
+      Stack implementation based on a std::stack. The behaviour of pop() had been
+      slightly changed in order to get an error code if the stack is empty.
+      The stack is used within the Parser both as a value stack and as an operator stack.
 
-  \author (C) 2004, 2005 Ingo Berg 
+      \author (C) 2004-2008 Ingo Berg 
   */
   template <typename TValueType>
   class ParserStack 
   {
     private:
+
       /** \brief Type of the underlying stack implementation. */
       typedef std::stack<TValueType, std::vector<TValueType> > impl_type;
-      impl_type m_Stack;
+      
+      impl_type m_Stack;  ///< This is the actual stack.
 
     public:	
   	 

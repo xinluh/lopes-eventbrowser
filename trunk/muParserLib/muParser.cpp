@@ -1,11 +1,12 @@
-/*
+/* 
                  __________                                      
     _____   __ __\______   \_____  _______  ______  ____ _______ 
    /     \ |  |  \|     ___/\__  \ \_  __ \/  ___/_/ __ \\_  __ \
   |  Y Y  \|  |  /|    |     / __ \_|  | \/\___ \ \  ___/ |  | \/
   |__|_|  /|____/ |____|    (____  /|__|  /____  > \___  >|__|   
         \/                       \/            \/      \/        
-  Copyright (C) 2004-2006 Ingo Berg
+
+  Copyright (C) 2004-2008 Ingo Berg
 
   Permission is hereby granted, free of charge, to any person obtaining a copy of this 
   software and associated documentation files (the "Software"), to deal in the Software
@@ -24,6 +25,7 @@
 */
 #include "muParser.h"
 
+//--- Standard includes ------------------------------------------------------------------------
 #include <cmath>
 #include <algorithm>
 #include <numeric>
@@ -36,10 +38,16 @@
 
 using namespace std;
 
+/** \file
+    \brief Implementation of the standard floating point parser.
+*/
+
 
 /** \brief Namespace for mathematical applications. */
 namespace mu
 {
+  std::locale Parser::s_locale = std::locale("C");
+  
   //---------------------------------------------------------------------------
   // Trigonometric function
   value_type Parser::Sin(value_type v)   { return sin(v);  }
@@ -70,16 +78,32 @@ namespace mu
   value_type Parser::Sign(value_type v) { return (value_type)((v<0) ? -1 : (v>0) ? 1 : 0); }
 
   //---------------------------------------------------------------------------
-  // Conditional (if then else)
-  value_type Parser::Ite(value_type v1, value_type v2, value_type v3) { return (v1==1) ? v2 : v3; }
+  /** \brief Conditional (if then else).
+      \param v1 Condition
+      \param v2 First value
+      \param v3 Second value
+      \return v2 if v1!=0 v3 otherwise.
+  */
+  value_type Parser::Ite(value_type v1, value_type v2, value_type v3) 
+  { 
+    return (v1) ? v2 : v3; 
+  }
 
   //---------------------------------------------------------------------------
-  // Unary operator Callbacks: Infix operators
-  value_type Parser::UnaryMinus(value_type v) { return -v; }
+  /** \brief Callback for the unary minus operator.
+      \param v The value to negate
+      \return -v
+  */
+  value_type Parser::UnaryMinus(value_type v) 
+  { 
+    return -v; 
+  }
 
   //---------------------------------------------------------------------------
-  // Functions with variable number of arguments
-  // sum
+  /** \brief Callback for adding multiple values. 
+      \param [in] a_afArg Vector with the function arguments
+      \param [in] a_iArgc The size of a_afArg
+  */
   value_type Parser::Sum(const value_type *a_afArg, int a_iArgc)
   { 
     if (!a_iArgc)	
@@ -91,7 +115,10 @@ namespace mu
   }
 
   //---------------------------------------------------------------------------
-  // mean value
+  /** \brief Callback for averaging multiple values. 
+      \param [in] a_afArg Vector with the function arguments
+      \param [in] a_iArgc The size of a_afArg
+  */
   value_type Parser::Avg(const value_type *a_afArg, int a_iArgc)
   { 
     if (!a_iArgc)	
@@ -104,7 +131,10 @@ namespace mu
 
 
   //---------------------------------------------------------------------------
-  // minimum
+  /** \brief Callback for determining the minimum value out of a vector. 
+      \param [in] a_afArg Vector with the function arguments
+      \param [in] a_iArgc The size of a_afArg
+  */
   value_type Parser::Min(const value_type *a_afArg, int a_iArgc)
   { 
       if (!a_iArgc)	
@@ -118,7 +148,10 @@ namespace mu
 
 
   //---------------------------------------------------------------------------
-  // maximum
+  /** \brief Callback for determining the maximum value out of a vector. 
+      \param [in] a_afArg Vector with the function arguments
+      \param [in] a_iArgc The size of a_afArg
+  */
   value_type Parser::Max(const value_type *a_afArg, int a_iArgc)
   { 
       if (!a_iArgc)	
@@ -132,25 +165,35 @@ namespace mu
 
 
   //---------------------------------------------------------------------------
-  // Default value recognition callback
+  /** \brief Default value recognition callback. 
+      \param [in] a_szExpr Pointer to the expression
+      \param [in, out] a_iPos Pointer to an index storing the current position within the expression
+      \param [out] a_fVal Pointer where the value should be stored in case one is found.
+      \return 1 if a value was found 0 otherwise.
+  */
   int Parser::IsVal(const char_type* a_szExpr, int *a_iPos, value_type *a_fVal)
   {
     value_type fVal(0);
 
-  // thanks to CodeProject member sailorickm for writing this fix:
-  // http://www.codeproject.com/cpp/FastMathParser.asp?msg=1354598#xx1354598xx
-  // i cant test it myself, if you see problems please contact me.
-  #if defined (__hpux) || (defined __GNUC__ && (__GNUC__ == 3 && (__GNUC_MINOR__ < 3 )))
-    int iEnd = 0;
-    int nAssigned = sscanf(a_szExpr, "%lf%n", &fVal, &iEnd);
-    if (nAssigned == 0)
-    iEnd = -1;
-  #else
+  // 20080309 commented the fix since it is not local aware
+  //
+  //// thanks to CodeProject member sailorickm for writing this fix:
+  //// http://www.codeproject.com/cpp/FastMathParser.asp?msg=1354598#xx1354598xx
+  //// i cant test it myself, if you see problems please contact me.
+  ////
+  //// - 20080309 ibg; support for locales wont work with this fix
+  //#if defined (__hpux) || (defined __GNUC__ && (__GNUC__ == 3 && (__GNUC_MINOR__ < 3 )))
+  //  int iEnd = 0;
+  //  int nAssigned = sscanf(a_szExpr, "%lf%n", &fVal, &iEnd);
+  //  if (nAssigned == 0)
+  //  iEnd = -1;
+  //#else
     stringstream_type stream(a_szExpr);
-    stream.seekg(0); // todo:  check if this really is necessary
+    stream.seekg(0);        // todo:  check if this really is necessary
+    stream.imbue(Parser::s_locale);
     stream >> fVal;
     int iEnd = stream.tellg(); // Position after reading
-  #endif
+  //#endif
 
     if (iEnd==-1)
       return 0;
@@ -168,7 +211,6 @@ namespace mu
   */
   Parser::Parser()
     :ParserBase()
-    ,m_fEpsilon((value_type)1e-7)
   {
     AddValIdent(IsVal);
 
@@ -178,16 +220,19 @@ namespace mu
     InitOprt();
   }
 
-
   //---------------------------------------------------------------------------
-  /** Define the character sets. */
+  /** \brief Define the character sets. 
+      \sa DefineNameChars, DefineOprtChars, DefineInfixOprtChars
+    
+    This function is used for initializing the default character sets that define
+    the characters to be useable in function and variable names and operators.
+  */
   void Parser::InitCharSets()
   {
     DefineNameChars( _T("0123456789_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") );
     DefineOprtChars( _T("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-*^/?<>=#!$%&|~'_") );
     DefineInfixOprtChars( _T("/+-*^?<>=#!$%&|~'_") );
   }
-
 
   //---------------------------------------------------------------------------
   /** \brief Initialize the default functions. */
@@ -228,18 +273,51 @@ namespace mu
     DefineFun(_T("max"), Max);
   }
 
-
   //---------------------------------------------------------------------------
-  /** \brief Initialize operators. */
+  /** \brief Initialize constants.
+  
+    By default the parser recognizes two constants. Pi ("pi") and the eulerian
+    number ("_e").
+  */
   void Parser::InitConst()
   {
     DefineConst(_T("_pi"), (value_type)PARSER_CONST_PI);
     DefineConst(_T("_e"), (value_type)PARSER_CONST_E);
   }
 
+  //---------------------------------------------------------------------------
+  /** \brief Set the decimal separator.
+      \param cDecSep Decimal separator as a character value.
+      \sa SetThousandsSep
+
+      By default muparser uses the "C" locale. The decimal separator of this
+      locale is overwritten by the one provided here.
+  */
+  void Parser::SetDecSep(char_type cDecSep)
+  {
+    char_type cThousandsSep = std::use_facet< change_dec_sep<char_type> >(s_locale).thousands_sep();
+    s_locale = std::locale(std::locale("C"), new change_dec_sep<char_type>(cDecSep, cThousandsSep));
+  }
+  
+  //---------------------------------------------------------------------------
+  /** \brief Sets the thousands operator. 
+      \param cThousandsSep The thousands separator as a character
+      \sa SetDecSep
+
+      By default muparser uses the "C" locale. The thousands separator of this
+      locale is overwritten by the one provided here.
+  */
+  void Parser::SetThousandsSep(char_type cThousandsSep)
+  {
+    char_type cDecSep = std::use_facet< change_dec_sep<char_type> >(s_locale).decimal_point();
+    s_locale = std::locale(std::locale("C"), new change_dec_sep<char_type>(cDecSep, cThousandsSep));
+  }
 
   //---------------------------------------------------------------------------
-  /** \brief Initialize operators. */
+  /** \brief Initialize operators. 
+  
+    By default only the unary minus operator is added.
+  */
   void Parser::InitOprt()
   {
     DefineInfixOprt(_T("-"), UnaryMinus);
@@ -247,20 +325,33 @@ namespace mu
 
 
   //---------------------------------------------------------------------------
-  /** \brief Numerically differentiate with regard to a variable. */
-  value_type Parser::Diff(value_type *a_Var, value_type a_fPos) const
+  /** \brief Numerically differentiate with regard to a variable. 
+      \param [in] a_Var Pointer to the differentiation variable.
+      \param [in] a_fPos Position at which the differentiation should take place.
+      \param [in] a_fEpsilon Epsilon used for the numerical differentiation.
+
+    Numerical differentiation uses a 5 point operator yielding a 4th order 
+    formula. The default value for epsilon is 0.00074 which is
+    numerical_limits<double>::epsilon() ^ (1/5) as suggested in the muparser
+    forum:
+
+    http://sourceforge.net/forum/forum.php?thread_id=1994611&forum_id=462843
+  */
+  value_type Parser::Diff(value_type *a_Var, 
+                          value_type  a_fPos, 
+                          value_type  a_fEpsilon) const
   {
-    assert(m_fEpsilon);
-    value_type fEpsilon( (a_fPos==0) ? (value_type)1e-10 : m_fEpsilon * a_fPos ),
-              fRes(0), fBuf(*a_Var), f[4] = {0,0,0,0};
+    value_type fRes(0), 
+               fBuf(*a_Var), 
+               f[4] = {0,0,0,0};
 
-  *a_Var = a_fPos+2*fEpsilon;  f[0] = Eval();
-  *a_Var = a_fPos+1*fEpsilon;  f[1] = Eval();
-  *a_Var = a_fPos-1*fEpsilon;  f[2] = Eval();
-  *a_Var = a_fPos-2*fEpsilon;  f[3] = Eval();
-  *a_Var = fBuf; // restore variable
+    *a_Var = a_fPos+2 * a_fEpsilon;  f[0] = Eval();
+    *a_Var = a_fPos+1 * a_fEpsilon;  f[1] = Eval();
+    *a_Var = a_fPos-1 * a_fEpsilon;  f[2] = Eval();
+    *a_Var = a_fPos-2 * a_fEpsilon;  f[3] = Eval();
+    *a_Var = fBuf; // restore variable
 
-    fRes = (-f[0] + 8*f[1] - 8*f[2] + f[3]) / (12*fEpsilon);
+    fRes = (-f[0] + 8*f[1] - 8*f[2] + f[3]) / (12*a_fEpsilon);
     return fRes;
   }
 } // namespace mu
