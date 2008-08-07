@@ -68,8 +68,6 @@ struct infoGraph2D : infoGraph
 
      bool virtual readyToDraw()
      {
-        print();
-        
          return (xAxis.length() > 0 && yAxis.length() > 0 && (!useErrors ||
             (useErrors && !xAxis_err.empty() && !yAxis_err.empty())));
      }

@@ -151,8 +151,6 @@ bool atob(const std::string& s)
     return (i == 0)? false : true;
 }
 
-
-    
 void getLines(const string& filename, vector<string>& lines)
 {
     ifstream file(filename.c_str());
