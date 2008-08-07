@@ -27,17 +27,6 @@ void CanvasCollection::removeCanvas(int index)
     canvases.erase(canvases.begin() + index);
 }
 
-// CanvasCollection* CanvasCollection::clone()
-// {
-//     CanvasCollection *c = new CanvasCollection();
-//     c->canvases.resize(canvases.size());
-//     for (int i = 0; i < (int) canvases.size(); ++i)
-//     {
-//         c->canvases[i] = canvases[i];
-//     }
-//     return c;
-// }
-
 void CanvasCollection::print()
 {
     cout << "-----------------------------------" << endl;

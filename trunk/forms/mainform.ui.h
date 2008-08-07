@@ -67,7 +67,6 @@ vector<int> tabIds;
 vector<QListViewItem*> tabNames;
 CanvasCollection* canvases = new CanvasCollection();
 
-bool multiGraphCont = false;
 bool isInitialized = false;
 bool isDrawingInNewTab = false; // keep track of when is drawing in new tab so
                                 // that the old tab's information is not
@@ -149,7 +148,11 @@ void MainForm::importCanvases()
         return;
     }
     else
+    {
         loadCanvasCollection(cc);
+        QMessageBox::information(this,"Success",QString("%1 canvas(es) is "
+                                 "loaded").arg(cc->size()));
+    }
 }
 
 void MainForm::exportCanvases()
@@ -168,6 +171,8 @@ void MainForm::loadCanvasCollection(CanvasCollection* cc)
 {
     if (!cc) return;
     removeAllTabs();
+    ckbMultiGraph->setChecked(false);
+    ckbNewTab->setChecked(false);
 
     canvases = cc;
 
@@ -395,8 +400,9 @@ void MainForm::selectTab( QListViewItem * sel)
 {
     if (!isDrawingInNewTab)
         saveToCanvas();
-    
-    multiGraphCont = false; // make sure that a new graph with axis is started
+
+    // make sure that a new graph with axis is started
+    ckbMultiGraph->setChecked(false); 
     
     int index = (sel)? getTabIndex(sel) : getTabIndex();
     int id;
@@ -704,6 +710,8 @@ void MainForm::setMultigraphStatus( bool state )
 
 void MainForm::saveEventCut()
 {
+    if (txtEventCut->text().isEmpty()) return;
+    
     cmbEventCuts->insertItem(txtEventCut->text());
     appendLine(EVENTCUTS_FILE, txtEventCut->text());
 }
