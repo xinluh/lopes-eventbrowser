@@ -4,7 +4,7 @@
 
 using namespace std;
 
-char * Canvas::graphTypeDescriptions[] =
+const char * Canvas::graphTypeDescriptions[] =
     {
         "2D Graph",
         "Shower Angles",
