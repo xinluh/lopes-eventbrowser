@@ -55,7 +55,7 @@ public:
     void draw(Draw* d);
     
  private:
-    static char * graphTypeDescriptions[];
+    static const char * graphTypeDescriptions[];
 
     graphTypes type;
     infoGraph* graphInfo;
