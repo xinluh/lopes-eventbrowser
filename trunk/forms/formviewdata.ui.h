@@ -80,7 +80,7 @@ void formViewData::setColumnNames()
 }
 
 
-int callback_fetchData(void* obj,int index, vector<string> values,long)
+int callback_fetchData(void* obj,int& index, vector<string>& values,long&)
 {
     QTable* table = (QTable*) obj;
     int row = table->numRows();

@@ -99,7 +99,7 @@ void Draw::drawGrandeCoordinates()
 
 
 //callback function for ReadRootTree class
-int getValue_2DTGraphErrors(void* obj,int index,vector<float> values, long)
+int getValue_2DTGraphErrors(void* obj,int& index,vector<float>& values, long&)
 {
     TGraphErrors * g = (TGraphErrors  * ) obj;
 
@@ -143,7 +143,7 @@ void Draw::draw2DGraph(const string& x,const string& y,
     canvas->Update();
 }
 
-int getValue_PolarGraphErrors(void* obj,int index,vector<float> values, long)
+int getValue_PolarGraphErrors(void* obj,int& index,vector<float>& values, long&)
 {
     TGraphPolar* g = (TGraphPolar*) obj;
 
@@ -188,15 +188,15 @@ void Draw::drawPolarGraph(const string& r, const string& theta,
     canvas->Update();
 }
 
-int getValue_ShowerAngles(void* obj,int index,vector<float> values, long)
+int getValue_ShowerAngles(void* obj,int& index,vector<float>& values, long&)
 {
     TGraphPolar * g = (TGraphPolar*) obj;
     g->SetPoint(index,values[1],values[0]);
     return 0;
 }
 
-int getValue_ShowerAngles2(void* obj,int index,vector<float> values,
-                            long total_n)
+int getValue_ShowerAngles2(void* obj,int& index,vector<float>& values,
+                            long& total_n)
 {
     float theta = values[1],
           r = values[0]/50,  //need to scale the r value; 50 is the max on
