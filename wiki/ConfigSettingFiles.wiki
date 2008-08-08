@@ -1,7 +1,7 @@
 #summary Describes the config/settings file used by the program.
 #labels Phase-Design
 
-=Canvas definition file=
+=Canvas definition file (see sample_canvases.cfg)=
 This file contains definitions of the canvas; for example, when the user draws a 2D graph, the definition of that canvas will contains the mathematical expressions for the x-axis, y-axis, and the respective errors. This kind of file is created when the user choose "File -> Export canvases" from the main dialog, and its information can be imported when user choose "File -> Import canvases" from the main dialog.
 
 An example file is shown below:

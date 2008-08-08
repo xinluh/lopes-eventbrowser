@@ -1,0 +1,6 @@
+This folders contains images used for wiki pages. The PNG are original
+screenshots, and the gif are the thumbnails. The gif are generated using
+command:
+
+mogrify -format gif -size 1000x360 -auto-orient -thumbnail 500x130 -unsharp 0x.5  '*.png'
+
