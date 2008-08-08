@@ -77,17 +77,17 @@ class ReadRootTree
     // for each event in the root tree, this function will call the callback
     // function as given in parameter; obj will be pass unmodified to the
     // callback function;
-    int fillValues(int (*callback)(void* obj,int index,
-                                   std::vector<float> values,
-                                   long total_n),
+    int fillValues(int (*callback)(void* obj,int& index,
+                                   std::vector<float>& values,
+                                   long& total_n),
                    void* obj, std::vector<std::string> expressions);
     
     // same as fillValues except it gives strings as output for display
     // purposes also can handle int (hopefully!) unlike fillValues, which
     // handels only float
-    int fillValues_str(int (*callback_str) (void* obj,int index,
-                                            std::vector<std::string> values,
-                                            long total_n),
+    int fillValues_str(int (*callback_str) (void* obj,int& index,
+                                            std::vector<std::string>& values,
+                                            long& total_n),
                        void* obj, std::vector<std::string> expressions);
     
     int getNumberEntries() {return entries;}

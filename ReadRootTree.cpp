@@ -268,8 +268,8 @@ void ReadRootTree::setEventCut(const char * filter,const char * sort_by,
     
 }
 
-int ReadRootTree::fillValues(int (*callback)(void*,int,vector<float>,
-                                             long total_n ),
+int ReadRootTree::fillValues(int (*callback)(void*,int&,vector<float>&,
+                                             long& total_n ),
                              void* obj,
                              vector<string> expressions)
 {
@@ -278,8 +278,8 @@ int ReadRootTree::fillValues(int (*callback)(void*,int,vector<float>,
     return fillValues_all((void*)callback,CALLBACK_FLOAT,obj,expressions);
 }
 
-int ReadRootTree::fillValues_str(int (*callback)(void*,int,vector<string>,
-                                             long total_n ),
+int ReadRootTree::fillValues_str(int (*callback)(void*,int&,vector<string>&,
+                                             long& total_n ),
                              void* obj,
                              vector<string> expressions)
 {
@@ -306,15 +306,15 @@ int ReadRootTree::fillValues_all(void* callback_func,callback_type type,
     
     ostringstream ss;
     int ret_code;
-    int (*callback)(void*,int,std::vector<float>,long) = 0;
-    int (*callback_str) (void*,int,std::vector<std::string>,long) = 0;
+    int (*callback)(void*,int&,vector<float>&,long&) = 0;
+    int (*callback_str) (void*,int&,vector<string>&,long&) = 0;
 
     // cast the callback function to the correct type
     if (type == CALLBACK_STR)
-        callback_str = (int (*) (void*,int,std::vector<std::string>,long))
+        callback_str = (int (*) (void*,int&,vector<string>&,long&))
                         callback_func;
     else
-        callback = (int (*)(void*,int,std::vector<float>,long)) callback_func;
+        callback = (int (*)(void*,int&,vector<float>&,long&)) callback_func;
 
     // init parsers based on how many needed
     initParsers(expressions.size());
