@@ -4,4 +4,4 @@ _Note: Even though QT is a cross-platform library and there exists ROOT for Wind
 
 First, make sure the external library dependencies are satisfied. The requirements can be found [LibraryDependency here].
 
-Then refer to the [[http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/COMPILE COMPILE] file in the source directory for details.
+Then refer to the [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/COMPILE COMPILE] file in the source directory for details.

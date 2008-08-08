@@ -15,4 +15,4 @@ All UI elements/widgets, except labels which does not show up in the code, are n
   * ckb = checkBox
 
 = Code Formatting =
-The formatting follows the standard c++ code formatting. Lines are kept under 80 characters long for easy reading, and tab (instead of spaces) is used for indenting.
+The formatting follows the standard c++ code formatting. Lines are kept under 80 characters long for easy reading, and spaces (instead of tab) are used for indenting.

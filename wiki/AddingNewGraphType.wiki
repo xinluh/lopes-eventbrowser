@@ -8,7 +8,7 @@ Part of the design goal of this program is that it could be easily extended, and
 ==To begin==
 
  * Test the graph you want first in a c++ macro with the ROOT interpreter.
- * The various steps described below are detailed in the code. Check out the comment in the code that begins with `##` - those are intended to facilitate adding a new graph type.
+ * The various steps described below are detailed in the code. Check out the comment in the code that begins with `##` - those are intended to facilitate adding a new graph type. The text surrounded by underscores like `_text to be replace_` are usually intended to be replaced by appropriate values specific to the new graph you are adding.
 
 ==Step by step==
 
