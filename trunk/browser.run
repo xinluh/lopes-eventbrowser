@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# This shell script sets the enviromental variables linking to a ROOT version
+# with which the eventbrowser is known to work, then runs the eventbrowser. 
+
+OLD_ROOTSYS=$ROOTSYS
+OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+
+ROOTSYS=/users/iklx/huang/root
+PATH=$ROOTSYS/bin:$PATH:$HOME/bin
+LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
+
+echo "Running ROOT from: " $ROOTSYS  
+
+export ROOTSYS PATH LD_LIBRARY_PATH
+
+./browser
+
+ROOTSYS=$OLD_ROOTSYS
+LD_LIBRARY_PATH=$OLD_LD_LIBRARY_PATH
+
+export ROOTSYS LD_LIBRARY_PATH
