@@ -1,11 +1,23 @@
 To compile:
 
 * Make sure that the required libraries are present, and the environmental
-variables ROOTSYS and LD_LIBRARY_PATH contains paths to ROOT 5.18.
+variables ROOTSYS and LD_LIBRARY_PATH contains paths to ROOT 5.18. Typical
+values would be ROOTSYS=/user/local/root and LD_LIBRARY_PATH=/user/local/root/lib.
 
 * Make sure that qmake on the system is from Qt 3; one can check it by typing
-qmake --version.
+qmake --version. If multiple QT verions are present, make sure that instead of
+just typing qmake below, use the full path to the QT 3 version of qmake.
 
 And then simply type:
 
 qmake && make
+
+or 
+
+/path/to/qt3/qmake && make
+
+To start the program after compiling, type
+
+./browser
+
+in the terminal.
