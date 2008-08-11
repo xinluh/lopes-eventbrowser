@@ -484,11 +484,23 @@ void MainForm::loadCanvas(Canvas* c)
                 ((infoGraphPosition*)c->getGraphInfo())->positionType);
             break;
         }
+        case Canvas::HIST_1D:
+        {
+            infoHist1D* i4 = (infoHist1D*) c->getGraphInfo();
+
+            ckbHist1DUseDefault->setChecked(i4->useDefault);
+            txtHist1D_data->setText(i4->data);
+            txtHist1D_xmin->setText(ftos(i4->min));
+            txtHist1D_xmax->setText(ftos(i4->max));
+            txtHist1D_nbins->setText(itos(i4->nbins));
+            break;
+        }
         // ## add the case for new graph type here
         // case Canvas::_your new enum graph type enum name_:
         // {
         //     take the values from the infoGraph struct and fill in the user
         //     interface like above
+        //     break;
         // }
         default:
         {
@@ -553,6 +565,17 @@ void MainForm::saveToCanvas(Canvas* c)
         i3->thetaAxis = txtPolarThetaAxis_2->text().ascii();
         i3->rAxis_err = txtPolarRAxisError->text().ascii();
         i3->thetaAxis_err = txtPolarThetaAxisError->text().ascii();
+    }
+    else if (wgsAction->visibleWidget() == tabHist1D)
+    {
+        c->setGraphType(Canvas::HIST_1D);
+
+        infoHist1D* i4 = (infoHist1D*) c->getGraphInfo();
+        i4->useDefault = ckbHist1DUseDefault->isChecked();
+        i4->data = txtHist1D_data->text().ascii();
+        i4->min = atof(txtHist1D_xmin->text().ascii());
+        i4->max = atof(txtHist1D_xmax->text().ascii());
+        i4->nbins = atoi(txtHist1D_nbins->text().ascii());
     }
 // ## uncomment below to add another graph type ##
 //  else if (wgsAction->visibleWidget() == _the "tab page" widget you created_)
@@ -729,6 +752,7 @@ QWidget* MainForm::findGraphWidget(Canvas::graphTypes type)
         case Canvas::SHOWER_ANGLE:       return tabShowerAngles;
         case Canvas::ANTENNA_POSITION:   return tabPosition;
         case Canvas::GRAPH_POLAR:        return tabGraphPolar;
+        case Canvas::HIST_1D:            return tabHist1D;
        // ## add case for new graph type to return your new "tab" widget; see
        // example above
         default:                         return tabUnknown;

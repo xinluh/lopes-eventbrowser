@@ -79,7 +79,7 @@ struct infoGraph2D : infoGraph
         
         d->draw2DGraph(xAxis,yAxis, x_err,y_err);
 
-        parentCanvas->setName(xAxis + " - " + yAxis);
+        parentCanvas->setName("2DGraph: " + xAxis + " - " + yAxis);
     }
 
 };
@@ -203,6 +203,49 @@ struct infoGraphPosition : infoGraph
     }
 };
 
+struct infoHist1D : infoGraph
+{
+    bool useDefault;
+    string data;
+    float min, max;
+    int nbins; 
+  //  all information for graphing go here; see above for example
+
+  // this function should print information in this struct to a stream;
+  // this is used to save the information to a file and for debugging
+    void print(ostream* s)
+    {
+        if (!s) s = &cout;
+
+        *s << "useDefault"  <<  " = "  << useDefault  << endl;
+        *s << "data"  <<  " = "  << data  << endl;
+        *s << "min"  <<  " = "  << min  << endl;
+        *s << "max"  <<  " = "  << max  << endl;
+        *s << "nbins"  <<  " = "  << nbins  << endl;
+    }
+
+    void enterValue(const string& name, const string& value)
+    {
+        if      (name == "useDefault") useDefault       = atob(value);
+        else if (name == "data"    )   data       = value;
+        else if (name == "min" )       min  = atof(value);
+        else if (name == "max")        max = atof(value);
+        else if (name == "nbins")      nbins = atoi(value);
+
+    }
+
+    bool readyToDraw()
+    {
+        return (data.length() > 0
+                && (useDefault || (!useDefault && max > min && nbins > 0)));
+    }
+  
+    void draw(Draw* d)
+    {
+        d->draw1DHist(data,useDefault,min,max,nbins);
+        parentCanvas->setName("1DHist: " + data);
+    }
+};
 
 // ## uncomment below to add another graph type ## 
 //struct infoGraph_BlahBlah_ : infoGraph
@@ -213,16 +256,17 @@ struct infoGraphPosition : infoGraph
 //  // this is used to save the information to a file and for debugging
 //  void print(ostream* s)
 //  {
+//      if (!s) s = &cout;
+//
+//      *s << "_name-of-param_"  <<  " = "  << _param_  << endl;
+//
 //  }
 //
 //  // this should read a name-value pair of information into the data member
 //  // in this struct; this is used for retrieving previous saved information
 //  // in a file back to the memory
 //  void enterValue(const string& name, const string& value)
-//  { if (!s) s = &cout;
-//
-//      *s << "_name-of-param_"  <<  " = "  << _param_  << endl;
-//
+//  {
 //  }
 //
 //  // tell the rest of the program whether all the information necessary for

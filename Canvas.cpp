@@ -8,7 +8,7 @@ const char * Canvas::graphTypeDescriptions[] =
     {
         "2D Graph",
         "Shower Angles",
-        "Antenna Positions",
+        "Hardware Layout",
         "1D Histogram",
         "Polar Graph"
         // ## add the description for the new graph type in the same order as
@@ -52,7 +52,10 @@ void Canvas::setGraphType (graphTypes graphType)
         case ANTENNA_POSITION:
             graphInfo = new infoGraphPosition();
             break;
-        // ## to add new graph type: case ... see above for example
+        case HIST_1D:
+            graphInfo = new infoHist1D();
+            break;
+        // ## to add case for new graph type: case ... see above for example
         default:
             graphInfo = new infoGraph();
     }

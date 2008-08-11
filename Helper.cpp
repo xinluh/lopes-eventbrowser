@@ -1,6 +1,9 @@
 #include "Helper.h"
 
 #include <fstream>
+#include <string>
+#include <sstream>
+
 
 #ifdef DEBUG
 #include <iostream>
@@ -149,6 +152,32 @@ bool atob(const std::string& s)
 {
     int i = atoi(s.c_str());
     return (i == 0)? false : true;
+}
+
+int atoi(const std::string& s)
+{
+    return atoi(s.c_str());
+}
+
+float atof(const std::string& s)
+{
+    return atof(s.c_str());
+}
+
+string itos(const int i)
+{
+   string s;
+   stringstream out;
+   out << i;
+   return out.str();
+}
+
+string ftos(const float i)
+{
+   string s;
+   stringstream out;
+   out << i;
+   return out.str();
 }
 
 void getLines(const string& filename, vector<string>& lines)

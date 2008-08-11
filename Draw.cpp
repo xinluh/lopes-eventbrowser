@@ -1,4 +1,20 @@
 #include "Draw.h"
+#include "TGraph.h"
+#include "TH1F.h"
+#include "TTree.h"
+#include "TGraphErrors.h"
+#include "TGraphPolar.h"
+#include "TCanvas.h"
+#include "TAxis.h"
+#include "TMarker.h"
+#include "TStyle.h"
+#include "TLegend.h"
+
+#include "ReadRootTree.h"
+#include "global.h"
+
+#include <sstream>
+
 
 #ifdef DEBUG
 #include <iostream>
@@ -176,7 +192,7 @@ void Draw::drawPolarGraph(const string& r, const string& theta,
     g->SetTitle(s.str().c_str());
     
     g->Draw((string(isMultiGraph()? "P" : "AOP")
-            // and if r_err not empty, paint errors (using option "E")
+            // and if r_err not empty, paint errors as well (using option "E")
             + string((r_err != "") ? "E" : "")).c_str()); 
 
     g->SetFillColor(10);
@@ -285,6 +301,37 @@ void Draw::drawShowerAngles(const string& r, const string& theta,
     canvas->Update();
 }
 
+
+int getValue_1DHist(void* obj,int& index,vector<float>& values, long&)
+{
+
+    return 0;
+}
+
+void Draw::draw1DHist(const string& content, bool useDefault,
+                      float min, float max, int nbins)
+{
+    TH1F* hist = NULL;
+
+    string option = content + ">>hist";
+    
+    if (!useDefault)
+    {
+        char buf[1024];
+        sprintf(buf,"(%i,%f,%f)",nbins, min, max);
+        option += string(buf);
+    }
+
+    rootTree->getTTree()->Draw(option.c_str());
+
+    hist = (TH1F*)gPad->GetPrimitive("hist"); 
+
+    if (hist)
+        hist->GetXaxis()->SetTitle(content.c_str());
+    canvas->Update();
+
+}
+
 void Draw::setSourceRootTree(vector<string> root_files, const char * treeName)
 {
     rootTree = new ReadRootTree(root_files,treeName,"branches.cfg");
@@ -326,3 +373,9 @@ void Draw::clearCanvas()
     canvas->Clear();
     canvas->Update();
 }
+
+void Draw::setMultiGraph(bool isMultiGraph)
+{
+    colorMultiGraph = 1;
+    multiGraph = isMultiGraph;
+}	

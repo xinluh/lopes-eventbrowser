@@ -32,6 +32,14 @@ bool parseNameValuePair(const std::string& s,
                         std::string separator = "=");
 // convert string to bool
 bool atob(const std::string& s);
+// convert string to int; wrapper around the standard atoi() for convenience
+int atoi(const std::string& s);
+// convert string to float; wrapper around the standard atof() for convenience
+float atof(const std::string& s);
+// convert int to string
+std::string itos(const int i);
+// convert float to string
+std::string ftos(const float);
 // get all lines from a file into a vector of strings
 void getLines(const std::string& filename, std::vector<std::string>& lines);
 // append a line to a file (will be created if not existent)

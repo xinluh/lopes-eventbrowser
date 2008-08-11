@@ -91,6 +91,7 @@ class ReadRootTree
                        void* obj, std::vector<std::string> expressions);
     
     int getNumberEntries() {return entries;}
+    TTree* getTTree () {return chain;}        
     const std::string getLastMessage() {return message; }
     const std::vector<std::string> getBranchNames() {return branches;}
     const std::string getEventCut() {return *eventCut;}

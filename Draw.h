@@ -1,19 +1,12 @@
 #ifndef _DRAW_H_
 #define _DRAW_H_
-#include "TGraph.h"
-#include "TGraphErrors.h"
-#include "TGraphPolar.h"
-#include "TCanvas.h"
-#include "TAxis.h"
-#include "TMarker.h"
-#include "TStyle.h"
-#include "TLegend.h"
 
-#include "ReadRootTree.h"
-#include "global.h"
+class TCanvas;
+class ReadRootTree;
 
 #include <string>
-#include <sstream>
+#include <vector>
+
 
 class Draw
 {
@@ -31,10 +24,8 @@ public:
 	// subsequent draw will be drawn in a different color on top of the
 	// previous graphs and the exisint axises without erasing the previous
 	// graph
-	bool isMultiGraph() {return multiGraph;	}
-	void setMultiGraph(bool isMultiGraph) { colorMultiGraph = 1;
-	                                        multiGraph = isMultiGraph;}	
-
+	bool isMultiGraph() { return multiGraph; }
+	void setMultiGraph(bool isMultiGraph);
 	void setCanvas(TCanvas * tc); // set the current TCanvas to draw on
 	void setCanvas(TCanvas * tc, int subpadnumber);
 	void setSourceRootTree(std::vector<std::string> root_files,
@@ -53,7 +44,10 @@ public:
                        const std::string& r_err, const std::string& theta_err);
 	void drawShowerAngles(const std::string& r, const std::string& theta,
 								const std::string& colorcode_by);
-	
+    void draw1DHist(const std::string& content, bool useDefault = true,
+                    float min = 0, float max = 0, int nbins = 0);
+
+    
  private:
 	TCanvas *canvas; //the curent canva to draw on
 	int padn; //the subpad number
