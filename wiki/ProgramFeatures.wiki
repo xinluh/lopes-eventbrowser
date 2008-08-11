@@ -1,0 +1,15 @@
+#summary Describes the main features in the program.
+#labels Featured,Phase-Design
+
+= Introduction =
+
+TODO!
+
+= Available graph types =
+
+ * ~~*1D Histogram*: plain normal histogram; one can specify the min and max as well as the bin numbers of the axis.~~
+ * *2D Graph*: The typical x vs. y graph; one can also specify error bars for either or both x and y values (to use error bars for only x or y values, enter `0` for the other error).
+ * *Polar Graph*: The typical polar graph of r vs. theta values; one can also specify errors bars values.
+ * *Shower Angles*: This is a specialized graph which shows the incoming air shower angles in a color coded polar graph. The values for r and theta, as well as the value with which to color, can be specified by the user.
+ * *Hardware Layouts*: plot the positions of either the LOPES antennas or the Grande Stations.
+ * You are welcome to add more! See [AddingNewGraphType here] for a step-by-step HOWTO.
