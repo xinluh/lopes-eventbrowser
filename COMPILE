@@ -16,8 +16,25 @@ or
 
 /path/to/qt3/qmake && make
 
+----------------------------------------------------------------
+
 To start the program after compiling, type
 
 ./browser
 
 in the terminal.
+
+----------------------------------------------------------------
+
+If problems occur, do
+
+rm -rf build
+
+to remove the compiled objects, etc. before recompiling.
+
+----------------------------------------------------------------
+
+Compilation flags:
+
+DEBUG - to print additional useful debugging information in the console.
+TREAT_INTEGER_AS_FLOAT - see explanation in ReadRootTree.cpp
