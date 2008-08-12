@@ -26,8 +26,7 @@ Click OK to proceed.
 
 ===Main Dialog===
 
-[http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/dialog_main.png##
-http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main.gif] (click to enlarge)
+[http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/dialog_main.png## http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main.png] (click to enlarge)
 
 The root files and root trees selected will be opened, and now one is ready for making analysis of the data in the root trees. 
 
@@ -69,8 +68,7 @@ If error bars are desired, check the checkbox "Use Errors" and fill in the appro
 
 Then click "Draw" to plot the graph:
 
-[http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/dialog_main_2dgraph.png##
-http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_2dgraph.png] (click to enlarge)
+[http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/dialog_main_2dgraph.png## http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_2dgraph.png] (click to enlarge)
 
 Notice that the canvas title under the list of canvases is automatically changed to _x-axis_ - _y-axis_. 
 
@@ -87,5 +85,4 @@ The shower angles graph is color coded; the points on the graph is given color i
 
 A sample graph using the parameters in the screenshot above:
 
-[http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/dialog_main_partial_showerangles1.png##
-http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_showerangles1.png] (click to enlarge)
+[http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/dialog_main_partial_showerangles1.png## http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_showerangles1.png] (click to enlarge)
