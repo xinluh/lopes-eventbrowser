@@ -1,0 +1,15 @@
+This package contains the compiled binary for lopes-eventbrowser. A small ROOT
+file test_root_file_tree-ka104ev.root, and some sample config files are also
+included to get you started.
+
+To start, cd to the folder where you unpacked the files, and type 
+
+browser.run
+
+to run the eventbrowser. The browser.run is a shell script that sets the
+enviromental variables to a known working path; you can change it to other
+paths if needed.
+
+For more information and the source codes, visit the page for the project on
+Google Code:
+http://code.google.com/p/lopes-eventbrowser/
