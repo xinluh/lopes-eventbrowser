@@ -9,7 +9,7 @@ TODO!
 
 You are not limited to any of the single options listed below; by checking the option "Draw multiple graphs on the same canvas" in the main dialog, you can combine graphs - for example, to see visually where the incoming showers are relative to the LOPES antennas, you can draw the antennas position then draw the x-position vs. y-position of incoming showers on top of that. 
 
- * ~~*1D Histogram*: plain normal histogram; one can specify the min and max as well as the bin numbers of the axis.~~
+ * *1D Histogram*: plain normal histogram; one can specify the min and max as well as the bin numbers of the axis.
  * *2D Graph*: The typical x vs. y graph; one can also specify error bars for either or both x and y values (to use error bars for only x or y values, enter `0` for the other error).
  * *Polar Graph*: The typical polar graph of r vs. theta values; one can also specify errors bars values.
  * *Shower Angles*: This is a specialized graph which shows the incoming air shower angles in a color coded polar graph. The values for r and theta, as well as the value with which to color, can be specified by the user.

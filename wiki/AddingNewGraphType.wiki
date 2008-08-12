@@ -23,7 +23,10 @@ Part of the design goal of this program is that it could be easily extended, and
  # Define how the graph will be drawn. Of course, this is the most important part. Depending on from where the graph is getting data, you might be able to just copy and paste a ROOT c++ macro or have to modify it. See [CodeStructure#Adding_a_new_drawing_method "Adding a new drawing method"] for more information how to do this part.
  # Define the user interface. The program will need to know somehow what the user input are, and this is done in the main dialog. 
   * Fire up `designer` (which should come with the QT3 development package), and open the file [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/forms/mainform.ui forms/mainform.ui] in designer:
-  * [http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/designer_graphtype_widgetstack.png http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/designer_graphtype_widgetstack.gif]
+  *
+ [http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/designer_graphtype_widgetstack.png
+ http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/designer_graphtype_widgetstack.png]
+ (click to enlarge)
   *
   * Right click on the small arrows in the upper right hand corner of the WidgetStack and choose the item "Add Page" to add a new widget to the stack, then rename the widget to something sensible (for example, the 2Dgraph widget is named tabGraph2D). This new widget is where you will ask the user for information, and you can do so by adding QLineEdit, QLabel, etc. It would be much clearer if the widgets that will be used later are named descriptively (it's easier to tell what txtXAxis is than lineEdit1). See also [NamingConventionAndFormatting naming convention].
   * Read [CodeStructure#User_interface "User interface"] for more information on the user interface in this program, and read the help files from QT if you want more information on widgets, how to use designer, and user interface programming in QT in general.
