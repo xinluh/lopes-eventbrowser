@@ -22,9 +22,6 @@
 #include <iostream>
 #endif
 
-//#include <string>
-//#include <vector>
-
 using namespace std;
 
 // max num of events to be fetched for display purpose

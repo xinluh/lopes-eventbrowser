@@ -34,7 +34,7 @@
                 <enum>NoFrame</enum>
             </property>
             <property name="text">
-                <string>&lt;h1&gt;&lt;p align="center"&gt;Event Browser&lt;/p&gt;&lt;/h1&gt;
+                <string>&lt;h1&gt;&lt;p align="center"&gt;Lopes-Eventbrowser&lt;/p&gt;&lt;/h1&gt;
 
 A qt-based event browser for the LOPES collaboration at Forschungszentrum Karlsruhe, Germany. Uses ROOT as the backend for plotting and graphing.
 &lt;br&gt;&lt;br&gt;
