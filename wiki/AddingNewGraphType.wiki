@@ -24,7 +24,7 @@ Part of the design goal of this program is that it could be easily extended, and
  # Define the user interface. The program will need to know somehow what the user input are, and this is done in the main dialog. 
   * Fire up `designer` (which should come with the QT3 development package), and open the file [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/forms/mainform.ui forms/mainform.ui] in designer:
   *
- [http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/designer_graphtype_widgetstack.png??
+ [http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/designer_graphtype_widgetstack.png##
  http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/designer_graphtype_widgetstack.png]
  (click to enlarge)
   *
