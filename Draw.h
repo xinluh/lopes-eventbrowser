@@ -3,10 +3,12 @@
 
 class TCanvas;
 class ReadRootTree;
+class TGraphErrors;
+class TGraphPolar;
+class TH1F;
 
 #include <string>
 #include <vector>
-
 
 class Draw
 {
@@ -38,23 +40,22 @@ public:
 	// a bunch of drawing functions; add your own, if you want!
 	void drawAntennaPosition();
 	void drawGrandeCoordinates();
-	void draw2DGraph(const std::string& x, const std::string& y,
+	TGraphErrors* draw2DGraph(const std::string& x, const std::string& y,
 					 const std::string& x_err, const std::string& y_err);
-    void drawPolarGraph(const std::string& r, const std::string& theta,
+    TGraphPolar* drawPolarGraph(const std::string& r, const std::string& theta,
                        const std::string& r_err, const std::string& theta_err);
-	void drawShowerAngles(const std::string& r, const std::string& theta,
+	TGraphPolar* drawShowerAngles(const std::string& r,
+                                 const std::string& theta,
 								const std::string& colorcode_by);
-    void draw1DHist(const std::string& content, bool useDefault = true,
+    TH1F* draw1DHist(const std::string& content, bool useDefault = true,
                     float min = 0, float max = 0, int nbins = 0);
 
     
  private:
 	TCanvas *canvas; //the curent canva to draw on
 	int padn; //the subpad number
-//	multiGraphStatus multiStatus;
 	int colorMultiGraph; // keeping track of the colors used by previous graph
 	bool multiGraph;
-
 	int getDrawColor(); //detect whether is multiGraph and auto increment the
 						//color as needed
 };

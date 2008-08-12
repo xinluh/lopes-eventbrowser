@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include "TH1F.h"
+
 #include "global.h"
 #include "Helper.h"
 #include "Draw.h"
@@ -242,8 +244,12 @@ struct infoHist1D : infoGraph
   
     void draw(Draw* d)
     {
-        d->draw1DHist(data,useDefault,min,max,nbins);
+        TH1F* hist = d->draw1DHist(data,useDefault,min,max,nbins);
+        
         parentCanvas->setName("1DHist: " + data);
+        min = (float) hist->GetXaxis()->GetXmin();
+        max = (float) hist->GetXaxis()->GetXmax();
+        nbins = hist->GetNbinsX();
     }
 };
 
