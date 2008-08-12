@@ -1,7 +1,7 @@
 #summary Describes the main features in the program.
 #labels Featured,Phase-Design
 
-== Introduction ==
+== Features ==
 
 Lopes-Eventbrowser will read any abitrary ROOT tree produced by a compatible version of ROOT and use the data in the ROOT tree for analysis.
 
@@ -20,8 +20,8 @@ The current notable features are:
    * The code structure around graph types are designed to be extensible; therefore it's straightforward to extend the program to include more graph types. See AddingNewGraphType.
 
  * *ROOT file manipulation*
-   * Can handle abitrary ROOT file or files (using *TChain) containing ROOT `TTree`, independent of the structure inside the root tree. The relevant information such as branches present is discovered programatically.
-   * Provides a convenient interface for applying event cuts to ROOT tree: feedback such as number of events after cut are given immediately, and the resulting events after cut can be saved in a new ROOT file. 
+   * Can handle abitrary ROOT file or files (using `TChain`) containing ROOT `TTree`, independent of the structure inside the root tree. The relevant information such as branches present is discovered programatically.
+   * Provides a convenient interface for applying event cuts to ROOT tree: feedback such as number of events after cut are given immediately, and the resulting events after cut can be saved in a new ROOT file. Event cuts can be saved to facilitate switching between different cuts.
    * Reading of ROOT tree is customizable through a config file which can specify selected branches for reading - useful for saving a subset of branches in a ROOT tree to a new ROOT tree. See ConfigSettingFiles, section "Root branches configuration file".
    * Data in a ROOT tree can be displayed in the user interface in a table.
 
@@ -29,7 +29,7 @@ The current notable features are:
    * The canvases created during a session of the program can be exported to a text file, which can be imported later by the program for further editing. This is useful for persisting information between program sessions as well as working on multiple groups of canvases. The text file is also easily editable by hand, creating possibility for other uses. ConfigSettingFiles, section "Canvas definition file".
    * The canvases can also be saved in other useful formats supported by ROOT, namely, postscript, EPS, PDF, JPEG, GIF, c++ macro, and ROOT binary. For the format postscript, there is also an option to save all canvases to a single file.
 
-=== Available graph types ===
+==== Available graph types ====
 
 You are not limited to any of the single options listed below; by checking the option "Draw multiple graphs on the same canvas" in the main dialog, you can combine graphs - for example, to see visually where the incoming showers are relative to the LOPES antennas, you can draw the antennas position then draw the x-position vs. y-position of incoming showers on top of that. 
 
@@ -39,6 +39,8 @@ You are not limited to any of the single options listed below; by checking the o
  * *Shower Angles*: This is a specialized graph which shows the incoming air shower angles in a color coded polar graph. The values for r and theta, as well as the value with which to color, can be specified by the user.
  * *Hardware Layouts*: plot the positions of either the LOPES antennas or the Grande Stations.
  * You are welcome to add more! See [AddingNewGraphType here] for a step-by-step HOWTO.
+
+----
 
 == Limitations ==
 
