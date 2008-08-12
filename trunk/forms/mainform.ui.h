@@ -97,6 +97,7 @@ void MainForm::init()
     statusBar()->addWidget(lblEventCutStatus);
 
     getSavedEventCuts();
+    setMultigraphStatus (false);
     
     addNewTab();    
     isInitialized = fileOpen();

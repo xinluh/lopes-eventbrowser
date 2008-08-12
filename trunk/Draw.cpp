@@ -1,4 +1,3 @@
-#include "Draw.h"
 #include "TGraph.h"
 #include "TH1F.h"
 #include "TTree.h"
@@ -12,6 +11,8 @@
 
 #include "ReadRootTree.h"
 #include "global.h"
+#include "Draw.h"
+#include "Helper.h"
 
 #include <sstream>
 
@@ -124,11 +125,10 @@ int getValue_2DTGraphErrors(void* obj,int& index,vector<float>& values, long&)
     return 0;
 }
 
-void Draw::draw2DGraph(const string& x,const string& y,
+TGraphErrors* Draw::draw2DGraph(const string& x,const string& y,
                        const string& x_err, const string& y_err)
 {
-//    if (!x || !y || !rootTree) return;
-    if (!canvas) return;
+    if (!canvas) return NULL;
 
     TGraphErrors* g = new TGraphErrors();
 
@@ -157,6 +157,8 @@ void Draw::draw2DGraph(const string& x,const string& y,
 
     g->Draw(isMultiGraph()? "P" : "AP");
     canvas->Update();
+
+    return g;
 }
 
 int getValue_PolarGraphErrors(void* obj,int& index,vector<float>& values, long&)
@@ -169,10 +171,10 @@ int getValue_PolarGraphErrors(void* obj,int& index,vector<float>& values, long&)
     return 0;
 }
 
-void Draw::drawPolarGraph(const string& r, const string& theta,
+TGraphPolar* Draw::drawPolarGraph(const string& r, const string& theta,
                           const string& r_err,const string& theta_err)
 {
-    if (!canvas) return;
+    if (!canvas) return NULL;
     
     TGraphPolar* g = new TGraphPolar();
 
@@ -202,6 +204,8 @@ void Draw::drawPolarGraph(const string& r, const string& theta,
     g->SetMinRadial(0);
     
     canvas->Update();
+
+    return g;
 }
 
 int getValue_ShowerAngles(void* obj,int& index,vector<float>& values, long&)
@@ -243,10 +247,10 @@ int getValue_ShowerAngles2(void* obj,int& index,vector<float>& values,
     return 0;
 }
 
-void Draw::drawShowerAngles(const string& r, const string& theta,
+TGraphPolar* Draw::drawShowerAngles(const string& r, const string& theta,
                             const string& colorcode_by)
 {
-    if (!canvas) return;
+    if (!canvas) return NULL;
 
     // set the so called pretty palette with rainbow colors
     gStyle->SetPalette(1);
@@ -265,8 +269,8 @@ void Draw::drawShowerAngles(const string& r, const string& theta,
 
     rootTree->fillValues(&getValue_ShowerAngles, g, arg);
 
-     canvas->SetBorderSize(0);
-     canvas->SetFrameFillColor(0);
+    canvas->SetBorderSize(0);
+    canvas->SetFrameFillColor(0);
     canvas->SetFillColor(10);
     
     g->Draw("AOP");
@@ -299,21 +303,22 @@ void Draw::drawShowerAngles(const string& r, const string& theta,
 
     lg->Draw();
     canvas->Update();
+
+    return g;
 }
 
-
-int getValue_1DHist(void* obj,int& index,vector<float>& values, long&)
-{
-
-    return 0;
-}
-
-void Draw::draw1DHist(const string& content, bool useDefault,
+TH1F* Draw::draw1DHist(const string& content, bool useDefault,
                       float min, float max, int nbins)
 {
     TH1F* hist = NULL;
-
-    string option = content + ">>hist";
+    // ensure that in a multigraph setting hist are given a unique name
+    static int counter;
+    if (isMultiGraph()) counter++;
+    
+    string name = "hist" + itos(counter);
+    string option = content + ">>" + name;
+    cout << option << endl;
+    
     
     if (!useDefault)
     {
@@ -321,15 +326,25 @@ void Draw::draw1DHist(const string& content, bool useDefault,
         sprintf(buf,"(%i,%f,%f)",nbins, min, max);
         option += string(buf);
     }
+    
+    rootTree->getTTree()->Draw(option.c_str(), rootTree->getEventCut().c_str(),
+                               string(isMultiGraph()? "same" : "").c_str());
 
-    rootTree->getTTree()->Draw(option.c_str());
-
-    hist = (TH1F*)gPad->GetPrimitive("hist"); 
+    hist = (TH1F*)gPad->GetPrimitive(name.c_str());
 
     if (hist)
+    {
         hist->GetXaxis()->SetTitle(content.c_str());
+        hist->SetTitle(content.c_str());
+
+        int color = getDrawColor();
+        hist->SetFillColor(color);
+        hist->SetLineColor(color);
+    }
+        
     canvas->Update();
 
+    return hist;
 }
 
 void Draw::setSourceRootTree(vector<string> root_files, const char * treeName)
@@ -374,8 +389,8 @@ void Draw::clearCanvas()
     canvas->Update();
 }
 
-void Draw::setMultiGraph(bool isMultiGraph)
+void Draw::setMultiGraph(bool doMultiGraph)
 {
     colorMultiGraph = 1;
-    multiGraph = isMultiGraph;
+    multiGraph = doMultiGraph;
 }	
