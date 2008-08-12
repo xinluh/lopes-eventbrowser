@@ -1,12 +1,10 @@
 #summary Describes the layout of the main dialog.
 
-The main dialog is the entry to the program; all functions of the program is directly or indirectly accessible from the main dialog.
+The main dialog is the main entry point to the program; all functions of the program is directly or indirectly accessible from the main dialog.
 
 == Layout ==
 
 The main dialog is divided into a few parts:
-
-http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_annotated.png
 
  # [MainDialog#Tabbed_interface Tabbed canvas interface]
  # [MainDialog#Event_cuts_interface Event cuts interface]
@@ -15,6 +13,8 @@ http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_annotated.png
  # [MainDialog#Status_bar Status bar]
  # [MainDialog#Menu Menu]
 
+http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_annotated.png
+
 ----
 
 ===Tabbed interface===
@@ -22,7 +22,8 @@ http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_annotated.png
 On the left, the canvases are shown in a columns; on top of the column there are buttons to add, remove and rename canvas. By clicking a name in the column, the corresponding canvas should show up on the right. 
 
 By right clicking on the various parts (such as the axis, the title, the plots, etc.), you can have access to some ROOT function to modify the attributes of the graph such as color, marker type, etc.:
-[http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/dialog_main_partial_root_context_menu.png## http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_root_context_menu.png]
+
+[http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/dialog_main_partial_root_context_menu.png## http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_main_partial_root_context_menu.png] (click to enlarge)
 
 ===Event cuts interface===
 
@@ -57,5 +58,7 @@ The options are:
  * *File - Exit*: exit the program.
 
  * *Edit - Divide Canvas*: suppose to divide the current canvas into pads; but the functionality is not yet implemented.
+
+ * *Tools - View data in ROOT tree*: show the [ViewDataInRootTree View Data dialog]. 
  
  * *Help - About*: shows information about the program.
