@@ -14,7 +14,7 @@ If you downloaded the compiled version, use instead:
 }}}
 as the script `browser.run` sets the enviromental variables pointing to a known working version of ROOT 5.18 in the IK.FZK cluster.
 
-A sample root file [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/test_root_file_tree-ka104ev.root test_root_file_tree-ka104ev.root] should be included in both the source code and the compiled tarball. The guide below will use this sample file.
+A sample ROOT file [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/test_root_file_tree-ka104ev.root test_root_file_tree-ka104ev.root] should be included in both the source code and the compiled tarball. The guide below will use this sample file.
 
 
 ===Open File Dialog===
@@ -23,15 +23,11 @@ First one will be greeted by a dialog asking for the root files to be opened:
 
 [http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/large/dialog_openfile.png## http://lopes-eventbrowser.googlecode.com/svn/wiki/pic/dialog_openfile.png] (click to enlarge)
 
-Any file with extension .root locating in the startup directory of the program is automatically recognized and added to the list of files to be opened. To open other files, click "Browse..." and select one or more files (by holding down SHIFT or CTRL key). Multiple files will be opened as a root chain. 
+The sample ROOT file should show up in the list of files to open, as all files with extension .root locating in the same directory of the program are automatically detected when the program is first started.
 
-This program will read any root trees created by compatible versions of ROOT. 
+Simply click Ok to continue.
 
-Once the files are added to the list, the list of root trees present in the root file is automatically detected, and one can select from the drop-down list. 
-
-There are two options for reading branches from a root tree. The easiest is the "Default" option, which reads all compatible branches (i.e. branches of integer or float data type). But one can also use a text file, which is handy when one needs only a subset of branches. The use of this config file is explained in ConfigSettingFiles.
-
-Click OK to proceed.
+For more explanation on the options on this dialog, see OpenFileDialog.
 
 ----
 
