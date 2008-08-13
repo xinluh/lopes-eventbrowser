@@ -23,6 +23,7 @@
 #include <qmessagebox.h>
 #include <qinputdialog.h>
 #include <qobjectlist.h>
+#include <qregexp.h>
 #include "TQtWidget.h"
 
 #include <string>
@@ -229,7 +230,42 @@ void MainForm::fileSaveAllSingle()
 
 void MainForm::fileSaveAllMultiple()
 {
-    NOT_IMPLEMENTED
+    int tabcount = (int) tabIds.size();
+    TQtWidget * tqtw;
+    bool ok;
+
+    if (tabcount < 1) return;
+
+    // get filename extension
+    QString ext = QInputDialog::getItem(
+            "File Type", "Choose a file type to save as: ",
+            QStringList::split(";;",fileTypeFilterSingle),
+            0, false, &ok, this);
+    if (!ok) return;
+    // search for the extension part in the string
+    QRegExp regex("\\(\\*\\.(.+)\\)");
+    regex.search(ext);
+    ext = regex.cap(1);
+        
+    // get folder to save under
+    QString folder = QFileDialog::getExistingDirectory("", this,
+                    "Choose directory",
+                    "Choose a directory to save files under", TRUE);
+    if (!folder) return;
+
+    // saving!
+    for (int i = 0; i<tabcount ; i++)
+    {
+        tqtw = (TQtWidget*) wgStack->widget(tabIds[i])
+                ->child("tqtw","TQtWidget", FALSE);
+        if (tqtw)
+        {
+            string filename = string(folder.ascii()) + "/" + 
+                              validateFilename(tabNames[i]->text(0))
+                              + "." + ext;
+            draw->saveAs(tqtw->GetCanvas(),filename.c_str());
+        }
+    }
 }
 
 void MainForm::fileExit()
