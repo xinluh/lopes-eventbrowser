@@ -6,7 +6,14 @@
 OLD_ROOTSYS=$ROOTSYS
 OLD_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
+#------------------------------
+# change this your ROOT folder if you are running 
+# outside of the IK.FZK cluster:
+
 ROOTSYS=/users/iklx/huang/root
+
+#-------------------------------
+
 PATH=$ROOTSYS/bin:$PATH:$HOME/bin
 LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
 

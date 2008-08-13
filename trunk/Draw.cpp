@@ -60,7 +60,8 @@ void Draw::drawAntennaPosition()
         1.876,33.919,77.362,58.835,-152.552,-127.937,-141.969,-166.636};
 
     TGraph *tg = new TGraph();
-    for (int j=0;j<30;j++) tg->SetPoint(j,y_ant[j],x_ant[j]);
+    for (int j=0; j<30; j++)
+        tg->SetPoint(j,y_ant[j],x_ant[j]);
 
     canvas->SetBorderSize(0);
     canvas->SetGridx();
@@ -81,13 +82,14 @@ void Draw::drawAntennaPosition()
 
 void Draw::drawGrandeCoordinates()
 {
-    float x_G[37]={-0.14,-131.26,-257.02,-384.85,-499.64, 64.48,
+    const int num = 37;
+    float x_G[num]={-0.14,-131.26,-257.02,-384.85,-499.64, 64.48,
                    -64.99,-211.23,-328.97,-426.06,-569.81, 24.21,
                    -140.10,-260.88,-377.53,-481.52,  44.09, -95.83,
                    -195.43,-319.85,-481.54,-608.26,  24.79,-112.86,
                    -249.76,-386.09,-533.71, 101.22, -24.72,-196.54,
                    -317.87,-443.33,-565.96,-111.90,-275.03,-389.06, -517.91};
-    float y_G[37]={65.33, 70.87, 101.73, 96.12, 95.51, -42.03,-41.42,
+    float y_G[num] = {65.33, 70.87, 101.73, 96.12, 95.51, -42.03,-41.42,
                    -40.54, -49.29,  -7.66,  46.42,-156.62, -143.78,
                    -136.19,-144.97,-155.46,-276.64,-276.04, -272.58,
                    -267.57,-234.93,-281.77,-391.27,-383.64, -392.04,
@@ -95,7 +97,8 @@ void Draw::drawGrandeCoordinates()
                    -525.89,-526.39,-654.86,-645.43,-653.28, -620.77};
 
     TGraph *tg = new TGraph();
-    for (int j=0;j<30;j++) tg->SetPoint(j,x_G[j],y_G[j]);
+    for (int j=0; j < num; j++)
+        tg->SetPoint(j,x_G[j],y_G[j]);
 
     canvas->SetBorderSize(0);
     canvas->SetGridx();
@@ -311,14 +314,13 @@ TH1F* Draw::draw1DHist(const string& content, bool useDefault,
                       float min, float max, int nbins)
 {
     TH1F* hist = NULL;
+    
     // ensure that in a multigraph setting hist are given a unique name
     static int counter;
     if (isMultiGraph()) counter++;
-    
     string name = "hist" + itos(counter);
-    string option = content + ">>" + name;
-    cout << option << endl;
     
+    string option = content + ">>" + name;
     
     if (!useDefault)
     {

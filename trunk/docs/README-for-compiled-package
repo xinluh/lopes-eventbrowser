@@ -2,13 +2,25 @@ This package contains the compiled binary for lopes-eventbrowser. A small ROOT
 file test_root_file_tree-ka104ev.root, and some sample config files are also
 included to get you started.
 
-To start, cd to the folder where you unpacked the files, and type 
+THe script browser.run included in this package sets the enviromental
+variables to a known working path of ROOT 5.18 in the IK.FZK cluster; if you
+are running outside of the cluster, you can get compiled versions of ROOT
+5.18 which satisfies the requirement of this program from the ROOT website:
 
-browser.run
+http://root.cern.ch/root/Version518.html
 
-to run the eventbrowser. The browser.run is a shell script that sets the
-enviromental variables to a known working path; you can change it to other
-paths if needed.
+After you unpacked the ROOT package, edit the path in the script file
+browser.run to point to your unpacked ROOT folder.
+
+Additionally, you need QT3 libraries to run this program; the libraries should
+come with most standard Linux distributions.
+
+-------------------------
+
+To start the program, cd to the folder where you untar this package, and type
+in the terminal:
+
+. browser.run
 
 For more information and the source codes, visit the page for the project on
 Google Code:
