@@ -1305,6 +1305,9 @@
         <property name="name">
             <cstring>filePrintAction</cstring>
         </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
         <property name="iconSet">
             <iconset>image6</iconset>
         </property>
@@ -1514,6 +1517,9 @@
             <cstring>editDivide_CanvasAction</cstring>
         </property>
         <property name="toggleAction">
+            <bool>false</bool>
+        </property>
+        <property name="enabled">
             <bool>false</bool>
         </property>
         <property name="text">
