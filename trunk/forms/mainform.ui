@@ -1222,7 +1222,16 @@
         <separator/>
         <action name="fileExitAction"/>
     </item>
-    <item text="&amp;Edit" name="Edit">         <action name="editDivide_CanvasAction"/>     </item>     <item text="&amp;Tools" name="Tools">         <action name="toolsView_data_in_ROOT_treeAction"/>     </item>     <item text="&amp;Help" name="helpMenu">         <action name="helpAboutAction"/>     </item>     <separator/>
+    <item text="&amp;Edit" name="Edit">
+        <action name="editDivide_CanvasAction"/>
+    </item>
+    <item text="&amp;Tools" name="Tools">
+        <action name="toolsView_data_in_ROOT_treeAction"/>
+    </item>
+    <item text="&amp;Help" name="helpMenu">
+        <action name="helpAboutAction"/>
+    </item>
+    <separator/>
 </menubar>
 <toolbars>
 </toolbars>
@@ -1272,7 +1281,7 @@
             <string>Save</string>
         </property>
         <property name="menuText">
-            <string>&amp;Save</string>
+            <string>&amp;Save As</string>
         </property>
         <property name="accel">
             <string>Ctrl+S</string>
@@ -1580,6 +1589,20 @@
             <string>Unnamed</string>
         </property>
     </action>
+    <action>
+        <property name="name">
+            <cstring>toolsView_data_in_ROOT_treeAction</cstring>
+        </property>
+        <property name="toggleAction">
+            <bool>true</bool>
+        </property>
+        <property name="text">
+            <string>&amp;View data in ROOT tree</string>
+        </property>
+        <property name="menuText">
+            <string>&amp;View data in ROOT tree</string>
+        </property>
+    </action>
 </actions>
 <images>
     <image name="image0">
@@ -1806,7 +1829,19 @@
     <connection>
         <sender>ckbHist1DUseDefault</sender>
         <signal>toggled(bool)</signal>
-        <receiver>gbHist1DOptions</receiver>         <slot>setDisabled(bool)</slot>     </connection>     <connection>         <sender>toolsView_data_in_ROOT_treeAction</sender>         <signal>activated()</signal>         <receiver>MainForm</receiver>         <slot>viewData()</slot>     </connection> </connections> <includes>     <include location="global" impldecl="in declaration">string</include>     <include location="global" impldecl="in declaration">vector</include>
+        <receiver>gbHist1DOptions</receiver>
+        <slot>setDisabled(bool)</slot>
+    </connection>
+    <connection>
+        <sender>toolsView_data_in_ROOT_treeAction</sender>
+        <signal>activated()</signal>
+        <receiver>MainForm</receiver>
+        <slot>viewData()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="global" impldecl="in declaration">string</include>
+    <include location="global" impldecl="in declaration">vector</include>
     <include location="local" impldecl="in declaration">Canvas.h</include>
     <include location="local" impldecl="in implementation">mainform.ui.h</include>
 </includes>
