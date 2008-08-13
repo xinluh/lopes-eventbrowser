@@ -195,12 +195,12 @@ struct infoGraphPosition : infoGraph
         if (positionType == GRANDE_COORD)
         {
             d->drawGrandeCoordinates();
-            parentCanvas->setName("Grande Coordinates");
+            parentCanvas->setName("Grande Station Positions");
         }
         else if (positionType == ANTENNA_POS)
         {
             d->drawAntennaPosition();
-            parentCanvas->setName("Antenna Position");
+            parentCanvas->setName("Antenna Positions");
         }
     }
 };

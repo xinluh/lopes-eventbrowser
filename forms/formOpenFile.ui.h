@@ -14,7 +14,7 @@
 #include <qfiledialog.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
-
+#include <qmessagebox.h>
 
 #include "Helper.h"
 #include "ReadRootTree.h"
@@ -95,17 +95,26 @@ void formOpenFile::openFiles(vector<string> files)
     for (int i = 0; i < (int) files.size(); ++i)
         lsbFiles->insertItem(files[i]);
 
-    // enable the other group boxes when there are files selected
-    gbTree->setEnabled(hasFiles);
-    gbBranch->setEnabled(hasFiles);
-
-    
     if (hasFiles)
     {
         vector<string> trees;
         trees = ReadRootTree::getRootTreeNames(files[0]);
 
         cmbRootTree->clear();
+
+        if (trees.size() == 0) // no ROOT tree found in file
+        {
+            QMessageBox::warning(this,"Error",
+                   "No ROOT tree is found in " + files[0] + 
+                   "; are you sure that you have a valid ROOT file? ");
+            buttonOk->setEnabled(false);
+            return;
+        }
+
+        // enable the other group boxes when there are files selected
+        gbTree->setEnabled(hasFiles);
+        gbBranch->setEnabled(hasFiles);
+        buttonOk->setEnabled(true);
         
         // fill the root tree combobox with the trees from the root file
         for (int i = 0; i < (int) trees.size(); ++i)
