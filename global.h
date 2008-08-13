@@ -17,7 +17,7 @@
 #define MAX_LINE 2048
 #define END_OF_LINE '\n'
 
-const std::string invalidFilenameCharacters = "`~#%&*{}\\:?/|;";
+const std::string invalidFilenameCharacters = "`~#%&*{}\\:?/|; ";
 
 
 
