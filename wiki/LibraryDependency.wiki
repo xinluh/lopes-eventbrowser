@@ -10,9 +10,9 @@ One can get the source and the compiled binaries (which has been compiled with Q
 
 == QT ==
 
-QT version > 3.3 and < 4.0 is needed. A port to QT4 would be nice, but currently not considered. 
+QT version >= 3.3 and < 4.0 is needed. A port to QT4 would be nice, but currently not considered because of time constraint of the original project. 
 
-One can get QT3 from [http://trolltech.org/ TrollTech].
+One can get QT3 from [http://trolltech.org/ TrollTech], but the runtime libraries should be included in most linux distributions. To compile Lopes-Eventbrowser, one will also need the development libraries of QT 3. 
 
 
 == muParser ==
@@ -21,4 +21,4 @@ This is a mathematical library for parsing formulas, see http://muparser.sourcef
 
 The muParser code version 1.30 is included in the source tree under [http://code.google.com/p/lopes-eventbrowser/source/browse#svn/trunk/muParserLib muParserLib], and it is compiled along with the rest of the program.
 
-A slight change is made to the original source code which on can get from its website: the default datatype is changed from double to float to better adapt to the normal usage of the event browser. One can locate the change in source file [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/muParserLib/muParserDef.h muParserDef.h] under the define MUP_BASETYPE.
+_A slight change is made to the original source code which on can get from its website: the default datatype is changed from double to float to better adapt to the normal usage of the event browser. One can locate the change in source file [http://code.google.com/p/lopes-eventbrowser/source/browse/trunk/muParserLib/muParserDef.h muParserDef.h] under the define MUP_BASETYPE._
