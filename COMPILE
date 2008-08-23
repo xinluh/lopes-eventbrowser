@@ -1,12 +1,27 @@
 To compile:
 
-* Make sure that the required libraries are present, and the environmental
-variables ROOTSYS and LD_LIBRARY_PATH contains paths to ROOT 5.18. Typical
-values would be ROOTSYS=/user/local/root and LD_LIBRARY_PATH=/user/local/root/lib.
+* Make sure that the required libraries are present; check the current
+  list here:
+  http://code.google.com/p/lopes-eventbrowser/wiki/LibraryDependency
 
-* Make sure that qmake on the system is from Qt 3; one can check it by typing
-qmake --version. If multiple QT verions are present, make sure that instead of
-just typing qmake below, use the full path to the QT 3 version of qmake.
+* If you installed ROOT+QtROOT from the using the script
+  http://root.bnl.gov/QtRoot/INSTALL_QTROOT.sh, you should now run one
+  of the set_enviroment.* scripts according to your shell. If you did
+  not install using the script, do the following item:
+
+* Make sure that the environmental variables ROOTSYS and
+  LD_LIBRARY_PATH contains paths to ROOT. Typical values would be
+  ROOTSYS=/user/local/root and
+  LD_LIBRARY_PATH=/user/local/root/lib. (I'm not sure if this is
+  actually needed, but) also set the enviromental variables QTDIR to
+  your QT > 4.3 directory, and QTROOTSYSDIR to the directory
+  containing QtROOT installation - this is typicall just the same as ROOTSYS.
+
+* Make sure that qmake on the system is from Qt >= 4.3; one can check
+  it by typing qmake --version. If multiple QT verions are present, make
+  sure that instead of just typing qmake below, use the full path to the
+  QT >= 4.3 version of qmake.
+
 
 And then simply type:
 
@@ -14,7 +29,7 @@ qmake && make
 
 or 
 
-/path/to/qt3/qmake && make
+/path/to/qt4.3/qmake && make
 
 ----------------------------------------------------------------
 
@@ -38,3 +53,6 @@ Compilation flags:
 
 DEBUG - to print additional useful debugging information in the console.
 TREAT_INTEGER_AS_FLOAT - see explanation in ReadRootTree.cpp
+USE_QT - this is for the non-UI parts of the program; I tried to keep
+the non-UI part independent of QT, thus by undefining USE_QT, the
+non-UI part can be use in outside project without having QT dependency.
