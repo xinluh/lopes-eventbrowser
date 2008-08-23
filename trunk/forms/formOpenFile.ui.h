@@ -11,7 +11,7 @@
 *****************************************************************************/
 #include <string>
 #include <vector>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qcombobox.h>
 #include <qpushbutton.h>
 #include <qmessagebox.h>
@@ -63,7 +63,7 @@ void formOpenFile::openFiles()
 {
     vector<string> files;
     
-    QStringList vfiles = QFileDialog::getOpenFileNames(
+    QStringList vfiles = Q3FileDialog::getOpenFileNames(
                             "Root File (*.root)",
                             "",
                             this,
@@ -71,9 +71,9 @@ void formOpenFile::openFiles()
                             "Select one or more root files to open" );
 
     if (vfiles.size() == 0) return;
-    
-    for ( QStringList::Iterator it = vfiles.begin(); it != vfiles.end(); ++it )
-            files.push_back(*it);
+
+    for (int i = 0; i < (int) vfiles.size(); i++)
+        files.push_back(vfiles[i].toStdString());
     
     openFiles(files);
 }
@@ -93,7 +93,7 @@ void formOpenFile::openFiles(vector<string> files)
 
     // then add the new files to the listbox
     for (int i = 0; i < (int) files.size(); ++i)
-        lsbFiles->insertItem(files[i]);
+      lsbFiles->insertItem(s(files[i]));
 
     if (hasFiles)
     {
@@ -105,7 +105,7 @@ void formOpenFile::openFiles(vector<string> files)
         if (trees.size() == 0) // no ROOT tree found in file
         {
             QMessageBox::warning(this,"Error",
-                   "No ROOT tree is found in " + files[0] + 
+                                 "No ROOT tree is found in " + s(files[0])  + 
                    "; are you sure that you have a valid ROOT file? ");
             buttonOk->setEnabled(false);
             return;
@@ -119,7 +119,7 @@ void formOpenFile::openFiles(vector<string> files)
         // fill the root tree combobox with the trees from the root file
         for (int i = 0; i < (int) trees.size(); ++i)
         {
-            cmbRootTree->insertItem(trees[i]);
+          cmbRootTree->addItem(s(trees[i]));
 
             // select the tree currently selected in the ReadRootTree 
             if (tree && (trees[i] == tree->getTreeName()))
@@ -129,7 +129,7 @@ void formOpenFile::openFiles(vector<string> files)
         if (tree && (tree->getBranchFile()))
         {
             rbBranchFile->setChecked(true);
-            txtBranchFile->setText(*(tree->getBranchFile()));
+            txtBranchFile->setText(s(*(tree->getBranchFile())));
         }
         else
             rbBranchDefault->setChecked(true);
@@ -139,7 +139,7 @@ void formOpenFile::openFiles(vector<string> files)
 
 void formOpenFile::openBranchFile()
 {
-    QString s = QFileDialog::getOpenFileName(
+    QString s = Q3FileDialog::getOpenFileName(
                     "",
                     "Config files (*.cfg *.txt *.*)",
                     this,
@@ -158,12 +158,12 @@ void formOpenFile::okClicked()
     vector<string> files;
 
     for (int i = 0; i < (int) lsbFiles->count(); ++i)
-        files.push_back(lsbFiles->item(i)->text());
+      files.push_back(lsbFiles->item(i)->text().toStdString());
     
-    tree = new ReadRootTree(files,cmbRootTree->currentText(),
+    tree = new ReadRootTree(files,cmbRootTree->currentText().ascii(),
                             ((rbBranchDefault->isChecked() &&
                              !(txtBranchFile->text().isEmpty())) ?
-                             txtBranchFile->text() : NULL));
+                             txtBranchFile->text().ascii() : NULL));
 
     accept();
     

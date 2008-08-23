@@ -15,7 +15,7 @@
 #include <vector>
 #include "Helper.h"
 
-
+#include <Q3CheckListItem>
 #ifdef DEBUG
 #include <iostream>
 #endif
@@ -24,7 +24,7 @@
 using namespace std;
 
 ColumnCollection * cc;
-vector<QCheckListItem*> items;
+vector<Q3CheckListItem*> items;
 int currentItem = -1; // keep track of which item had been selected
 
 
@@ -55,13 +55,13 @@ int formChooseDisplayColumns::addItem(singleColumn * c)
 {
     if (!c) return -1;
 
-    QCheckListItem * q = new QCheckListItem(lv,lv->lastItem(),
-                                            "",QCheckListItem::CheckBox);
+    Q3CheckListItem * q = new Q3CheckListItem(lv,lv->lastItem(),
+                                            "",Q3CheckListItem::CheckBox);
 
-    q->setText(1,c->expression);
-    q->setText(2,c->alias);
+    q->setText(1,s(c->expression));
+    q->setText(2,s(c->alias));
     q->setTristate(false);
-    q->setState(c->shown? QCheckListItem::On : QCheckListItem::Off);
+    q->setState(c->shown? Q3CheckListItem::On : Q3CheckListItem::Off);
 
     items.push_back(q);
     
@@ -69,7 +69,7 @@ int formChooseDisplayColumns::addItem(singleColumn * c)
 }
 
 
-void formChooseDisplayColumns::editSingleItem( QListViewItem * item )
+void formChooseDisplayColumns::editSingleItem( Q3ListViewItem * item )
 {
     // save previous changes if any
     saveChanges();
@@ -80,16 +80,16 @@ void formChooseDisplayColumns::editSingleItem( QListViewItem * item )
     // previous index is knonw
     currentItem = getIndex(item);
 
-    txtAlias->setText(cc->columns[currentItem]->alias);
-    cmbExpression->setCurrentText(cc->columns[currentItem]->expression);
+    txtAlias->setText(s(cc->columns[currentItem]->alias));
+    cmbExpression->setCurrentText(s(cc->columns[currentItem]->expression));
 }
 
 
-int formChooseDisplayColumns::getIndex( QListViewItem *item )
+int formChooseDisplayColumns::getIndex( Q3ListViewItem *item )
 {
     for (int i = 0; i < (int) items.size(); ++i)
     {
-        if (items[i] == (QCheckListItem*) item)
+        if (items[i] == (Q3CheckListItem*) item)
             return i;
     }
 
@@ -101,7 +101,8 @@ int formChooseDisplayColumns::getIndex( QListViewItem *item )
 void formChooseDisplayColumns::saveChanges()
 {
     if (txtAlias->text().isEmpty() && !cmbExpression->currentText().isEmpty())
-        txtAlias->setText(validateFilename(cmbExpression->currentText()));
+      txtAlias->setText(s(validateFilename(
+                          cmbExpression->currentText().toStdString())));
     
     if (currentItem != -1 && !cmbExpression->currentText().isEmpty() &&
         !txtAlias->text().isEmpty())
@@ -132,7 +133,7 @@ void formChooseDisplayColumns::addNewItem()
     singleColumn *s  = new singleColumn("new_exp");
 
     cc->addColumn(s);
-    lv->setSelected((QListViewItem*) items[addItem(s)],true);
+    lv->setSelected((Q3ListViewItem*) items[addItem(s)],true);
 }
 
 

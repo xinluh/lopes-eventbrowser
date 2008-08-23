@@ -9,6 +9,12 @@
 
 #include "global.h"
 
+#define USE_QT
+
+#ifdef USE_QT
+#include <qstring.h>
+#endif
+
 // This file contains some small utility functions
 
 // remove illegal characters like \, ?, etc. from string intended for filename
@@ -45,6 +51,11 @@ void getLines(const std::string& filename, std::vector<std::string>& lines);
 // append a line to a file (will be created if not existent)
 void appendLine(const std::string& filename, const std::string& line);
 
-#endif 
+#ifdef USE_QT
+// shortcut to get std::string to QString without obsessive typing...
+QString s(const std::string& str);
+#endif // USE_QT
+
+#endif //_HELPER_H_
 
 

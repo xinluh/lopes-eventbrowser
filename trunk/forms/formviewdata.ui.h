@@ -11,11 +11,11 @@
 *****************************************************************************/
 #include "ReadRootTree.h"
 #include "ColumnCollection.h"
-#include "formChooseDisplayColumns.h"
+//#include "formChooseDisplayColumns.h"
 #include "Helper.h"
 #include "global.h"
 
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qstatusbar.h>
 
 #ifdef DEBUG
@@ -41,9 +41,9 @@ void formViewData::initialize( ReadRootTree * root_Tree )
     vector<string> cuts;
     getLines(EVENTCUTS_FILE,cuts);
     for (int i = 0; i < (int) cuts.size(); ++i)
-        txtEventCut->insertItem(cuts[i]);
+      txtEventCut->addItem(s(cuts[i]));
 
-    txtEventCut->setCurrentText(rootTree->getEventCut());
+    txtEventCut->setCurrentText(s(rootTree->getEventCut()));
     if (fileExists(COLUMN_FILE))
         cols = ColumnCollection::readFromFile();
     else
@@ -73,13 +73,13 @@ void formViewData::setColumnNames()
     table->setNumCols(aliases.size());
     
     for (int i = 0; i < (int)aliases.size(); i++)
-            table->horizontalHeader()->setLabel(i,aliases[i]);
+      table->horizontalHeader()->setLabel(i,s(aliases[i]));
 }
 
 
 int callback_fetchData(void* obj,int& index, vector<string>& values,long&)
 {
-    QTable* table = (QTable*) obj;
+    Q3Table* table = (Q3Table*) obj;
     int row = table->numRows();
     // insert new row
     table->setNumRows(table->numRows() + 1);
@@ -87,7 +87,7 @@ int callback_fetchData(void* obj,int& index, vector<string>& values,long&)
     for (int i = 0; i < ((table->numCols() < (int) values.size())?
                          table->numCols(): (int) values.size()); ++i)
     {
-        table->setText(row,i,values[i]);
+      table->setText(row,i,s(values[i]));
         
     }
 
@@ -121,7 +121,7 @@ void formViewData::fetchData()
         status += QString("; NOTE: only the first %1 events are displayed!")
             .arg(MAX_NUM_EVENTS);
 
-    cout << status << endl;
+    //cout << status << endl;
     
     
     //lblEventCutStatus->setText(status);
@@ -135,25 +135,25 @@ void formViewData::editColumns()
     // todo: important: make a copy of the ColumnCollection class before
     // sending it off for editing; otherwise after user canceled the result
     // could be bad...
-    formChooseDisplayColumns f(this);
-    f.initialize(cols);
+    // formChooseDisplayColumns f(this);
+    // f.initialize(cols);
 
-    if (f.exec())
-    {
-        setColumnNames();
-        fetchData();
-    }
+    // if (f.exec())
+    // {
+    //     setColumnNames();
+    //     fetchData();
+    // }
 }
 
 void formViewData::saveAsNewRoot()
 {
-    QString file = QFileDialog::getSaveFileName(
+    QString file = Q3FileDialog::getSaveFileName(
                     "newroot.root",
                     "Root file (*.root)",
                     this,
                     tr("save file dialog"),
                     tr("Choose a filename to save under"));
 
-    if (file) rootTree->saveToNewFile(file.ascii());
+    if (!file.isEmpty()) rootTree->saveToNewFile(file.ascii());
 }
     

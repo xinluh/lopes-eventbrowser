@@ -206,3 +206,11 @@ void appendLine(const string& filename, const string& line)
     file << line << endl;
     file.close();
 }
+
+
+#ifdef USE_QT
+QString s(const string& str)
+{
+    return QString::fromStdString(str);
+}
+#endif //USE_QT
