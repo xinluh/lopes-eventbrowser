@@ -19,11 +19,14 @@
 #include "formAbout.h"
 
 #include <qstatusbar.h>
-#include <qfiledialog.h>
+#include <q3filedialog.h>
 #include <qmessagebox.h>
 #include <qinputdialog.h>
-#include <qobjectlist.h>
+#include <qobject.h>
 #include <qregexp.h>
+//Added by qt3to4:
+#include <QLabel>
+#include <Q3VBoxLayout>
 #include "TQtWidget.h"
 
 #include <string>
@@ -33,6 +36,10 @@
 
 #ifdef DEBUG
 #include <iostream>
+#endif
+
+#ifdef QT_NO_CAST_FROM_ASCII
+#undef QT_NO_CAST_FROM_ASCII
 #endif
 
 #define NOT_IMPLEMENTED QMessageBox::information(this, \
@@ -48,24 +55,24 @@ Draw * draw = new Draw(); //the Draw object for drawing stuff
 //pointers for creating new tab with TQtWidget in it
 QWidget * newTab; // pointer to newly created tab
 TQtWidget * newTqtw; // pointer to newly created TQtWidget
-QVBoxLayout * newLayout; // pointer for laying out TQtWidget properly
+Q3VBoxLayout * newLayout; // pointer for laying out TQtWidget properly
 
 // filters for saving to files
-static string fileTypeFilterSingle = "Postscript (*.ps);;"
+static QString fileTypeFilterSingle = "Postscript (*.ps);;"
                                      "Root File (*.root);;"
                                      "Encapsulated Postscript (*.eps);;"
                                      "PDF (*.pdf);;"
                                      "JPEG (*.jpg);;"
                                      "GIF (*.gif);;"
                                      "C++ Macro (*.cxx)";
-static string fileTypeFilterMultiple = "Postscript (*.ps);;"
+static QString fileTypeFilterMultiple = "Postscript (*.ps);;"
                                        "Encapsulated Postscript (*.eps)";
 
 
 // keeping track of the corresponding tabnames in the listview
 // and the widgetstack
 vector<int> tabIds;
-vector<QListViewItem*> tabNames;
+vector<Q3ListViewItem*> tabNames;
 CanvasCollection* canvases = new CanvasCollection();
 
 bool isInitialized = false;
@@ -86,8 +93,8 @@ void MainForm::init()
 
     //populate the graph type drop-down list
     for (int i = 0; i < Canvas::numberOfGraphTypes(); ++i)
-        cmbGraphType->insertItem(Canvas::getDescription(
-                                     (Canvas::graphTypes) i));
+      cmbGraphType->addItem(QString::fromStdString(Canvas::getDescription(
+                                       (Canvas::graphTypes) i)));
     
     // set up statusbar; important: don't attempt to write to status bar
     // before this!!!
@@ -124,23 +131,23 @@ bool MainForm::fileOpen()
     applyRootCut();
     fillBranchNames();
 
-    this->setCaption("Browser - " +
-                     joinStrings(draw->rootTree->getListOfFiles(),"; "));
+    this->setCaption(QString::fromStdString("Browser - " +
+                     joinStrings(draw->rootTree->getListOfFiles(),"; ")));
     //changeStatus("Opened files: " + joinStrings(filenames, ", "));
     return true;
 }
 
 void MainForm::importCanvases()
 {
-    QString file = QFileDialog::getOpenFileName("",
+    QString file = Q3FileDialog::getOpenFileName("",
                     "Config files (*.cfg)",
                     this,
                     tr("Open file dialog"),
                     tr("Choose file that contains canvas definitions"));
 
-    if (!file) return;
+    if (file.isEmpty()) return;
 
-    CanvasCollection * cc = CanvasCollection::readFromFile(file);
+    CanvasCollection * cc = CanvasCollection::readFromFile(file.toStdString());
 
     if (!cc)
     {
@@ -159,14 +166,14 @@ void MainForm::importCanvases()
 
 void MainForm::exportCanvases()
 {
-    QString file = QFileDialog::getSaveFileName(
+    QString file = Q3FileDialog::getSaveFileName(
                     "canvases.cfg",
                     "Config file (*.cfg)",
                     this,
                     tr("save file dialog"),
                     tr("Choose a filename to save under"));
 
-    if (file) canvases->saveToFile(file);
+    if (!file.isEmpty()) canvases->saveToFile(file.toStdString());
 }
 
 void MainForm::loadCanvasCollection(CanvasCollection* cc)
@@ -185,15 +192,16 @@ void MainForm::loadCanvasCollection(CanvasCollection* cc)
 
 void MainForm::fileSave()
 {
-    QString file = QFileDialog::getSaveFileName(
-                   validateFilename(tabNames[getTabIndex()]->text(0)),
+    QString file = Q3FileDialog::getSaveFileName(
+                   s(validateFilename(
+                         tabNames[getTabIndex()]->text(0).toStdString())),
                     fileTypeFilterSingle,
                     this,
                     tr("save file dialog"),
                     tr("Choose a filename to save under"));
 
 
-    if (file) draw->saveAs(NULL,file.ascii());
+    if (!file.isEmpty()) draw->saveAs(NULL,file.ascii());
 }
 
 
@@ -204,13 +212,13 @@ void MainForm::fileSaveAllSingle()
 
     if (tabcount < 1) return;
 
-    QString file = QFileDialog::getSaveFileName("",
+    QString file = Q3FileDialog::getSaveFileName("",
                     fileTypeFilterMultiple,
                     this,
                     tr("save file dialog"),
                     tr("Choose a filename to save under"));
 
-    if (!file) return;
+    if (file.isEmpty()) return;
 
     //open for saving multiple canvas in one file
     draw->saveAs(NULL,file.ascii(),Draw::OPEN_ONLY); 
@@ -248,10 +256,10 @@ void MainForm::fileSaveAllMultiple()
     ext = regex.cap(1);
         
     // get folder to save under
-    QString folder = QFileDialog::getExistingDirectory("", this,
+    QString folder = Q3FileDialog::getExistingDirectory("", this,
                     "Choose directory",
                     "Choose a directory to save files under", TRUE);
-    if (!folder) return;
+    if (folder.isEmpty()) return;
 
     // saving!
     for (int i = 0; i<tabcount ; i++)
@@ -260,9 +268,9 @@ void MainForm::fileSaveAllMultiple()
                 ->child("tqtw","TQtWidget", FALSE);
         if (tqtw)
         {
-            string filename = string(folder.ascii()) + "/" + 
-                              validateFilename(tabNames[i]->text(0))
-                              + "." + ext;
+            string filename = folder.toStdString() + "/" + 
+              validateFilename(tabNames[i]->text(0).toStdString())
+              + "." + ext.toStdString();
             draw->saveAs(tqtw->GetCanvas(),filename.c_str());
         }
     }
@@ -333,11 +341,11 @@ void MainForm::addNewTab(Canvas* c, bool autoDraw)
     if (!c) return;
     
     int id = -1;
-    QListViewItem * item;
+    Q3ListViewItem * item;
     
     newTab = new QWidget(wgStack,"tab_"); //todo add number!
     newTqtw = new TQtWidget(newTab,"tqtw");
-    newLayout = new QVBoxLayout(newTab,0,6,"tabLayout");
+    newLayout = new Q3VBoxLayout(newTab,0,6,"tabLayout");
     newLayout->addWidget(newTqtw);
     
     id = wgStack->addWidget(newTab);
@@ -347,9 +355,9 @@ void MainForm::addNewTab(Canvas* c, bool autoDraw)
         tabIds.push_back(id);
 
         //create an item after the last one in the listview
-        item = new QListViewItem(lvGraphs,
+        item = new Q3ListViewItem(lvGraphs,
               (tabNames.size() == 0)? 0 : tabNames[(int)tabNames.size() - 1],
-                                 c->getName());
+                                  s(c->getName()));
         tabNames.push_back(item);
         
         //focus on the newly created tab
@@ -422,7 +430,7 @@ int MainForm::getTabIndex( int widgetID )
     return -1;
 }
 
-int MainForm::getTabIndex( QListViewItem * item )
+int MainForm::getTabIndex( Q3ListViewItem * item )
 {
     if (!item) return -1;
     
@@ -433,7 +441,7 @@ int MainForm::getTabIndex( QListViewItem * item )
     return -1;
 }
 
-void MainForm::selectTab( QListViewItem * sel)
+void MainForm::selectTab( Q3ListViewItem * sel)
 {
     if (!isDrawingInNewTab)
         saveToCanvas();
@@ -474,11 +482,11 @@ void MainForm::loadCanvas(Canvas* c)
 {
     if (!c) return;
 
-    txtEventCut->setText(c->getEventCut());
+    txtEventCut->setText(s(c->getEventCut()));
     if (isInitialized)
         applyRootCut();
 
-    renameTab(c->getName());
+    renameTab(s(c->getName()));
     wgsAction->raiseWidget(findGraphWidget(c->getGraphType()));
     cmbGraphType->setCurrentItem(c->getGraphType());
     
@@ -489,19 +497,19 @@ void MainForm::loadCanvas(Canvas* c)
             infoGraph2D* info = (infoGraph2D*) c->getGraphInfo();
 
             ckb2DErrors->setChecked(info->useErrors);
-            txt2DXAxis->setText(info->xAxis);
-            txt2DYAxis->setText(info->yAxis);
-            txt2DXAxisError->setText(info->xAxis_err);
-            txt2DYAxisError->setText(info->yAxis_err);
+            txt2DXAxis->setText(s(info->xAxis));
+            txt2DYAxis->setText(s(info->yAxis));
+            txt2DXAxisError->setText(s(info->xAxis_err));
+            txt2DYAxisError->setText(s(info->yAxis_err));
             break;
         }
         case Canvas::SHOWER_ANGLE:
         {
             infoShowerAngle* info2 = (infoShowerAngle*) c->getGraphInfo();
 
-            txtPolarThetaAxis->setText(info2->thetaAxis);
-            txtPolarRAxis->setText(info2->rAxis);
-            txtColorCode->setText(info2->colorCodeBy);
+            txtPolarThetaAxis->setText(s(info2->thetaAxis));
+            txtPolarRAxis->setText(s(info2->rAxis));
+            txtColorCode->setText(s(info2->colorCodeBy));
             break;
         }
         case Canvas::GRAPH_POLAR:
@@ -509,10 +517,10 @@ void MainForm::loadCanvas(Canvas* c)
             infoGraphPolar* i3 = (infoGraphPolar*) c->getGraphInfo();
 
             ckbPolarErrors->setChecked(i3->useErrors);
-            txtPolarRAxis_2->setText(i3->rAxis);
-            txtPolarThetaAxis_2->setText(i3->thetaAxis);
-            txtPolarRAxisError->setText(i3->rAxis_err);
-            txtPolarThetaAxisError->setText(i3->thetaAxis_err);
+            txtPolarRAxis_2->setText(s(i3->rAxis));
+            txtPolarThetaAxis_2->setText(s(i3->thetaAxis));
+            txtPolarRAxisError->setText(s(i3->rAxis_err));
+            txtPolarThetaAxisError->setText(s(i3->thetaAxis_err));
             break;
         }
         case Canvas::ANTENNA_POSITION:
@@ -526,10 +534,10 @@ void MainForm::loadCanvas(Canvas* c)
             infoHist1D* i4 = (infoHist1D*) c->getGraphInfo();
 
             ckbHist1DUseDefault->setChecked(i4->useDefault);
-            txtHist1D_data->setText(i4->data);
-            txtHist1D_xmin->setText(ftos(i4->min));
-            txtHist1D_xmax->setText(ftos(i4->max));
-            txtHist1D_nbins->setText(itos(i4->nbins));
+            txtHist1D_data->setText(s(i4->data));
+            txtHist1D_xmin->setText(s(ftos(i4->min)));
+            txtHist1D_xmax->setText(s(ftos(i4->max)));
+            txtHist1D_nbins->setText(s(itos(i4->nbins)));
             break;
         }
         // ## add the case for new graph type here
@@ -563,7 +571,7 @@ void MainForm::saveToCanvas(Canvas* c)
     if (!c) return;
 
     c->setEventCut(txtEventCut->text().ascii());
-    c->setName(tabNames[getTabIndex()]->text(0));
+    c->setName(tabNames[getTabIndex()]->text(0).toStdString());
 
     if (wgsAction->visibleWidget() == tabPosition)
     {
@@ -697,7 +705,7 @@ void MainForm::renameTab(int index, QString name)
 //    QListViewItem * item = tabNames[index];
         
     if (tabNames[index])
-        tabNames[index]->setText(0,name);
+      tabNames[index]->setText(0,name);
 }
 
 void MainForm::divideCanvas()
@@ -726,11 +734,11 @@ void MainForm::divideCanvas(int n_columns, int n_rows)
 
 void MainForm::addNewSubPad( int n_subpad )
 {
-    QListViewItem * parent_item = tabNames[getTabIndex()];
+    Q3ListViewItem * parent_item = tabNames[getTabIndex()];
 
     if (!parent_item) return;
     
-    QListViewItem * child_item, *after_item;
+    Q3ListViewItem * child_item, *after_item;
     ostringstream ss;
 
     // find the last child under the parent_item
@@ -748,9 +756,9 @@ void MainForm::addNewSubPad( int n_subpad )
         ss << "Pad " << i;
         
         if (after_item)
-            child_item = new QListViewItem(parent_item,after_item,ss.str());
+          child_item = new Q3ListViewItem(parent_item,after_item,s(ss.str()));
         else
-            child_item = new QListViewItem(parent_item,ss.str());
+          child_item = new Q3ListViewItem(parent_item,s(ss.str()));
 
         after_item = child_item;
     }
@@ -773,7 +781,7 @@ void MainForm::saveEventCut()
     if (txtEventCut->text().isEmpty()) return;
     
     cmbEventCuts->insertItem(txtEventCut->text());
-    appendLine(EVENTCUTS_FILE, txtEventCut->text());
+    appendLine(EVENTCUTS_FILE, txtEventCut->text().toStdString());
 }
 
 void MainForm::changeStatus(QString status)
@@ -827,7 +835,7 @@ void MainForm::fillBranchNames()
     
     vector<string> names = draw->rootTree->getBranchNames();
     for (int i = 0; i < (int) names.size(); i++)
-        cmbBranchNames->insertItem(names[i]);
+      cmbBranchNames->addItem(s(names[i]));
 }
 void MainForm::getSavedEventCuts()
 {
@@ -837,14 +845,15 @@ void MainForm::getSavedEventCuts()
     getLines(EVENTCUTS_FILE,files);
 
     for (int i = 0; i < (int) files.size(); ++i)
-        cmbEventCuts->insertItem(files[i]);
+      cmbEventCuts->addItem(s(files[i]));
 }
 void MainForm::insertBranchName( const QString& name )
 {
     // find the QLineEdit or QTextEdit that has focus and append the branch
     // name to it; the find method relies on the fact that all the textboxes
     // are named with prefix txt
-    QObjectList *l = topLevelWidget()->queryList(NULL,"txt*");
+  /* TODO
+  QObjectList *l = topLevelWidget()->queryList(NULL,"txt*");
     QObjectListIt it( *l );
     QWidget* w;
         
@@ -859,13 +868,13 @@ void MainForm::insertBranchName( const QString& name )
                 break;
             }
 
-            if ((QTextEdit*)w != 0)
+            if ((Q3TextEdit*)w != 0)
             {
-                ((QTextEdit*)w)->setText(((QTextEdit*)w)->text() + name);
+                ((Q3TextEdit*)w)->setText(((Q3TextEdit*)w)->text() + name);
                 break;
             }
         }
     }
 
-    delete l; 
+    delete l; */
 }
