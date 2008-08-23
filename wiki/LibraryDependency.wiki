@@ -1,18 +1,20 @@
 #summary The external libraries that this project depends on.
 #labels Phase-Implementation,Phase-Requirements
 
-==ROOT 5.18 ==
+*NOTE: this page only describes the library dependency for the newest, QT4 version of the program. For library dependency of the stable branch qt3-branch, see LibraryDependencyQT3.*
 
-This project requires [http://root.cern.ch/ ROOT] compiled with QT3 support. Currently only *ROOT 5.18* is supported, as the older versions have bugs that prevent program from running properly, and the newer versions (>5.18) have dropped QT3 and support only QT4.
+==ROOT==
 
-One can get the source and the compiled binaries (which has been compiled with QT3 support) [http://root.cern.ch/root/Version518.html here]. 
+This project requires [http://root.cern.ch/ ROOT] compiled with QT support. Only ROOT version 5.18 or above is supported. 
+
+The easiest way to get ROOT with QT support is to use the script http://root.bnl.gov/QtRoot/INSTALL_QTROOT.sh, which will download and install ROOT plus QtROOT in a directory of choice (not interfering with existent ROOT and QT installations). 
 
 
 == QT ==
 
-QT version >= 3.3 and < 4.0 is needed. A port to QT4 would be nice, but currently not considered because of time constraint of the original project. 
+QT version 4.3 or above is needed. 
 
-One can get QT3 from [http://trolltech.org/ TrollTech], but the runtime libraries should be included in most linux distributions. To compile Lopes-Eventbrowser, one will also need the development libraries of QT 3. 
+One can get QT from [http://trolltech.org/ TrollTech], but the runtime libraries should be included in most linux distributions. To compile Lopes-Eventbrowser, one will also need the development libraries of QT 4.3 or above. 
 
 
 == muParser ==
