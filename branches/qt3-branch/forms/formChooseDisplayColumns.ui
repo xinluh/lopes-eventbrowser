@@ -1,0 +1,418 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>formChooseDisplayColumns</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>formChooseDisplayColumns</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>599</width>
+            <height>480</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Choose Display Columns</string>
+    </property>
+    <hbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QListView">
+            <column>
+                <property name="text">
+                    <string>1</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Expression</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>Alias</string>
+                </property>
+                <property name="clickable">
+                    <bool>true</bool>
+                </property>
+                <property name="resizable">
+                    <bool>true</bool>
+                </property>
+            </column>
+        <item>
+            <property name="text">
+                <string>Item</string>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+            <property name="pixmap">
+                <pixmap></pixmap>
+            </property>
+        </item>
+            <property name="name">
+                <cstring>lv</cstring>
+            </property>
+            <property name="defaultRenameAction">
+                <enum>Accept</enum>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout8</cstring>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QGroupBox">
+                    <property name="name">
+                        <cstring>gbEdit</cstring>
+                    </property>
+                    <property name="title">
+                        <string></string>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Expression to evaluate:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>cmbExpression</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>cmbExpression</cstring>
+                            </property>
+                            <property name="editable">
+                                <bool>true</bool>
+                            </property>
+                        </widget>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel2_2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>&amp;Alias:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>txtAlias</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLineEdit">
+                            <property name="name">
+                                <cstring>txtAlias</cstring>
+                            </property>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout7</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout6</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer6</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>160</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QToolButton">
+                                    <property name="name">
+                                        <cstring>btnAdd</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="on">
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="iconSet">
+                                        <iconset>image0</iconset>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Add new column</string>
+                                    </property>
+                                </widget>
+                                <widget class="QToolButton">
+                                    <property name="name">
+                                        <cstring>btnRemove</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="iconSet">
+                                        <iconset>image1</iconset>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Remove column</string>
+                                    </property>
+                                </widget>
+                                <widget class="QToolButton">
+                                    <property name="name">
+                                        <cstring>btnMoveUp</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="iconSet">
+                                        <iconset>image2</iconset>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Move up</string>
+                                    </property>
+                                </widget>
+                                <widget class="QToolButton">
+                                    <property name="name">
+                                        <cstring>btnMoveDown</cstring>
+                                    </property>
+                                    <property name="enabled">
+                                        <bool>false</bool>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="iconSet">
+                                        <iconset>image3</iconset>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Move down</string>
+                                    </property>
+                                </widget>
+                                <widget class="QToolButton">
+                                    <property name="name">
+                                        <cstring>btnSave</cstring>
+                                    </property>
+                                    <property name="text">
+                                        <string></string>
+                                    </property>
+                                    <property name="iconSet">
+                                        <iconset>image4</iconset>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Save the columns selection to file for later use</string>
+                                    </property>
+                                </widget>
+                            </vbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout6</cstring>
+                            </property>
+                            <vbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <spacer>
+                                    <property name="name">
+                                        <cstring>spacer6_2</cstring>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Vertical</enum>
+                                    </property>
+                                    <property name="sizeType">
+                                        <enum>Expanding</enum>
+                                    </property>
+                                    <property name="sizeHint">
+                                        <size>
+                                            <width>20</width>
+                                            <height>179</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                                <widget class="QLayoutWidget">
+                                    <property name="name">
+                                        <cstring>layout5</cstring>
+                                    </property>
+                                    <hbox>
+                                        <property name="name">
+                                            <cstring>unnamed</cstring>
+                                        </property>
+                                        <spacer>
+                                            <property name="name">
+                                                <cstring>spacer7</cstring>
+                                            </property>
+                                            <property name="orientation">
+                                                <enum>Horizontal</enum>
+                                            </property>
+                                            <property name="sizeType">
+                                                <enum>Expanding</enum>
+                                            </property>
+                                            <property name="sizeHint">
+                                                <size>
+                                                    <width>120</width>
+                                                    <height>20</height>
+                                                </size>
+                                            </property>
+                                        </spacer>
+                                        <widget class="QPushButton">
+                                            <property name="name">
+                                                <cstring>btnOk</cstring>
+                                            </property>
+                                            <property name="text">
+                                                <string>&amp;OK</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string>Alt+O</string>
+                                            </property>
+                                        </widget>
+                                        <widget class="QPushButton">
+                                            <property name="name">
+                                                <cstring>btnCancel</cstring>
+                                            </property>
+                                            <property name="enabled">
+                                                <bool>false</bool>
+                                            </property>
+                                            <property name="text">
+                                                <string>&amp;Cancel</string>
+                                            </property>
+                                            <property name="accel">
+                                                <string>Alt+C</string>
+                                            </property>
+                                        </widget>
+                                    </hbox>
+                                </widget>
+                            </vbox>
+                        </widget>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+    </hbox>
+</widget>
+<images>
+    <image name="image0">
+        <data format="PNG" length="427">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000017249444154388ded52314bc360143cb543900eba25e052e85037d32a587f82d93e475723886347470b0eda49c44114847c6ba6561c1444a805492238b41d0a198466ac740841d4e790046a436c86161c7af071f078dfbdc7bd03a6f8179055cd28565c92558d0e2bae3136e1a2ea52d5ea12f5896455a3247f66933479d0a16425d43a809063899649242c80a1d671a06401afad8f4f7870639670e399e182ac6a860056f0a0430043c8077bef50b212f225feab1eb0d9b8985ffd7352b1e252bd49441f44f4ea73bd49447da2ea3311b944f796cf6451ec412356786d1d1b4bc0d99d0d27edb394024e1e6c64d240f9d6c6530a28576d58002e0d0702a2f64484598e99f912076f89508e387a2d115bc71cfbeb195c359a802d423fe5b87913b173cee1bc2cc0836e8eb03cc61ed525edb14ba5eb09e4787b45023e2791e3760f9b185f8ee78020c76b8be82d47721c896b88d408e12f0010c0ccfc2e2f04b91d3c54acdfb113877ac2178a7d27f837858f1f53a9b3da5d6d03660000000049454e44ae426082</data>
+    </image>
+    <image name="image1">
+        <data format="PNG" length="273">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000000d849444154388dedd0a16e024110c6f17f09e2d2202a57d4d4d55230e515708b459627e82b9054d006410882e058bb8a10c435c1b435dc35414013c40ac4c9260872a91904a63968e101f667becc8899c980e7797fbac8368a8de12c4097522c019a3333fae85f96ffdd74ffb295b78588fc88c85c44b622aff13e253e526f448a8da164e7e4b28df4cb52b9866ee8480ad09d3a6e0af01c3a160134278ef73c34478e1818cc1202f4c1810783f5ad8eee1e0d66a9a83e19be978a5acb60578a7adb8053d88e61bc563cf40cc9e71529363af172cff37edb01bf3a6e7471de53350000000049454e44ae426082</data>
+    </image>
+    <image name="image2">
+        <data format="PNG" length="864">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000032749444154388db5944f68db6518c73fef9ab8275da7a92bd88a83047a483005273af8fd6030cb06e3e7749080608a87b193eb699b0b4a7b5b2d8c6eb73969c994c1a2205d0ea3e6209a5527d9a91d8374ab5ada50c6d683d422dabeb4691f0f4d6baaa60b485ff8f2bd3ccfe7fdf2fe798caab2136bd78e507712ecabb7d04d9921f1c98bcd53f6c4cdaf74f569f575257653e6a3ee43d164734beb1bce31b95a4fcf53c16eca24da9a5a7b6d8bb7e7ca7b89c6db8f825d9da940f7ff02bb6703af75c582d7bda3a71aa3c1562eff5820fd7e660f2217fb860247b6eb35b59e9b7bd6ec1791fb89a3ddcd4ba119eedd29009670f3014ebd12a5ebd3cf7e173898ef5ffaa9eec46ecaec95988c7a8792cfc5631e0fef8e138f0a20445bee91999c237d32bdd7966dfed29079beaec489774cc39376c97bafc79dee23517fefb7590859ecc325c0b2602d6071c27116820be5fc97b9fbfc8153b8aa2bdb26feed980cba91ce83bdc7fbfc9747f324220225887724c00ff10e0b3e686bca11b6215fcf5bcecb34717ddba370538173611b4d5e7a372d7da31fe045205782402c48ae948388255b02e980ec2f968264991357c22f454fb829f3e116b2aaa2aa3883723c7931baa83aaf3a3dacaa8bfaddf40d1d9bbda23d7947477e6ed5e42dd1e107414dde12551dd3e107177471794c6f8cf7683a1bfad339c3db1bbccd337653e636c861ca167c023e6b0bfdf3d27727811b9a23539c8188c0948576c12b9fe393cf3fb6d65ac12750b620f27da17fe9f096c4ffd4c0a0a8ce0eebc47c5a4f7f13d491c7413dfdc3dfae3aa1ce79b4567fcd0f929db4b0dfe38be23588406e0a1231c83d0262f0f54c16905aedb5c11211c69fe4f0229d5082444cc895a02b2604a6e0cd701cb0f581cdfaf2196376db49cbab6d1e99e23568879b93164290295abc76d94c6c8c6934c6ec36c66c9d9495cb33c0334023f02cb06f6050541f0fabea848e4c5f58f7d9adee9c478117807d95bec60ac71855c518e3677d36fb2bf2396728e29396cd57f2dffeebdd017b005801ca155f019637c0a60a5ced0d15df5591011458aba80cac5641978165555dfbd7aca86cd250a50d6843a564ad0abe5a0557ad82fd05c56b946fd069fa7e0000000049454e44ae426082</data>
+    </image>
+    <image name="image3">
+        <data format="PNG" length="869">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b0000032c49444154388db5954d681b5710c77fab28f0042de850880c3ed4b08635b8d094162a41201239ed717d8b038510c8c129d43836b8550f4121057ff55213284e7a717c48ec6d49d34d2f5173895272684a71aaa55eac1c0c56a1b82a71a58724677ad00a14d972db401e0c33c3eefcf6ffe67dac2122bc8a1179255420daebc1dcf558d9f5f531652a74a0714c851b68baf2df0b339238102022075a721c11a9cabddf96456447eefcfa85487d53567f99956a7556961fe52439a9a4577dcf56284b51d8f0884735d96f47887183b16f4650cd32e76ecde35836a07bb6a22758fb9ad4a08debbbd82678be060bdce21a2a0aaeef02eaff831d4bc1868763d97801d896033e38433174131ccb7939c5aeaf61d0c6f5d7c004cf77c104b75803f47f579cb91efb213565c8dc9731494d19a28695ce6fb838e6083ad0d8a68240630f82d6baa538aa75fbfd4ccbdfdf07d6eb7a7e2031547b27bd4461a64af6c492ca848a1d0bd69e6ab06aac14cb28056ee0726f3aa7fa8e4ff0ddf40362e5781558d8072e2cc89d52b9f8696d6bb1962fae905070f9ee19ec6170034dc6dca6e297718e2b88012c72e1fb456ccbe6c257e7aae9fe4aae3023b7db3ca3fb48a7a68ca5ccb03d9a7ccf567daf79acac6ff3677f091d6894d53a1cca5410c0dcc935b2b7b2ba183cfc3a7f454e1fba78638af3f975efd100f146693749d2dc862d70de56b005a7437ff9d432f3f7e79b033c7e52f9830fba39fb1403643e365ed74d7e763e3cfb26e54aa4f8461e9e82b28000b2efdbdcf811f1eebadb5aebb70a0bb2d37357748efc1579e6989cf4aeaefc356a9e65a8926274b8a5f4e289393c3f0e25ef996e9239080af4be2b4484f4b87a373dad7677aa1392fb29294fea6959dd9c10fb527c3739c9a9c36a0f058b08b3d7d4887d29f177551ec8eae627b2743bb19b9c5463ff56f7428f0dc33080231d160122c97135d1d79fb8a854cc2805c59b0f3fe723e07987ed017b22d27c61f142e0515af773b4233e12fa486e517de6051c7b7c559fd79a46086c86d026d0087d1368b4c1473b80dd7177dee880347ae4f5f61fa43d05a36b6ddbd38c846600d2d1826ec575a02e22cff7ede35e7d0ee3f6c7daf0bd0eb84807ec1f12080e786a4d0d120000000049454e44ae426082</data>
+    </image>
+    <image name="image4">
+        <data format="PNG" length="1066">89504e470d0a1a0a0000000d4948445200000016000000160806000000c4b46c3b000003f149444154388d9d944f685c5514c67f335ce9bd38857b650a6fa095793594bed0c8a4e8c2d925e2c2591469d0952bff2c9aaca66908652aa24d162d962eda64d50a5d24ea62ba703175d56cb48a9424a8642a96a468e10d64e0beeac8bdc283b87869fa87b4a99ecd773feee1dcef1ecef9723c14a3d38dcb491abdb5d6895f4018482d5218c0fe1d6a568cfcbe7eae71f53b9e2172f70f17af8c579acbd18f615ff84fb42fcc77bc9351d1e4db5d8b738aceade6aaf77e57b9d09e9c3d3d3ff74c852f5e19af2cde899ab23cfc62e7f662def6929c42e6284074b00acf39a4302cfd7c0397745ca46f8ccc7e3c7fed6985f3008bb7e51959b077fc9dd6af916ebdbb70fe83fc60d07ad3f5923f176fddd8b07fc1da7a4c108428ad77b5bb835f8e7f527b7ec7c2494ff619a1ee55fb56de981efffc0b80e9c9f96faa7b573e553d72499220019f7aca7dd5bc29f8df9d189cddb115ef7dd4f8ba24ec4f3ea1e10083c162315271bd1b105686214d40684813b48fe974da84581ece573079eefcec590001502ac4d764af343b353d050a706c6175f232a409526abc27c382c6def534cf3c9a7fe2f8d819e0ec562b7c47fe86949082730e973aecba8514f0168426496210e07d02c2e07d766fd72d7137c6ae5bc262c8687db4b2a51878292a87b8d4a15020e0f5d3f3d91c4b03299b982907401aaa8d192492e6c4518c34a01526310780e53c80c41c09a3089f7aac7fa0347aa5465819441733853e9599626f090f46448786f0de62b4c17a4b6da8864dedc08356606b513982148c34b8d4d13c39427b7901290c9dbb2bd906a6169024498c969af62f0bcc4dd470a9c34843100418614e01e447eba315290d1e8f29652f23401634978e0db1f46d135d0c49bc0514de5bb42eb1f4438b4bc786d0ba04029c7028a1a000e3f5d14ade0873a0149430c260638bd9635042610a86300899abd768df6c51dedb0f388262487bf93a73f51a61106ee5e3c1a58eb018021cc8dbd40e0c0e0c12f7e20d292536b6b89ec3e150461194439a13235bca979617684e8c1094439451c4718ceb39925e82f77e23d8172031af09857a59173533e767727ed3cdb6c3e1a2e2facd16c3bac3b90b9f3d292f37f6e1095ad7aeee160e77a47fa01f9b5aa626a6487c82967a5b1c7f8cefdfbf9fd5d555b4d478ef99b93043500e5052be2f8c30d83f2c4618a490d083b81ba3a462adbb8691665bde7fa81f803008b3f1d4e0b1d0db34219b665360538bdaa3b2a99060bd454af9448eda5c2d05ec7ec0139f20310823b2cd32c20070f8d5c34f33ad1d434a89c7221e567ceaf8a9fb2ef5b86b6dcb1bf50663c7c71eb9f7de03648ae34ebc3175722a87df7cd1fbecbbff83c7dd7803c8e58ebe7df49d686ff4d57f51ba134f3a49f55f95f414b42a05a9fc0000000049454e44ae426082</data>
+    </image>
+</images>
+<connections>
+    <connection>
+        <sender>lv</sender>
+        <signal>selectionChanged(QListViewItem*)</signal>
+        <receiver>formChooseDisplayColumns</receiver>
+        <slot>editSingleItem(QListViewItem*)</slot>
+    </connection>
+    <connection>
+        <sender>btnOk</sender>
+        <signal>clicked()</signal>
+        <receiver>formChooseDisplayColumns</receiver>
+        <slot>okClicked()</slot>
+    </connection>
+    <connection>
+        <sender>btnCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>formChooseDisplayColumns</receiver>
+        <slot>cancelClicked()</slot>
+    </connection>
+    <connection>
+        <sender>btnAdd</sender>
+        <signal>clicked()</signal>
+        <receiver>formChooseDisplayColumns</receiver>
+        <slot>addNewItem()</slot>
+    </connection>
+    <connection>
+        <sender>btnRemove</sender>
+        <signal>clicked()</signal>
+        <receiver>formChooseDisplayColumns</receiver>
+        <slot>deleteItem()</slot>
+    </connection>
+    <connection>
+        <sender>btnSave</sender>
+        <signal>clicked()</signal>
+        <receiver>formChooseDisplayColumns</receiver>
+        <slot>saveColumnsToFile()</slot>
+    </connection>
+</connections>
+<includes>
+    <include location="local" impldecl="in declaration">ColumnCollection.h</include>
+    <include location="local" impldecl="in implementation">formChooseDisplayColumns.ui.h</include>
+</includes>
+<slots>
+    <slot>initialize( ColumnCollection * collection )</slot>
+    <slot>populate()</slot>
+    <slot returnType="int">addItem( singleColumn * c )</slot>
+    <slot>editSingleItem( QListViewItem * item )</slot>
+    <slot returnType="int">getIndex( QListViewItem * item )</slot>
+    <slot>saveChanges()</slot>
+    <slot>okClicked()</slot>
+    <slot>cancelClicked()</slot>
+    <slot>addNewItem()</slot>
+    <slot>deleteItem( int index )</slot>
+    <slot>deleteItem()</slot>
+    <slot>saveColumnsToFile()</slot>
+</slots>
+<functions>
+    <function access="private" specifier="non virtual">init()</function>
+</functions>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
